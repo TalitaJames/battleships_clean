@@ -1,0 +1,25 @@
+# Compiled code
+*.o
+*.out
+*.exe
+*.d
+
+# Editor files
+.vscode
+*.swp
+.~lock*
+
+# Spreadsheet Files
+spreadsheets/*
+*.xlsx
+
+# Logs
+*.log
+out/*
+
+*.jpg
+*.png
+
+
+# python things
+__pycache__/
