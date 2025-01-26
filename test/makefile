@@ -35,4 +35,4 @@ $(TEST_BUILD)/%.o: src/%.c
 
 clean:
 	@rm -f $(TEST_OBJS) $(TEST_DEPS) $(TEST_TARGET)
-	@echo "/test/ clean"x
+	@echo "/test/ clean"
