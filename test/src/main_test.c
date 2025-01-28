@@ -6,9 +6,9 @@
 int main(){
     printf("\nTESTING VECTOR\n");
     TEST_VECTOR_INIT();
-    TEST_VECTOR_INSERT();
+    TEST_VECTOR_APPEND();
 
-    printf("\nTESTING SHIPS\n");
+    printf("\nTESTING SgHIPS\n");
     TEST_SHIP_BOUNDINGBOX();
     TEST_SHIP_COLLISIONS();
 
