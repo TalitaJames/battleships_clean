@@ -15,8 +15,8 @@ typedef struct {
 // Inspired by this https://stackoverflow.com/a/3536261
 
 void vectorInit(Vector *a, size_t initialSize);
-void vectorInsert(Vector *a, int element);
+void vectorAppend(Vector *a, int element);
 void vectorFree(Vector *a);
-
+void vectorDisplay(Vector *a);
 
 #endif //VECTOR_H

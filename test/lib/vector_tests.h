@@ -7,7 +7,7 @@
 
 // vector
 void TEST_VECTOR_INIT();
-void TEST_VECTOR_INSERT();
+void TEST_VECTOR_APPEND();
 
 
 #endif //VECTOR_TESTS_H

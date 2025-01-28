@@ -13,7 +13,7 @@ void vectorInit(Vector *a, size_t initialSize) {
     a->size = initialSize;
 }
 
-void vectorInsert(Vector *a, int element) {
+void vectorAppend(Vector *a, int element) {
     // a->used is the number of used entries, because a->array[a->used++]
     // updates a->used only *after* the array has been accessed.
     // Therefore a->used can go up to a->size
@@ -31,6 +31,14 @@ void vectorInsert(Vector *a, int element) {
     a->array[a->used++] = element;
 }
 
+void vectorDisplay(Vector *a){
+    printf("Array: used %li, size %li\n[", a->used, a->size);
+    for (size_t i = 0; i < a->used; i++)
+    {
+        printf("%i,", a->array[i]);
+    }
+    printf("]\n");
+}
 
 void vectorFree(Vector *a) {
     free(a->array);
