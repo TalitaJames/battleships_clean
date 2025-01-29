@@ -6,8 +6,9 @@ DEPFLAGS = -MMD -MP # makes a .d file in the build directory listing dependencie
 # Directories
 SRC_BUILD = ../build/src
 TEST_BUILD = ../build/test
-TEST_SRCS = $(wildcard src/*.c)
-TEST_OBJS = $(patsubst src/%.c, $(TEST_BUILD)/%.o, $(TEST_SRCS))
+TEST_SRCS = $(wildcard src/*.c) $(wildcard src/*.cpp)
+TEST_OBJS = $(patsubst src/%.c, $(TEST_BUILD)/%.o, $(TEST_SRCS)) #convert from f.c to ../build/test/f.o
+TEST_OBJS := $(patsubst src/%.cpp, $(TEST_BUILD)/%.o, $(TEST_OBJS)) #converts remaining f.cpp to build dir
 TEST_DEPS = $(TEST_OBJS:.o=.d)
 
 # Exclude main.o from SRC_OBJS
@@ -25,8 +26,13 @@ $(TEST_TARGET): $(SRC_OBJS) $(TEST_OBJS)
 	@$(CXX) $(SRC_OBJS) $(TEST_OBJS) -o $@ $(CFLAGS)
 	@echo "/test/ done"
 
-# Build any .o files from the /src/ directory
-$(TEST_BUILD)/%.o: src/%.c
+# Build any .o files from the test/src/ directory
+$(TEST_BUILD)/%.o: src/%.c #compile .c as .cpp
+	@mkdir -p $(TEST_BUILD)
+	@echo "\t$(CXX) -c $< $(CFLAGS) $(DEPFLAGS) -o $@"
+	@$(CXX) -c $< $(CFLAGS) $(DEPFLAGS) -o $@
+
+$(TEST_BUILD)/%.o: src/%.cpp #compile .cpp
 	@mkdir -p $(TEST_BUILD)
 	@echo "\t$(CXX) -c $< $(CFLAGS) $(DEPFLAGS) -o $@"
 	@$(CXX) -c $< $(CFLAGS) $(DEPFLAGS) -o $@

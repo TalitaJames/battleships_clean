@@ -5,8 +5,9 @@ DEPFLAGS = -MMD -MP
 
 # Directories
 BUILD = ../build/src
-SRCS = $(wildcard *.c)
-OBJS = $(patsubst %.c, $(BUILD)/%.o, $(SRCS))
+SRCS = $(wildcard *.c) $(wildcard *.cpp)
+OBJS = $(patsubst %.c, $(BUILD)/%.o, $(SRCS)) # replace file.c into ../build/src/file.o
+OBJS := $(patsubst %.cpp, $(BUILD)/%.o, $(OBJS))  # convert remaining .cpp into .o
 DEPS = $(OBJS:.o=.d)
 
 # Target
@@ -19,7 +20,14 @@ $(TARGET): $(OBJS)
 	@$(CXX) $(OBJS) -o $@ $(CFLAGS)
 	@echo "/src/ done"
 
+# Compilation rule for C files (compile as C++)
 $(BUILD)/%.o: %.c
+	@mkdir -p $(BUILD)
+	@echo "\t$(CXX) -c $< $(CFLAGS) $(DEPFLAGS) -o $@"
+	@$(CXX) -c $< $(CFLAGS) $(DEPFLAGS) -o $@
+
+# Compilation rule for C++ files
+$(BUILD)/%.o: %.cpp
 	@mkdir -p $(BUILD)
 	@echo "\t$(CXX) -c $< $(CFLAGS) $(DEPFLAGS) -o $@"
 	@$(CXX) -c $< $(CFLAGS) $(DEPFLAGS) -o $@
