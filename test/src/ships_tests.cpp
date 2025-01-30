@@ -19,8 +19,33 @@ void TEST_SHIP_singleShipPositions(){
 void TEST_SHIP_allShipPositions(){
 
 }
-void TEST_SHIP_rndShipPos(){
+void TEST_SHIP_rndShipPos() {
+    BoardDimensions boardSize = {10, 10};
 
+    int numberOfRndShips = 5;
+    ShipPosition ships[numberOfRndShips];
+
+    for (size_t i = 0; i < numberOfRndShips; i++) {
+        ships[i] = rndShipPos(boardSize, 5);
+        ASSERT(ships[i].x >= 0 && ships[i].x < boardSize.width, "Ship x position should be within board bounds");
+        ASSERT(ships[i].y >= 0 && ships[i].y < boardSize.height, "Ship y position should be within board bounds");
+    }
+
+    // check all the ships are being generated in different positions
+    bool isRandom = false;
+    for (size_t i = 0; i < numberOfRndShips; i++) {
+        for (size_t j = i + 1; j < numberOfRndShips; j++) {
+            if (ships[i].x != ships[j].x || ships[i].y != ships[j].y) {
+                isRandom = true;
+                break;
+            }
+        }
+        if (isRandom) break;
+    }
+
+    ASSERT(isRandom, "Ship positions should be random");
+
+    printf("\tPASSED rndShipPos\n");
 }
 
 void TEST_SHIP_convertShipPositionToBoundingBox(){
@@ -54,6 +79,7 @@ void TEST_SHIP_convertShipPositionToBoundingBox(){
     ASSERT(testShip.east == 0, "East expected 0");
     ASSERT(testShip.south == 0, "South expected 0");
     ASSERT(testShip.west == 0, "West expected 0");
+
     // printf("N%i, E%i, S%i, W%i\n", testShip.north, testShip.east, testShip.south, testShip.west);
     printf("\tPASSED convertShipPositionToBoundingBox\n");
 }

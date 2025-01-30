@@ -77,7 +77,6 @@ Board rndBoard(){
     while (!b.isValid){
         for (size_t i = 0; i < FLEET_SIZE; i++){
             boardPositions[i] = rndShipPos(b.dimensions, FLEET[i]);
-            std::cout << FLEET[i] << ": " << boardPositions[i] << std::endl;
         }
 
         drawBoard(b, boardPositions);
