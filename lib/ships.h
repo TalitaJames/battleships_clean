@@ -1,10 +1,17 @@
 #ifndef SHIPS_H
 #define SHIPS_H
 
-#include <stdbool.h>
-#include <stdio.h>
+#include <iostream>
+#include <string>
+#include <random>
+#include <vector>
 
-typedef int Ship;
+#include "board.h"
+
+typedef unsigned int Ship;
+
+const Ship FLEET[] = {5, 5, 7};
+const short FLEET_SIZE = sizeof(FLEET)/sizeof(FLEET[0]);
 
 typedef struct {
     // Bounding box
@@ -12,20 +19,47 @@ typedef struct {
     int east;
     int south;
     int west;
-} ShipPlacement;
+} ShipBoundingBox;
 
-typedef struct{
-    int width;
-    int height;
-} Board;
+typedef struct {
+    unsigned int length;
+    int x;
+    int y;
+    bool direction; // 1 represents horizontal
+} ShipPosition;
 
-void singleShipPlacements(Board, Ship);
-void allShipPlacements(Board, Ship[]);
-ShipPlacement makeShipFromMinMaxDir(Ship length, int major, int minor, bool direction);
+// Generating ship positions
+std::vector<ShipPosition> singleShipPositions(BoardDimensions, Ship);
+std::vector<std::vector<ShipPosition>> allShipPositions(BoardDimensions, Ship[]);
+ShipPosition rndShipPos(Ship);
 
-bool doShipsCollide(ShipPlacement shipA, ShipPlacement shipB);
+// Conversions between various formats
+ShipBoundingBox convertShipPositionToBoundingBox(ShipPosition);
+ShipPosition convertBoundingboxToShipPosition(ShipBoundingBox);
 
-// void diplayShip(struct Board, struct ShipPlacement[]);
+// Check for collisions
+bool doShipsCollide(ShipPosition shipA, ShipPosition shipB);
+bool doShipsCollide(ShipBoundingBox shipA, ShipBoundingBox shipB);
+
+std::ostream& operator<<(std::ostream&, ShipPosition&);
+
+// int compareShipPositions(ShipPosition, ShipPosition);
+// int compareShipArray(ShipPosition *, ShipPosition *);
+
+// unsigned long shipPosToInt(ShipPosition);
+// unsigned long shipArrayToInt(ShipPosition *);
+// void intToShipPos(unsigned long, ShipPosition &);
+// void intToShipArray(unsigned long, ShipPosition *);
+// board intToBoard(unsigned long);
+
+// void nextShipPosition(ShipPosition &);
+// void nextShipPosition(ShipPosition &, ship);
+// void nextShipPosArray(ShipPosition *, ship const);
+
+// bool isStartPos(ShipPosition);
+// bool isStartArray(ShipPosition *);
+// void setEndArray(ShipPosition *);
+// void setStartArray(ShipPosition *);
 
 
 #endif //SHIPS_H

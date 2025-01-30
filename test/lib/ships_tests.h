@@ -4,9 +4,13 @@
 #include "ships.h"
 #include "test_utils.h"
 
-// Ships
-void TEST_SHIP_BOUNDINGBOX();
-void TEST_SHIP_COLLISIONS();
+void TEST_SHIP_singleShipPositions();
+void TEST_SHIP_allShipPositions();
+void TEST_SHIP_rndShipPos();
 
+void TEST_SHIP_convertShipPositionToBoundingBox();
+void TEST_SHIP_convertBoundingboxToShipPosition();
+
+void TEST_SHIP_doShipsCollide();
 
 #endif //SHIPS_TEST_H
