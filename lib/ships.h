@@ -4,15 +4,15 @@
 #include <iostream>
 #include <string>
 #include <random>
+#include <algorithm>
 #include <vector>
-
-#include "board.h"
 
 typedef unsigned int Ship;
 
 const Ship FLEET[] = {5, 5, 7};
 const short FLEET_SIZE = sizeof(FLEET)/sizeof(FLEET[0]);
 
+/// @brief a ship position, stored as the space the ship takes
 typedef struct {
     // Bounding box
     int north;
@@ -21,6 +21,7 @@ typedef struct {
     int west;
 } ShipBoundingBox;
 
+/// @brief the position of a ship
 typedef struct {
     unsigned int length;
     int x;
@@ -28,10 +29,17 @@ typedef struct {
     bool direction; // 1 represents horizontal
 } ShipPosition;
 
+/// @brief Rectangle board dimensions for putting ships in
+typedef struct {
+    int width;
+    int height;
+} BoardDimensions;
+
+
 // Generating ship positions
 std::vector<ShipPosition> singleShipPositions(BoardDimensions, Ship);
 std::vector<std::vector<ShipPosition>> allShipPositions(BoardDimensions, Ship[]);
-ShipPosition rndShipPos(Ship);
+ShipPosition rndShipPos(BoardDimensions, Ship);
 
 // Conversions between various formats
 ShipBoundingBox convertShipPositionToBoundingBox(ShipPosition);

@@ -53,17 +53,23 @@ std::vector<std::vector<ShipPosition>> allshipPositions(BoardDimensions board, S
 /*!
 @breif Generates a random position for a ship
 @param len a length of the ship
+@bug this is known to only generate ships stating in the top left corner
 @return shipPosition a (semi) random shipPosition
 */
-ShipPosition rndShipPos(Ship len){
+ShipPosition rndShipPos(BoardDimensions board, Ship len){
     std::random_device rdDev;
     std::mt19937 rng(rdDev());
-    std::uniform_int_distribution<std::mt19937::result_type> udist(0,BOARD_SIZE-len);
+
+    int max_x = std::max(0, board.width - (int)(len));
+    int max_y = std::max(0, board.height - (int)(len));
+
+    std::uniform_int_distribution<std::mt19937::result_type> udist_width(0,board.width-len);
+    std::uniform_int_distribution<std::mt19937::result_type> udist_height(0,board.height-len);
 
     ShipPosition pos;
     pos.length = len;
-    pos.x = udist(rng);
-    pos.y = udist(rng);
+    pos.x = udist_width(rng);
+    pos.y = udist_height(rng);
     pos.direction = rand() % 2;
 
     return pos;
@@ -132,7 +138,7 @@ bool doShipsCollide(ShipBoundingBox shipA, ShipBoundingBox shipB){
 std::ostream& operator<<(std::ostream& os, ShipPosition& shipPos){
     std::string dirStr = "→";
     if (!shipPos.direction) dirStr = "↓";
-    os << "(" << shipPos.x << ", " << shipPos.y << ", " << dirStr << ")";
+    os << "(" << shipPos.length << ", " << shipPos.x << ", " << shipPos.y << ", " << dirStr << ")";
 
     return os;
 };
