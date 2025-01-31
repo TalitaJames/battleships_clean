@@ -30,7 +30,6 @@ void TEST_VECTOR_APPEND(){
     ASSERT(v.used == usedCount, "Vector used value should match number of times inserted");
 
     for (size_t i = 0; i < v.used; i++){
-        // vectorDisplay(&v); //FIXME why does this print the "end" values not progressive?
         ASSERT(v.array[i]==i+2, "Values in the array should be set correctly");
     }
 
