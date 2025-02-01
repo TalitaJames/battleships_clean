@@ -6,9 +6,12 @@ DEPFLAGS = -MMD -MP # makes a .d file in the build directory listing dependencie
 # Directories
 SRC_BUILD = ../build/src
 TEST_BUILD = ../build/test
-TEST_SRCS = $(wildcard src/*.c) $(wildcard src/*.cpp)
-TEST_OBJS = $(patsubst src/%.c, $(TEST_BUILD)/%.o, $(TEST_SRCS)) #convert from f.c to ../build/test/f.o
-TEST_OBJS := $(patsubst src/%.cpp, $(TEST_BUILD)/%.o, $(TEST_OBJS)) #converts remaining f.cpp to build dir
+
+TEST_SRCS_C = $(wildcard src/*.c)
+TEST_SRCS_CPP = $(wildcard src/*.cpp)
+TEST_OBJS_C = $(patsubst src/%.c, $(TEST_BUILD)/%.o, $(TEST_SRCS_C))
+TEST_OBJS_CPP = $(patsubst src/%.cpp, $(TEST_BUILD)/%.o, $(TEST_SRCS_CPP))
+TEST_OBJS = $(TEST_OBJS_C) $(TEST_OBJS_CPP)
 TEST_DEPS = $(TEST_OBJS:.o=.d)
 
 # Exclude main.o from SRC_OBJS

@@ -5,10 +5,13 @@ DEPFLAGS = -MMD -MP
 
 # Directories
 BUILD = ../build/src
-SRCS = $(wildcard *.c) $(wildcard *.cpp)
-OBJS = $(patsubst %.c, $(BUILD)/%.o, $(SRCS)) # replace file.c into ../build/src/file.o
-OBJS := $(patsubst %.cpp, $(BUILD)/%.o, $(OBJS))  # convert remaining .cpp into .o
+SRCS_C = $(wildcard *.c)
+SRCS_CPP = $(wildcard *.cpp)
+OBJS_C = $(patsubst %.c, $(BUILD)/%.o, $(SRCS_C))
+OBJS_CPP = $(patsubst %.cpp, $(BUILD)/%.o, $(SRCS_CPP))
+OBJS = $(OBJS_C) $(OBJS_CPP)
 DEPS = $(OBJS:.o=.d)
+
 
 # Target
 .PHONY: all clean
