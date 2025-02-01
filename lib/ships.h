@@ -22,7 +22,7 @@ typedef struct {
 } ShipBoundingBox;
 
 /// @brief the position of a ship
-typedef struct {
+typedef struct ShipPosition{
     unsigned int length;
     int x;
     int y;
@@ -49,6 +49,8 @@ ShipPosition convertBoundingboxToShipPosition(ShipBoundingBox);
 bool doShipsCollide(ShipPosition shipA, ShipPosition shipB);
 bool doShipsCollide(ShipBoundingBox shipA, ShipBoundingBox shipB);
 
+bool operator==(const struct ShipPosition&, const struct ShipPosition&);
+bool operator!=(const struct ShipPosition&, const struct ShipPosition&);
 std::ostream& operator<<(std::ostream&, ShipPosition&);
 
 // int compareShipPositions(ShipPosition, ShipPosition);

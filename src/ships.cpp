@@ -142,3 +142,30 @@ std::ostream& operator<<(std::ostream& os, ShipPosition& shipPos){
 
     return os;
 };
+
+
+/**
+ * @brief Checks if two ShipPositions match
+ * @param A first hitmask
+ * @param B second hitmask
+ * @return bool true if equal
+ */
+bool operator==(const struct ShipPosition &A,  const struct ShipPosition &B){
+
+    if (A.length != B.length) return false;
+    if (A.x != B.x) return false;
+    if (A.y != B.y) return false;
+    if (A.direction != B.direction) return false;
+
+    return true;
+};
+
+/**
+ * @brief Checks if two ShipPositions aren't equal
+ * @param A first hitmask
+ * @param B second hitmask
+ * @return bool true if not equal
+ */
+bool operator!=(const struct ShipPosition &A,  const struct ShipPosition &B){
+    return !(A==B);
+};

@@ -13,4 +13,6 @@ void TEST_SHIP_convertBoundingboxToShipPosition();
 
 void TEST_SHIP_doShipsCollide();
 
+void TEST_SHIP_operatorEqual();
+
 #endif //SHIPS_TEST_H

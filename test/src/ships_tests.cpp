@@ -115,3 +115,24 @@ void TEST_SHIP_doShipsCollide(){
 
     printf("\tPASSED doShipsCollide\n");
 }
+
+
+void TEST_SHIP_operatorEqual(){
+    // Test if two ship positions are equal
+    ShipPosition shipA = {4, 3, 4, 1};
+    ShipPosition shipB = {4, 3, 4, 1};
+
+    ShipPosition shipC = {4, 3, 4, 0};
+    ShipPosition shipD = {3, 3, 3, 1};
+    ShipPosition shipE = {4, 2, 4, 1};
+    ShipPosition shipF = {4, 3, 0, 1};
+
+    ASSERT(shipA == shipB, "Ships with the same information should be equal");
+    ASSERT(shipA != shipC, "Ships going different directions shouldn't be equal");
+    ASSERT(shipA != shipD, "Ships with different lengths shouldn't be equal");
+    ASSERT(shipA != shipE, "Ships with x positions lengths shouldn't be equal");
+    ASSERT(shipA != shipF, "Ships with y positions lengths shouldn't be equal");
+
+
+    printf("\tPASSED operatorEqual\n");
+}
