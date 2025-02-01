@@ -28,6 +28,7 @@ void TEST_BOARD_wipeBoard() {
             ASSERT(b.board[x][y] == BOARD_DEFAULT, "Board cells should be set to BOARD_DEFAULT");
         }
     }
+    // TODO test shipPos is cleared
     ASSERT(b.dimensions.height == BOARD_SIZE, "Board height should be set to BOARD_SIZE");
     ASSERT(b.dimensions.width == BOARD_SIZE, "Board width should be set to BOARD_SIZE");
     printf("\tPASSED wipeBoard\n");
@@ -38,9 +39,9 @@ void TEST_BOARD_drawBoard() {
     ASSERT(b.dimensions.height >= 3, "Board height should be at least 3 to test properly");
     ASSERT(b.dimensions.width >= 3, "Board width should be at least 3 to test properly");
 
-    ShipPosition shipPos[2] = {
-        {3, 0, 0, true}, // Horizontal ship at (0,0)
-        {2, 1, 1, false} // Vertical ship at (1,1)
+    ShipPosition shipPos[FLEET_SIZE] = {
+        {3, 0, 0, true}, // Horizontal ship at [0][0], [1][0], [2][0]
+        {2, 1, 1, false} // Vertical ship at [1][1], [1][2]
     };
     drawBoard(b, shipPos);
 
@@ -56,6 +57,10 @@ void TEST_BOARD_drawBoard() {
     ASSERT(b.board[0][2] == BOARD_DEFAULT, "Empty space should be BOARD_DEFAULT");
     ASSERT(b.board[2][1] == BOARD_DEFAULT, "Empty space should be BOARD_DEFAULT");
     ASSERT(b.board[2][2] == BOARD_DEFAULT, "Empty space should be BOARD_DEFAULT");
+
+    for (size_t i = 0; i < FLEET_SIZE; i++){
+        ASSERT(b.shipPos[i] == shipPos[i], "Ship positions should be copied");
+    }
 
     printf("\tPASSED drawBoard\n");
 }
