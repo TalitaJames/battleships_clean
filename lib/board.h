@@ -8,18 +8,17 @@
 #define BOARD_SIZE 10
 #define BOARD_DEFAULT -1
 
-typedef struct {
+typedef struct Board{
     BoardDimensions dimensions;
     bool isEmpty;
     bool isValid;
     int board[BOARD_SIZE][BOARD_SIZE] {BOARD_DEFAULT}; // Array of the board in the form [x][y]
-    // int shipPositionsInt = 0; // Int representing the ship position array, aka arangment of boats on the board
-    //TODO how to store the board? (just an array of ship positions imo) (bitmask?)
+    ShipPosition shipPos[FLEET_SIZE] = {};
 } Board;
 
 Board initBlankBoard(void);
 void wipeBoard(Board &);
-void drawBoard(Board &, ShipPosition*); //TODO such as this
+void drawBoard(Board &, ShipPosition*);
 Board rndBoard(void);
 
 std::ostream& operator<<(std::ostream&, Board&);

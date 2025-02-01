@@ -23,6 +23,13 @@ void wipeBoard(Board &b){
 
     b.isEmpty=true;
     b.isValid=false;
+
+    //FIXME this isn't the most efficient, and they technically have values (of "default")
+    ShipPosition zeroPosition = {0,0,0,true};
+    for (size_t i = 0; i < FLEET_SIZE; i++) {
+        b.shipPos[i] = zeroPosition;
+    }
+
 }
 
 /**
@@ -34,6 +41,7 @@ void drawBoard(Board &board, ShipPosition* shipPos){
     wipeBoard(board);
     board.isEmpty = false;
 
+    // Draw the grid
     for (size_t i = 0; i < FLEET_SIZE; i++){ // for each ship
         for (size_t j = 0; j < shipPos[i].length; j++){ // for the length of each ship
             // early return if a ship already there or if it is out of bounds
@@ -61,7 +69,12 @@ void drawBoard(Board &board, ShipPosition* shipPos){
             }
         }
     }
-    // board.shipPositionsInt = shipArrayToInt(shipPos); //TODO later add hash of shipPos
+
+    // Update the ship positions
+    for (size_t i = 0; i < FLEET_SIZE; i++){
+        board.shipPos[i] = shipPos[i];
+    }
+
     board.isValid = true;
 }
 
