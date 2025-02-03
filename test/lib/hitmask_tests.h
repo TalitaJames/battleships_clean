@@ -1,5 +1,5 @@
-#ifndef HITMASK_TEST_H
-#define HITMASK_TEST_H
+#ifndef HITMASK_TESTS_H
+#define HITMASK_TESTS_H
 
 #include "hitmask.h"
 #include "test_utils.h"
@@ -15,4 +15,4 @@ void TEST_HITMASK_isHitmaskSolved();
 void TEST_HITMASK_isHit();
 void TEST_HITMASK_operatorEqual();
 
-#endif //HITMASKPS_TEST_H
+#endif //HITMASK_TESTS_H

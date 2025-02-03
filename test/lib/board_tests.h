@@ -1,5 +1,5 @@
-#ifndef BOARD_TEST_H
-#define BOARD_TEST_H
+#ifndef BOARD_TESTS_H
+#define BOARD_TESTS_H
 
 #include <iostream>
 #include <cstring>
@@ -12,4 +12,4 @@ void TEST_BOARD_wipeBoard();
 void TEST_BOARD_drawBoard();
 void TEST_BOARD_rndBoard();
 
-#endif //BOARD_TEST_H
+#endif //BOARD_TESTS_H
