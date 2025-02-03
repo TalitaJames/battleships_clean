@@ -19,6 +19,7 @@ int main(){
     TEST_SHIP_convertBoundingboxToShipPosition();
     TEST_SHIP_doShipsCollide();
     TEST_SHIP_operatorEqual();
+    TEST_SHIP_operatorRelational();
 
     printf("\nTESTING BOARD\n");
     TEST_BOARD_initBlankBoard();

@@ -49,9 +49,15 @@ ShipPosition convertBoundingboxToShipPosition(ShipBoundingBox);
 bool doShipsCollide(ShipPosition shipA, ShipPosition shipB);
 bool doShipsCollide(ShipBoundingBox shipA, ShipBoundingBox shipB);
 
+// Opperator Overloads
+std::ostream& operator<<(std::ostream&, const struct ShipPosition&);
+std::ostream& operator<<(std::ostream&, const struct ShipPosition*);
+
 bool operator==(const struct ShipPosition&, const struct ShipPosition&);
 bool operator!=(const struct ShipPosition&, const struct ShipPosition&);
-std::ostream& operator<<(std::ostream&, ShipPosition&);
+
+bool operator<(const struct ShipPosition&, const struct ShipPosition&);
+bool operator>(const struct ShipPosition&, const struct ShipPosition&);
 
 // int compareShipPositions(ShipPosition, ShipPosition);
 // int compareShipArray(ShipPosition *, ShipPosition *);

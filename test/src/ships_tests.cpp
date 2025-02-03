@@ -17,8 +17,9 @@ void TEST_SHIP_singleShipPositions(){
     printf("\tPASSED singleShipPositions\n");
 }
 void TEST_SHIP_allShipPositions(){
-
+    printf("\tNOT IMPLEMENTED allShipPositions\n");
 }
+
 void TEST_SHIP_rndShipPos() {
     BoardDimensions boardSize = {10, 10};
 
@@ -123,16 +124,46 @@ void TEST_SHIP_operatorEqual(){
     ShipPosition shipB = {4, 3, 4, 1};
 
     ShipPosition shipC = {4, 3, 4, 0};
-    ShipPosition shipD = {3, 3, 3, 1};
+    ShipPosition shipD = {3, 3, 4, 1};
     ShipPosition shipE = {4, 2, 4, 1};
     ShipPosition shipF = {4, 3, 0, 1};
 
     ASSERT(shipA == shipB, "Ships with the same information should be equal");
     ASSERT(shipA != shipC, "Ships going different directions shouldn't be equal");
-    ASSERT(shipA != shipD, "Ships with different lengths shouldn't be equal");
+    ASSERT(shipA == shipD, "Ships with different lengths at the same position are still considered equal");
     ASSERT(shipA != shipE, "Ships with x positions lengths shouldn't be equal");
     ASSERT(shipA != shipF, "Ships with y positions lengths shouldn't be equal");
 
 
     printf("\tPASSED operatorEqual\n");
+}
+
+void TEST_SHIP_operatorRelational(){
+    // Test if two ship positions are equal
+    ShipPosition shipA = {4, 3, 4, 1};
+    ShipPosition shipB = {4, 3, 4, 1};
+
+    ShipPosition shipC = {4, 3, 4, 0};
+    ShipPosition shipD = {4, 3, 3, 1};
+    ShipPosition shipE = {4, 5, 4, 1};
+    ShipPosition shipF = {2, 3, 4, 1};
+
+    ASSERT((shipA < shipB) == false, "Identifal ships should not be less than each other");
+    ASSERT((shipA > shipB) == false, "Identifal ships should not be greater than each other");
+
+    ASSERT((shipA > shipC) == true, "A ship in the same position in different directions should be greater than the other");
+    ASSERT((shipA < shipC) == false, "A ship in the same position in different directions should be greater than the other (2)");
+
+    ASSERT((shipA < shipD) == false, "A ship in the above the other should be less than");
+    ASSERT((shipA > shipD) == true, "A ship in the above the other should be less than (2)");
+
+    ASSERT((shipA < shipE) == true, "A ship in the same row further along should be greater than");
+    ASSERT((shipA > shipE) == false, "A ship in the same row further along should be greater than (2)");
+
+    ASSERT((shipA < shipF) == false, "Equal positioned ships with different lengths are still considered equal");
+    ASSERT((shipA > shipF) == false, "Equal positioned ships with different lengths are still considered equal (2)");
+
+
+    printf("\tPASSED operatorRelational\n");
+
 }

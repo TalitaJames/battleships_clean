@@ -133,26 +133,41 @@ bool doShipsCollide(ShipBoundingBox shipA, ShipBoundingBox shipB){
  * @brief toString overload for ship position
  * @param os a stream
  * @param shipPos given ship position
- * @return * toString& ship position converted to string
+ * @return the stream
  */
-std::ostream& operator<<(std::ostream& os, ShipPosition& shipPos){
+std::ostream& operator<<(std::ostream& os,  const struct ShipPosition& shipPos){
     std::string dirStr = "→";
     if (!shipPos.direction) dirStr = "↓";
-    os << "(" << shipPos.length << ", " << shipPos.x << ", " << shipPos.y << ", " << dirStr << ")";
 
+    os << "len:" << shipPos.length << " (" << shipPos.x << ", " << shipPos.y << ", " << dirStr << ")";
+
+    return os;
+};
+
+/**
+ * @brief toString overload for an array of ship positions
+ * @param os a stream
+ * @param shipPos given ship position
+ * @return the stream with the array
+ */
+std::ostream& operator<<(std::ostream& os,  const struct ShipPosition* shipArray){
+    for (size_t i = 0; i < FLEET_SIZE; i++){
+        os << shipArray[i] << "\t";
+    }
     return os;
 };
 
 
 /**
- * @brief Checks if two ShipPositions match
- * @param A first hitmask
- * @param B second hitmask
+ * @brief Checks if two ShipPositions match.
+ * Note that length isn't checked, as it is negligible for considering the same positions
+ * 
+ * @param A first ship position
+ * @param B second ship position
  * @return bool true if equal
  */
 bool operator==(const struct ShipPosition &A,  const struct ShipPosition &B){
 
-    if (A.length != B.length) return false;
     if (A.x != B.x) return false;
     if (A.y != B.y) return false;
     if (A.direction != B.direction) return false;
@@ -162,10 +177,46 @@ bool operator==(const struct ShipPosition &A,  const struct ShipPosition &B){
 
 /**
  * @brief Checks if two ShipPositions aren't equal
- * @param A first hitmask
- * @param B second hitmask
+ * @param A first ship position
+ * @param B second ship position
  * @return bool true if not equal
  */
 bool operator!=(const struct ShipPosition &A,  const struct ShipPosition &B){
     return !(A==B);
 };
+
+/**
+ * @brief Checks if B is greater than A, in priority of direction (vertical < horizontal) and if B is lower and further right.
+ * Note that length isn't checked, as it is negligible for considering the same positions
+ * @param A First ship position
+ * @param B Seccond ship position
+ * @return true if A is greater than B
+ */
+bool operator<(const struct ShipPosition &A, const struct ShipPosition &B){
+
+    if (A.direction != B.direction){ // if directions aren't equal
+        return A.direction < B.direction; // horizontal (true) is greater
+    }
+
+    if (A.y != B.y){
+        return A.y < B.y;
+    }
+
+    if (A.x != B.x){
+        return A.x < B.x;
+    }
+
+    return false; // if all else fails, they are equal (thus not greater than)
+}
+
+/**
+ * @brief Checks if A is greater than B, ie is A is closer to the bottom, and further right
+ *          (or is vertical and B is not)
+ * @param A First ship position
+ * @param B Seccond ship position
+ * @return true if A is not less than B AND A is not equal to B (thus less than)
+ */
+bool operator>(const struct ShipPosition &A, const struct ShipPosition &B){
+    if (!(A<B) && (A!=B)) return true;
+    return false;
+}
