@@ -4,6 +4,7 @@
 #include "ships_tests.h"
 #include "board_tests.h"
 #include "hitmask_tests.h"
+#include "probabilityGrid_tests.h"
 
 int main(){
     printf("\nTESTING VECTOR\n");
@@ -32,10 +33,13 @@ int main(){
     TEST_HITMASK_howManyTurnsTaken();
     TEST_HITMASK_checkCompatible();
     TEST_HITMASK_turnsToShotmask();
-
     TEST_HITMASK_isHitmaskSolved();
     TEST_HITMASK_isHit();
     TEST_HITMASK_operatorEqual();
+
+    printf("\nTESTING PROBABILITYGRID\n");
+    TEST_PROBABILITYGRID_initProbabilityGrid();
+    TEST_PROBABILITYGRID_calcProbabilityGrid();
 
     return 0;
 }
