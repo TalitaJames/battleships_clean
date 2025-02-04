@@ -4,6 +4,9 @@
 #define BOARD_SIZE 5
 #define BOARD_DEFAULT -1
 
+#define THREAD_COUNT 8
+#define CODE_VERSION "V5c"
+
 #define verbose true
 
 #endif //CONSTANTS_H
