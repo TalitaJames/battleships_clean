@@ -24,7 +24,7 @@ int main(){
     TEST_SHIPS_nextShipPosArray();
     TEST_SHIPS_setStartArray();
     TEST_SHIPS_setEndArray();
-
+    TEST_SHIPS_compareShipArray();
 
     printf("\nTESTING BOARD\n");
     TEST_BOARD_initBlankBoard();

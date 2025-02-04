@@ -221,7 +221,24 @@ bool operator>(const struct ShipPosition &A, const struct ShipPosition &B){
     return false;
 }
 
-
+/**
+ * @brief Compares two shipPosition arrays and determines which is "greater".
+ * The "greatest" array is the one with a greater ship,
+ * compared from left to right in the array
+ *
+ * @param pA position A
+ * @param pB position B
+ * @return int comparing the sizes, ie -1 if pA>pB, 0 if pA=pB, 1 if pA<pB
+*/
+int compareShipArray(ShipPosition *pA, ShipPosition *pB){
+    for (size_t i = 0; i < FLEET_SIZE; i++){
+        if (pA[i] != pB[i]){
+            // if pA>pB return -1, else return 1
+            return (pA[i] > pB[i]) ? -1 : 1;
+        }
+    }
+    return 0;
+};
 
 
 /**
@@ -297,7 +314,7 @@ void setStartArray(ShipPosition * shipPosArray){
 void setEndArray(ShipPosition * shipPosArray){
     for (size_t i = 0; i < FLEET_SIZE; i++){
         shipPosArray[i].length = FLEET[i];
-        shipPosArray[i].x = BOARD_SIZE - FLEET[i] + 1;
+        shipPosArray[i].x = BOARD_SIZE - FLEET[i]; // No +1 because that is imbeded in the fact BOARD_SIZE is always one above x
         shipPosArray[i].y = BOARD_SIZE - 1;
         shipPosArray[i].direction = 1; // true (->) is the last value
     }

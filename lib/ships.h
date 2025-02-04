@@ -11,7 +11,7 @@
 
 typedef unsigned int Ship;
 
-const Ship FLEET[] = {5, 5, 7};
+const Ship FLEET[] = {2, 3, 3};
 const short FLEET_SIZE = sizeof(FLEET)/sizeof(FLEET[0]);
 
 /// @brief a ship position, stored as the space the ship takes
@@ -60,6 +60,8 @@ bool operator!=(const struct ShipPosition&, const struct ShipPosition&);
 
 bool operator<(const struct ShipPosition&, const struct ShipPosition&);
 bool operator>(const struct ShipPosition&, const struct ShipPosition&);
+
+int compareShipArray(ShipPosition *pA, ShipPosition *pB); //TODO test
 
 // Iterating through ships
 void nextShipPosition(ShipPosition &);

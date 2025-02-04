@@ -244,10 +244,39 @@ void TEST_SHIPS_setEndArray() {
 
     for (size_t i = 0; i < FLEET_SIZE; i++) {
         ASSERT(shipPosArray[i].length == FLEET[i], "Expected length to match FLEET");
-        ASSERT(shipPosArray[i].x == BOARD_SIZE - FLEET[i] + 1, "Expected x to match BOARD_SIZE - FLEET[i] + 1");
+        ASSERT(shipPosArray[i].x == BOARD_SIZE - FLEET[i], "Expected x to match BOARD_SIZE - FLEET[i]");
         ASSERT(shipPosArray[i].y == BOARD_SIZE - 1, "Expected y to be BOARD_SIZE - 1");
         ASSERT(shipPosArray[i].direction == 1, "Expected direction to be 1");
     }
 
     printf("\tPASSED setEndArray\n");
+}
+
+
+void TEST_SHIPS_compareShipArray() {
+    ShipPosition pA[FLEET_SIZE];
+    ShipPosition pB[FLEET_SIZE];
+
+    // Initialize pA and pB with some values
+    for (int i = 0; i < FLEET_SIZE; i++) {
+        pA[i] = {(unsigned int)i, i, i, true};
+        pB[i] = {(unsigned int)i, i, i, true};
+    }
+
+    // pA == pB
+    int result = compareShipArray(pA, pB);
+    ASSERT(result == 0, "compareShipArray should return 0 when arrays are equal");
+
+    // pA > pB
+    pA[0] = {1, 1, 2, true}; // Make pA greater than pB
+    result = compareShipArray(pA, pB);
+    ASSERT(result == -1, "compareShipArray should return -1 when pA > pB");
+
+    // pA < pB
+    pA[0] = {0, 0, 0, true}; // Reset pA
+    pB[1] = {1, 1, 2, true}; // Make pB greater than pA
+    result = compareShipArray(pA, pB);
+    ASSERT(result == 1, "compareShipArray should return 1 when pA < pB");
+
+    printf("\tPASSED compareShipArray\n");
 }
