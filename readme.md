@@ -5,5 +5,6 @@
 Uses the [`JsonCPP`](https://github.com/open-source-parsers/jsoncpp)
 
 ## To Do list
-- [x] JSON things
 - [ ] MonteCarlo Tree search
+- [x] change `runThreads` to have a better name (iterateBoardsToGenerateProbabilityGrid?)
+    - [ ] make the function a parseable option to play methods(so that a different function could be used instead)

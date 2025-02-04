@@ -63,7 +63,7 @@ void checkBoards(Worker &w, Hitmask hitM, int threadID){
     if (verbose) std::cout << "CheckBoards " << threadID << " done" << std::endl;
 };
 
-void runThreads(Hitmask hitM, ProbabilityGrid &probGrid, unsigned int threadCount){
+void iterateBoardsToGenerateProbabilityGrid(Hitmask hitM, ProbabilityGrid &probGrid, unsigned int threadCount){
     std::vector<Worker> sweatshop;
     std::vector<std::thread> sweatshopThreads;
 

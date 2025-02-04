@@ -13,7 +13,7 @@
 void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM, ProbabilityGrid &probGrid, int &x, int &y, Json::Value & gamePlayHistory){
     if(isHitmaskSolved(hitM)) return;
     // gather data
-    if(playStyle != RND) runThreads(hitM, probGrid, THREAD_COUNT);
+    if(playStyle != RND) iterateBoardsToGenerateProbabilityGrid(hitM, probGrid, THREAD_COUNT);
 
     do{ // decide where to shoot
         switch(playStyle){

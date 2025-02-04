@@ -194,7 +194,7 @@ double coordinate_infoGain(int &xReturn, int &yReturn, ProbabilityGrid &pG, Hitm
                             infoHitmask.shipSunk[i]=1;
                         }
 
-                        runThreads(infoHitmask, infoPG, THREAD_COUNT);
+                        iterateBoardsToGenerateProbabilityGrid(infoHitmask, infoPG, THREAD_COUNT);
                         double probOptionIsTrue = ((double) infoPG.totalGoodBoards)/((double) pG.totalGoodBoards);
                         infoGainPart += (1 - probOptionIsTrue) * probOptionIsTrue;
 
