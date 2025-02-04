@@ -173,30 +173,30 @@ void TEST_SHIPS_nextShipPosition() {
     // just change y (no rollover)
     ShipPosition shipPos = {0, 0, 2, true};
     nextShipPosition(shipPos);
-    ASSERT(shipPos.x == 0, "Expected x to be 0");
-    ASSERT(shipPos.y == 3, "Expected y to be 0");
-    ASSERT(shipPos.direction == true, "Expected direction to be true");
+    ASSERT(shipPos.x == 0, "Expected x to be 0 when changing y");
+    ASSERT(shipPos.y == 3, "Expected y to be 0 when changing y");
+    ASSERT(shipPos.direction == true, "Expected direction to be true when changing y");
 
     // just change x
     shipPos.y = BOARD_SIZE - 1;
     nextShipPosition(shipPos);
-    ASSERT(shipPos.x == 1, "Expected x to be 1");
-    ASSERT(shipPos.y == 0, "Expected y to be 0");
-    ASSERT(shipPos.direction == true, "Expected direction to be true");
+    ASSERT(shipPos.x == 1, "Expected x to be 1 when changing x");
+    ASSERT(shipPos.y == 0, "Expected y to be 0 when changing x");
+    ASSERT(shipPos.direction == true, "Expected direction to be true when changing x");
 
     // xy at max and direction changes
-    ShipPosition xyRollover = {7, BOARD_SIZE-1, BOARD_SIZE-1, false};
+    ShipPosition xyRollover = {2, BOARD_SIZE-1, BOARD_SIZE-1, false};
     nextShipPosition(xyRollover);
-    ASSERT(xyRollover.x == 0, "Expected x to be 0");
-    ASSERT(xyRollover.y == 0, "Expected y to be 0");
-    ASSERT(xyRollover.direction == true, "Expected direction to be true");
+    ASSERT(xyRollover.x == 0, "Expected x to be 0 when changing direction");
+    ASSERT(xyRollover.y == 0, "Expected y to be 0 when changing direction");
+    ASSERT(xyRollover.direction == true, "Expected direction to be true when changing direction");
 
     // xy at max and direction rollover to begining
     ShipPosition finalShipPos = {1, BOARD_SIZE-1, BOARD_SIZE-1, true};
     nextShipPosition(finalShipPos);
-    ASSERT(finalShipPos.x == 0, "Expected x to be 0");
-    ASSERT(finalShipPos.y == 0, "Expected y to be 0");
-    ASSERT(finalShipPos.direction == false, "Expected direction to be false");
+    ASSERT(finalShipPos.x == 0, "Expected x to be 0 when rolling over x,y,direction");
+    ASSERT(finalShipPos.y == 0, "Expected y to be 0 when rolling over x,y,direction");
+    ASSERT(finalShipPos.direction == false, "Expected direction to be false when rolling over x,y,direction");
 
     printf("\tPASSED nextShipPosition\n");
 }
