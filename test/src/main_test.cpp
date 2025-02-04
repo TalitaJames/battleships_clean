@@ -1,16 +1,12 @@
 #include <stdio.h>
 #include "test_utils.h"
-#include "vector_tests.h"
 #include "ships_tests.h"
 #include "board_tests.h"
 #include "hitmask_tests.h"
 #include "probabilityGrid_tests.h"
+#include "boardIterator_tests.h"
 
 int main(){
-    printf("\nTESTING VECTOR\n");
-    TEST_VECTOR_INIT();
-    TEST_VECTOR_APPEND();
-
     printf("\nTESTING SHIPS\n");
     TEST_SHIP_singleShipPositions();
     TEST_SHIP_allShipPositions();
@@ -46,6 +42,12 @@ int main(){
     printf("\nTESTING PROBABILITYGRID\n");
     TEST_PROBABILITYGRID_initProbabilityGrid();
     TEST_PROBABILITYGRID_calcProbabilityGrid();
+
+    printf("\nTESTING BOARDITERATOR\n");
+    TEST_BOARDITERATOR_dividePositions();
+    TEST_BOARDITERATOR_appendWorkerToProbGrid();
+    TEST_BOARDITERATOR_gatherProbabilityFromWorkers();
+
 
     return 0;
 }
