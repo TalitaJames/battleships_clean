@@ -20,6 +20,11 @@ int main(){
     TEST_SHIP_doShipsCollide();
     TEST_SHIP_operatorEqual();
     TEST_SHIP_operatorRelational();
+    TEST_SHIPS_nextShipPosition();
+    TEST_SHIPS_nextShipPosArray();
+    TEST_SHIPS_setStartArray();
+    TEST_SHIPS_setEndArray();
+
 
     printf("\nTESTING BOARD\n");
     TEST_BOARD_initBlankBoard();

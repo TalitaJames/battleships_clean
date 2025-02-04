@@ -220,3 +220,85 @@ bool operator>(const struct ShipPosition &A, const struct ShipPosition &B){
     if (!(A<B) && (A!=B)) return true;
     return false;
 }
+
+
+
+
+/**
+ * @brief Given a ship position and a ship, generate the next one in sequence.
+ * A ship "starts" in the vertical top left corner,
+ * and moves down, then right, then flips direction (to be horizontal)
+ *
+ * @param shipPos the given ship position
+*/
+void nextShipPosition(ShipPosition &shipPos){
+    shipPos.y++;
+
+    if (shipPos.direction && shipPos.y >= BOARD_SIZE){
+        shipPos.y=0;
+        shipPos.x++;
+    } else if (!shipPos.direction && shipPos.y > BOARD_SIZE - shipPos.length){
+        shipPos.y=0;
+        shipPos.x++;
+    }
+
+    if (shipPos.direction && shipPos.x > BOARD_SIZE - shipPos.length){
+        shipPos.x=0;
+        shipPos.y=0;
+        shipPos.direction = !shipPos.direction;
+    } else if (!shipPos.direction && shipPos.x >= BOARD_SIZE){
+        shipPos.x=0;
+        shipPos.y=0;
+        shipPos.direction = !shipPos.direction;
+    }
+};
+
+/**
+ * @brief Generate the next ship position array, from the current position
+ * From the last ship (nth) ship to the position will itterate to the next,
+ * then check if it has "overflowed" back to the starting position.
+ * It continues reseting from right to left until either that position overflows to the start,
+ * or all positions in the array have been incremented.
+ *
+ * @param shipPosArray a pointer to the ship position array
+*/
+void nextShipPosArray(ShipPosition* shipPosArray){
+    ShipPosition startingShipPos = {0,0,0,0};
+
+    for (int i = FLEET_SIZE-1; i >= 0; i--){
+        nextShipPosition(shipPosArray[i]);
+        if (shipPosArray[i] != startingShipPos){
+            return;
+        }
+    }
+};
+
+
+
+/**
+ * @brief set the given array to have a ship at (0,0)
+ * @param shipPosArray the array to be set to {length, 0, 0,0}
+ */
+void setStartArray(ShipPosition * shipPosArray){
+    for (size_t i = 0; i < FLEET_SIZE; i++){
+        shipPosArray[i].length = FLEET[i];
+        shipPosArray[i].x = 0;
+        shipPosArray[i].y = 0;
+        shipPosArray[i].direction = 0;
+    }
+}
+
+/**
+ * @brief Sets every value of a ship position array to the end.
+ * The last value is the bottom right horizontal position
+ *
+ * @param shipPosArray a pointer to a ship posion array
+*/
+void setEndArray(ShipPosition * shipPosArray){
+    for (size_t i = 0; i < FLEET_SIZE; i++){
+        shipPosArray[i].length = FLEET[i];
+        shipPosArray[i].x = BOARD_SIZE - FLEET[i] + 1;
+        shipPosArray[i].y = BOARD_SIZE - 1;
+        shipPosArray[i].direction = 1; // true (->) is the last value
+    }
+}

@@ -4,9 +4,7 @@
 #include <stdio.h>
 #include <memory.h>
 #include "ships.h"
-
-#define BOARD_SIZE 10
-#define BOARD_DEFAULT -1
+#include "constants.h"
 
 typedef struct Board{
     BoardDimensions dimensions;

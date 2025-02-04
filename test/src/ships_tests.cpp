@@ -117,7 +117,6 @@ void TEST_SHIP_doShipsCollide(){
     printf("\tPASSED doShipsCollide\n");
 }
 
-
 void TEST_SHIP_operatorEqual(){
     // Test if two ship positions are equal
     ShipPosition shipA = {4, 3, 4, 1};
@@ -166,4 +165,89 @@ void TEST_SHIP_operatorRelational(){
 
     printf("\tPASSED operatorRelational\n");
 
+}
+
+void TEST_SHIPS_nextShipPosition() {
+    ASSERT(BOARD_SIZE > 4, "Board size must be greater than 4 for valid tests");
+
+    // just change y (no rollover)
+    ShipPosition shipPos = {0, 0, 2, true};
+    nextShipPosition(shipPos);
+    ASSERT(shipPos.x == 0, "Expected x to be 0");
+    ASSERT(shipPos.y == 3, "Expected y to be 0");
+    ASSERT(shipPos.direction == true, "Expected direction to be true");
+
+    // just change x
+    shipPos.y = BOARD_SIZE - 1;
+    nextShipPosition(shipPos);
+    ASSERT(shipPos.x == 1, "Expected x to be 1");
+    ASSERT(shipPos.y == 0, "Expected y to be 0");
+    ASSERT(shipPos.direction == true, "Expected direction to be true");
+
+    // xy at max and direction changes
+    ShipPosition xyRollover = {7, BOARD_SIZE-1, BOARD_SIZE-1, false};
+    nextShipPosition(xyRollover);
+    ASSERT(xyRollover.x == 0, "Expected x to be 0");
+    ASSERT(xyRollover.y == 0, "Expected y to be 0");
+    ASSERT(xyRollover.direction == true, "Expected direction to be true");
+
+    // xy at max and direction rollover to begining
+    ShipPosition finalShipPos = {1, BOARD_SIZE-1, BOARD_SIZE-1, true};
+    nextShipPosition(finalShipPos);
+    ASSERT(finalShipPos.x == 0, "Expected x to be 0");
+    ASSERT(finalShipPos.y == 0, "Expected y to be 0");
+    ASSERT(finalShipPos.direction == false, "Expected direction to be false");
+
+    printf("\tPASSED nextShipPosition\n");
+}
+
+void TEST_SHIPS_nextShipPosArray() {
+    ShipPosition shipPosArray[FLEET_SIZE];
+    setStartArray(shipPosArray);
+
+    nextShipPosArray(shipPosArray);
+    ASSERT(shipPosArray[FLEET_SIZE-1].x == 0, "Expected x to be 0");
+    ASSERT(shipPosArray[FLEET_SIZE-1].y == 1, "Expected y to be 1");
+    ASSERT(shipPosArray[FLEET_SIZE-1].direction == 0, "Expected direction to be 0");
+
+    //set the whole array to the end value
+    for (int i = 0; i < FLEET_SIZE; i++) {
+        shipPosArray[i] = {FLEET[i], (int)(BOARD_SIZE - FLEET[i] + 1), (int)(BOARD_SIZE - 1), 1};
+    }
+    nextShipPosArray(shipPosArray);
+    for (int i = 0; i < FLEET_SIZE; i++) {
+        ASSERT(shipPosArray[i].x == 0, "Expected x to be 0");
+        ASSERT(shipPosArray[i].y == 0, "Expected y to be 0");
+        ASSERT(shipPosArray[i].direction == 0, "Expected direction to be 0");
+    }
+
+    printf("\tPASSED nextShipPosArray\n");
+}
+
+void TEST_SHIPS_setStartArray() {
+    ShipPosition shipPosArray[FLEET_SIZE];
+    setStartArray(shipPosArray);
+
+    for (size_t i = 0; i < FLEET_SIZE; i++) {
+        ASSERT(shipPosArray[i].length == FLEET[i], "Expected length to match FLEET");
+        ASSERT(shipPosArray[i].x == 0, "Expected x to be 0");
+        ASSERT(shipPosArray[i].y == 0, "Expected y to be 0");
+        ASSERT(shipPosArray[i].direction == 0, "Expected direction to be 0");
+    }
+
+    printf("\tPASSED setStartArray\n");
+}
+
+void TEST_SHIPS_setEndArray() {
+    ShipPosition shipPosArray[FLEET_SIZE];
+    setEndArray(shipPosArray);
+
+    for (size_t i = 0; i < FLEET_SIZE; i++) {
+        ASSERT(shipPosArray[i].length == FLEET[i], "Expected length to match FLEET");
+        ASSERT(shipPosArray[i].x == BOARD_SIZE - FLEET[i] + 1, "Expected x to match BOARD_SIZE - FLEET[i] + 1");
+        ASSERT(shipPosArray[i].y == BOARD_SIZE - 1, "Expected y to be BOARD_SIZE - 1");
+        ASSERT(shipPosArray[i].direction == 1, "Expected direction to be 1");
+    }
+
+    printf("\tPASSED setEndArray\n");
 }

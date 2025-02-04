@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <vector>
 
+#include "constants.h"
+
 typedef unsigned int Ship;
 
 const Ship FLEET[] = {5, 5, 7};
@@ -59,23 +61,13 @@ bool operator!=(const struct ShipPosition&, const struct ShipPosition&);
 bool operator<(const struct ShipPosition&, const struct ShipPosition&);
 bool operator>(const struct ShipPosition&, const struct ShipPosition&);
 
-// int compareShipPositions(ShipPosition, ShipPosition);
-// int compareShipArray(ShipPosition *, ShipPosition *);
+// Iterating through ships
+void nextShipPosition(ShipPosition &);
+void nextShipPosArray(ShipPosition *);
 
-// unsigned long shipPosToInt(ShipPosition);
-// unsigned long shipArrayToInt(ShipPosition *);
-// void intToShipPos(unsigned long, ShipPosition &);
-// void intToShipArray(unsigned long, ShipPosition *);
-// board intToBoard(unsigned long);
+void setStartArray(ShipPosition *);
+void setEndArray(ShipPosition *);
 
-// void nextShipPosition(ShipPosition &);
-// void nextShipPosition(ShipPosition &, ship);
-// void nextShipPosArray(ShipPosition *, ship const);
-
-// bool isStartPos(ShipPosition);
-// bool isStartArray(ShipPosition *);
-// void setEndArray(ShipPosition *);
-// void setStartArray(ShipPosition *);
 
 
 #endif //SHIPS_H
