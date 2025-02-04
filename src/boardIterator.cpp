@@ -6,7 +6,7 @@
  * @param workerVector vector of workers as a refference (they get updated)
 */
 void dividePositions(int threadCount,std::vector<Worker> &workerVector){
-    // TODO check if threadCount is a power of 2, else round
+    // TODO add capacity for many workers, with ryan's splitting things
     workerVector.clear();
     workerVector.reserve(threadCount);
 
@@ -19,9 +19,6 @@ void dividePositions(int threadCount,std::vector<Worker> &workerVector){
     std::copy(positionStart, positionStart+FLEET_SIZE, std::begin(soloWorker.start));
     std::copy(positionEnd, positionEnd+FLEET_SIZE, std::begin(soloWorker.end));
     workerVector.push_back(soloWorker);
-
-    // TODO: add capacity for many workers, with ryan's splitting things
-
 };
 
 /**
