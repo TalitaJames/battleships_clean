@@ -7,7 +7,6 @@
 #include "constants.h"
 
 typedef struct Board{
-    BoardDimensions dimensions;
     bool isEmpty;
     bool isValid;
     int board[BOARD_SIZE][BOARD_SIZE] {BOARD_DEFAULT}; // Array of the board in the form [x][y]

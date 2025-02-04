@@ -9,11 +9,6 @@
 
 #include "constants.h"
 
-typedef unsigned int Ship;
-
-const Ship FLEET[] = {2, 3, 3};
-const short FLEET_SIZE = sizeof(FLEET)/sizeof(FLEET[0]);
-
 /// @brief a ship position, stored as the space the ship takes
 typedef struct {
     // Bounding box
@@ -31,17 +26,10 @@ typedef struct ShipPosition{
     bool direction; // 1 represents horizontal
 } ShipPosition;
 
-/// @brief Rectangle board dimensions for putting ships in
-typedef struct {
-    int width;
-    int height;
-} BoardDimensions;
-
-
 // Generating ship positions
-std::vector<ShipPosition> singleShipPositions(BoardDimensions, Ship);
-std::vector<std::vector<ShipPosition>> allShipPositions(BoardDimensions, Ship[]);
-ShipPosition rndShipPos(BoardDimensions, Ship);
+std::vector<ShipPosition> singleShipPositions(int boardSize, Ship);
+std::vector<std::vector<ShipPosition>> allShipPositions(int boardSize, Ship[]);
+ShipPosition rndShipPos(int boardSize, Ship);
 
 // Conversions between various formats
 ShipBoundingBox convertShipPositionToBoundingBox(ShipPosition);
@@ -61,7 +49,7 @@ bool operator!=(const struct ShipPosition&, const struct ShipPosition&);
 bool operator<(const struct ShipPosition&, const struct ShipPosition&);
 bool operator>(const struct ShipPosition&, const struct ShipPosition&);
 
-int compareShipArray(ShipPosition *pA, ShipPosition *pB); //TODO test
+int compareShipArray(ShipPosition *pA, ShipPosition *pB);
 
 // Iterating through ships
 void nextShipPosition(ShipPosition &);

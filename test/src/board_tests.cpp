@@ -11,9 +11,6 @@ void TEST_BOARD_initBlankBoard() {
         }
     }
 
-    ASSERT(b.dimensions.height == BOARD_SIZE, "Board height should be set to BOARD_SIZE");
-    ASSERT(b.dimensions.width == BOARD_SIZE, "Board width should be set to BOARD_SIZE");
-
     printf("\tPASSED initBlankBoard\n");
 }
 
@@ -29,15 +26,12 @@ void TEST_BOARD_wipeBoard() {
         }
     }
     // TODO test shipPos is cleared
-    ASSERT(b.dimensions.height == BOARD_SIZE, "Board height should be set to BOARD_SIZE");
-    ASSERT(b.dimensions.width == BOARD_SIZE, "Board width should be set to BOARD_SIZE");
     printf("\tPASSED wipeBoard\n");
 }
 
 void TEST_BOARD_drawBoard() {
     Board b = initBlankBoard();
-    ASSERT(b.dimensions.height >= 3, "Board height should be at least 3 to test properly");
-    ASSERT(b.dimensions.width >= 3, "Board width should be at least 3 to test properly");
+    ASSERT(BOARD_SIZE >= 3, "Board height should be at least 3 to test properly");
 
     ShipPosition shipPos[FLEET_SIZE] = {
         {3, 0, 0, true}, // Horizontal ship at [0][0], [1][0], [2][0]

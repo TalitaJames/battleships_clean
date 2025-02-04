@@ -4,18 +4,18 @@
 @brief Given an empty board, calculates all valid positions for the ship
 @param board the dimensions of the grid to place ship on
 @param ship length of a single ship
-@return //TODO
+@return //TODO implement single ship positions
 */
-std::vector<ShipPosition> singleShipPositions(BoardDimensions board, Ship shipLength) {
+std::vector<ShipPosition> singleShipPositions(int boardSize, Ship shipLength) {
 
-    int maxPositions = (board.width-shipLength+1)*board.height;
-    if (shipLength>1) maxPositions += (board.height-shipLength+1)*board.width;
+    int maxPositions = (boardSize-shipLength+1)*boardSize;
+    if (shipLength>1) maxPositions += (boardSize-shipLength+1)*boardSize;
 
     std::vector<ShipPosition> allSingleShipPositions;
     allSingleShipPositions.reserve(maxPositions);
 
-    for (int major = 0; major < board.width; major++) {
-        for (int minor = 0; minor < board.height - shipLength + 1; minor++) {
+    for (int major = 0; major < boardSize; major++) {
+        for (int minor = 0; minor < boardSize - shipLength + 1; minor++) {
             if(shipLength == 1){
                 ShipPosition newShip = {shipLength, major, minor, true};
                 allSingleShipPositions.push_back(newShip);
@@ -36,40 +36,38 @@ std::vector<ShipPosition> singleShipPositions(BoardDimensions board, Ship shipLe
 @brief Given an empty board, calculates all valid positions for all ships
 @param board the dimensions of the grid to place ships on
 @param ships array with lengths of all ships in the game
-@return //TODO
+@return //TODO implement this function
 */
-std::vector<std::vector<ShipPosition>> allshipPositions(BoardDimensions board, Ship fleet[])
+std::vector<std::vector<ShipPosition>> allshipPositions(int boardSize, Ship fleet[])
 {
     std::vector<std::vector<ShipPosition>> fixme;
     // int shipsCount = sizeof(ships)/sizeof(ships[0]);
     for (size_t i = 0; i < 5; i++){
-        singleShipPositions(board, fleet[i]);
+        singleShipPositions(boardSize, fleet[i]);
     }
     return fixme;
 
 }
 
 
-/*!
-@breif Generates a random position for a ship
-@param len a length of the ship
-@bug this is known to only generate ships stating in the top left corner
-@return shipPosition a (semi) random shipPosition
-*/
-ShipPosition rndShipPos(BoardDimensions board, Ship len){
+/**
+ * @brief  Generates a random position for a ship
+ * @param len a length of the ship
+ * @bug this is known to only generate ships stating in the top left corner
+ * @return shipPosition a (semi) random shipPosition
+ */
+ShipPosition rndShipPos(int boardSize, Ship len){
     std::random_device rdDev;
     std::mt19937 rng(rdDev());
 
-    int max_x = std::max(0, board.width - (int)(len));
-    int max_y = std::max(0, board.height - (int)(len));
+    int max = std::max(0, boardSize - (int)(len));
 
-    std::uniform_int_distribution<std::mt19937::result_type> udist_width(0,board.width-len);
-    std::uniform_int_distribution<std::mt19937::result_type> udist_height(0,board.height-len);
+    std::uniform_int_distribution<std::mt19937::result_type> udist(0,boardSize-len);
 
     ShipPosition pos;
     pos.length = len;
-    pos.x = udist_width(rng);
-    pos.y = udist_height(rng);
+    pos.x = udist(rng);
+    pos.y = udist(rng);
     pos.direction = rand() % 2;
 
     return pos;

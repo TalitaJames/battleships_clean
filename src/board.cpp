@@ -18,8 +18,6 @@ Board initBlankBoard(void){
  */
 void wipeBoard(Board &b){
     memset(b.board, BOARD_DEFAULT, sizeof(b.board));
-    b.dimensions.height = BOARD_SIZE;
-    b.dimensions.width = BOARD_SIZE;
 
     b.isEmpty=true;
     b.isValid=false;
@@ -89,7 +87,7 @@ Board rndBoard(){
 
     while (!b.isValid){
         for (size_t i = 0; i < FLEET_SIZE; i++){
-            boardPositions[i] = rndShipPos(b.dimensions, FLEET[i]);
+            boardPositions[i] = rndShipPos(BOARD_SIZE, FLEET[i]);
         }
 
         drawBoard(b, boardPositions);
@@ -100,7 +98,7 @@ Board rndBoard(){
 
 
 std::ostream& operator<<(std::ostream& os, Board& b){
-    os << "Board {" << b.dimensions.width << ", " << b.dimensions.height << "}";
+    os << "Board {" << BOARD_SIZE << ", " << BOARD_SIZE << "}";
     os << "\tempty:"<<b.isEmpty<<" valid: "<<b.isValid<<"\n";
     for (int y = 0; y < BOARD_SIZE; y++){
         os << "[";

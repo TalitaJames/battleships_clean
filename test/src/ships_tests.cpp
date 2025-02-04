@@ -2,12 +2,9 @@
 #include <set>
 
 void TEST_SHIP_singleShipPositions(){
-    BoardDimensions fiveSquare = {5,5};
-    BoardDimensions tenSquare = {10, 10};
-
-    std::vector<ShipPosition> allShips_3in5 = singleShipPositions(fiveSquare, 3);
-    std::vector<ShipPosition> allShips_5in5 = singleShipPositions(fiveSquare, 5);
-    std::vector<ShipPosition> allShips_1in10 = singleShipPositions(tenSquare, 1);
+    std::vector<ShipPosition> allShips_3in5 = singleShipPositions(5, 3);
+    std::vector<ShipPosition> allShips_5in5 = singleShipPositions(5, 5);
+    std::vector<ShipPosition> allShips_1in10 = singleShipPositions(10, 1);
 
 
     ASSERT(allShips_3in5.size() == 30, "The wrong number of ships for a size 3 on a 5x5 board");
@@ -17,19 +14,19 @@ void TEST_SHIP_singleShipPositions(){
     printf("\tPASSED singleShipPositions\n");
 }
 void TEST_SHIP_allShipPositions(){
-    printf("\tNOT IMPLEMENTED allShipPositions\n");
+    printf("\tNOT IMPLEMENTED allShipPositions\n"); //TODO implelemt
 }
 
 void TEST_SHIP_rndShipPos() {
-    BoardDimensions boardSize = {10, 10};
+    int boardSize = 10;
 
     int numberOfRndShips = 5;
     ShipPosition ships[numberOfRndShips];
 
     for (size_t i = 0; i < numberOfRndShips; i++) {
         ships[i] = rndShipPos(boardSize, 5);
-        ASSERT(ships[i].x >= 0 && ships[i].x < boardSize.width, "Ship x position should be within board bounds");
-        ASSERT(ships[i].y >= 0 && ships[i].y < boardSize.height, "Ship y position should be within board bounds");
+        ASSERT(ships[i].x >= 0 && ships[i].x < boardSize, "Ship x position should be within board bounds");
+        ASSERT(ships[i].y >= 0 && ships[i].y < boardSize, "Ship y position should be within board bounds");
     }
 
     // check all the ships are being generated in different positions
