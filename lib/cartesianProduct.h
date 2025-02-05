@@ -17,9 +17,16 @@ template <typename T> std::vector<std::vector<T>> vectorIntoVectorVector(std::ve
 // template definitions
 
 
-template <typename T> std::vector<std::vector<T>> vectorIntoVectorVector(std::vector<T> set){
+/**
+ * @brief change a 1D vector into a 2D
+ * @tparam T the type of vector
+ * @param in a 1D vector eg {3, 4, 6}
+ * @return the vector in transformed into n vectors each seperatly holding the element,
+ * ie {3, 4, 6} becomes {{3}, {4}, {6}}
+ */
+template <typename T> std::vector<std::vector<T>> vectorIntoVectorVector(std::vector<T> in){
     std::vector<std::vector<T>> result;
-    for(T element : set){
+    for(T element : in){
         std::vector<T> elementVector = {element};
         result.push_back(elementVector);
     }
@@ -27,23 +34,71 @@ template <typename T> std::vector<std::vector<T>> vectorIntoVectorVector(std::ve
     return result;
 }
 
-template <typename T> std::vector<std::vector<T>> cartesianProduct(std::vector<T> setA, std::vector<T> setB){
+
+/**
+ * @brief Computes the Cartesian product of two sets.
+ *
+ * Takes two 1D vectors and returns their Cartesian product,
+ * represented as a vector of vectors.
+ *
+ * @tparam T The type of elements in the sets.
+ * @param setA The first set.
+ * @param setB The second set.
+ * @return A vector of vectors representing the Cartesian product of setA and setB.
+ */
+template <typename T>
+std::vector<std::vector<T>> cartesianProduct(std::vector<T> setA, std::vector<T> setB){
     return cartesianProduct(vectorIntoVectorVector(setA), setB);
 }
 
-template <typename T> std::vector<std::vector<T>> cartesianProduct(std::vector<T> setA, std::vector<T> setB, std::function<bool(std::vector<T>)> filter){
+/**
+ * @brief Computes the filtered Cartesian product of two sets.
+ *
+ * Takes two vectors and a filter function.
+ * The Cartesian product is computed, only elements satisfying the filter
+ * are included in the result.
+ *
+ * @tparam T The type of elements in the sets.
+ * @param setA The first set.
+ * @param setB The second set.
+ * @param filter A function that determines which combinations should be included.
+ * @return A vector of vectors representing the filtered Cartesian product.
+ */
+template <typename T>
+std::vector<std::vector<T>> cartesianProduct(std::vector<T> setA, std::vector<T> setB, std::function<bool(std::vector<T>)> filter){
     return cartesianProduct(vectorIntoVectorVector(setA), setB, filter);
 }
 
 
 
+
+/**
+ * @brief Computes the filtered Cartesian product of two sets.
+ *
+ * @tparam T The type of elements in the sets.
+ * @param setA The first set (as a vector of vectors).
+ * @param setB The second set.
+ * @return A vector of vectors representing the Cartesian product.
+ */
 template <typename T>
 std::vector<std::vector<T>> cartesianProduct(std::vector<std::vector<T>> setA, std::vector<T> setB){
-    std::function<bool(std::vector<T>)> trueLambdaFn = [](std::vector<T>){ return true; };
-    return cartesianProduct(setA, setB, trueLambdaFn);
+    // function that always returns true  (ie include everything)
+    std::function<bool(std::vector<T>)> alwaysTrue = [](std::vector<T>){ return true; };
+    return cartesianProduct(setA, setB, alwaysTrue);
 }
 
-
+/**
+ * @brief Computes the Cartesian product of two sets with filtering.
+ *
+ * It iterates through all combinations of elements from setA and setB,
+ * applying a filtering function to determine which results should be included.
+ *
+ * @tparam T The type of elements in the sets.
+ * @param setA The first set (as a vector of vectors).
+ * @param setB The second set.
+ * @param filter A function that determines which combinations should be included.
+ * @return A vector of vectors representing the filtered Cartesian product.
+ */
 template <typename T>
 std::vector<std::vector<T>> cartesianProduct(std::vector<std::vector<T>> setA, std::vector<T> setB,std::function<bool(std::vector<T>)> filter){
 
