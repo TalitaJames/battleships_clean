@@ -23,7 +23,7 @@ void wipeBoard(Board &b){
     b.isValid=false;
 
     //FIXME this isn't the most efficient, and they technically have values (of "default")
-    ShipPosition zeroPosition = {0,0,0,true};
+    ShipPosition zeroPosition = {0,0,0,false};
     for (size_t i = 0; i < FLEET_SIZE; i++) {
         b.shipPos[i] = zeroPosition;
     }
