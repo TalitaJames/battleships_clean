@@ -3,14 +3,15 @@
 
 void TEST_SHIP_singleShipPositions(){
     std::vector<ShipPosition> allShips_3in5 = singleShipPositions(5, 3);
-    std::vector<ShipPosition> allShips_5in5 = singleShipPositions(5, 5);
-    std::vector<ShipPosition> allShips_1in10 = singleShipPositions(10, 1);
-
-
     ASSERT(allShips_3in5.size() == 30, "The wrong number of ships for a size 3 on a 5x5 board");
-    ASSERT(allShips_5in5.size() == 10, "The wrong number of ships for a size 5 on a 5x5 board");
-    ASSERT(allShips_1in10.size() == 100, "The wrong number of ships for a size 1 on a 10x10 board");
 
+    std::vector<ShipPosition> allShips_5in5 = singleShipPositions(5, 5);
+    ASSERT(allShips_5in5.size() == 10, "The wrong number of ships for a size 5 on a 5x5 board");
+
+    std::vector<ShipPosition> allShips_1in10 = singleShipPositions(10, 1);
+    ASSERT(allShips_1in10.size() == 100, "The wrong number of ships for a size 1 on a 10x10 board");
+    //TODO would a test to check contents?
+    // (Possibly put all in a set and check same size, ie no duplicates)
     printf("\tPASSED singleShipPositions\n");
 }
 void TEST_SHIP_allShipPositions(){
