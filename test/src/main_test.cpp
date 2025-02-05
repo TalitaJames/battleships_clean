@@ -5,6 +5,7 @@
 #include "hitmask_tests.h"
 #include "probabilityGrid_tests.h"
 #include "boardIterator_tests.h"
+#include "cartesianProduct_tests.h"
 
 int main(){
     printf("\nTESTING SHIPS\n");
@@ -48,6 +49,9 @@ int main(){
     TEST_BOARDITERATOR_appendWorkerToProbGrid();
     TEST_BOARDITERATOR_gatherProbabilityFromWorkers();
 
+    printf("\nTESTING CARTESIANPRODUCT\n");
+    TEST_CARTESIANPRODUCT_vectorIntoVectorVector();
+    TEST_CARTESIANPRODUCT_cartesianProduct();
 
     return 0;
 }
