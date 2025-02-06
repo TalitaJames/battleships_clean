@@ -1,3 +1,10 @@
+/**
+ * @file
+ * @author Talita
+ * @brief Functions for drawing and creating boards
+ * @date 2025-02-06
+ */
+
 #ifndef BOARD_H
 #define BOARD_H
 

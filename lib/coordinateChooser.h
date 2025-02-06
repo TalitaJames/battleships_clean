@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @author Talita
+ * @brief Various algorithms for picking the next best shot
+ * @date 2025-02-06
+ */
 #ifndef COORDINATECHOOSER_H
 #define COORDINATECHOOSER_H
 

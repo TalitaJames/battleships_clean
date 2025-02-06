@@ -1,3 +1,10 @@
+/**
+ * @file
+ * @author Talita
+ * @brief Calculates cartesian products
+ * @version 0.1
+ * @date 2025-02-06
+ */
 #ifndef CARTESIANPRODUCT_H
 #define CARTESIANPRODUCT_H
 

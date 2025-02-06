@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @author Talita
+ * @brief Tracks and modifies the state (hitmask) of the game
+ * @date 2025-02-06
+ */
 #ifndef HITMASK_H
 #define HITMASK_H
 

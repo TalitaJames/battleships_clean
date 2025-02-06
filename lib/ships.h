@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @author Talita
+ * @brief Information about a single ship and its position
+ * @date 2025-02-06
+ */
 #ifndef SHIPS_H
 #define SHIPS_H
 

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @author Talita
+ * @brief Variables usefull to the whole system
+ * @date 2025-02-06
+ */
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @author Talita
+ * @brief Captures probabilities from the many boards
+ * @date 2025-02-06
+ */
 #ifndef PROBABILITYGRID_H
 #define PROBABILITYGRID_H
 

@@ -1,3 +1,10 @@
+/**
+ * @file
+ * @author Talita
+ * @brief The agent that interacts with the game
+ * @version 0.1
+ * @date 2025-02-06
+ */
 #ifndef PLAYGAME_H
 #define PLAYGAME_H
 

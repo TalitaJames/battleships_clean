@@ -1,15 +1,19 @@
+/**
+ * @file
+ * @author Talita
+ * @brief Iteration methods for calculating probability grid
+ * Everything needed for the traditional approach to 'brute force' a
+ * probability grid by using multiple workers to iterate through all boards
+ *
+ * @date 2025-02-06
+ */
+
 #ifndef BOARDITERATOR_H
 #define BOARDITERATOR_H
 
-// #include <algorithm>
-// #include <iostream>
-// #include <fstream>
-// #include <limits>
 #include <chrono>
-// #include <string>
 #include <vector>
 #include <thread>
-// #include <mutex>
 
 #include "hitmask.h"
 #include "probabilityGrid.h"
