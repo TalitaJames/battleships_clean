@@ -24,6 +24,7 @@ struct ProbabilityGrid{
 void calcProbabilityGrid(ProbabilityGrid &);
 std::ostream& operator<<(std::ostream&, ProbabilityGrid&);
 
+void flattenBoardToProbabilityGrid(Board b, ProbabilityGrid &pG);
 
 
 #endif //PROBABILITYGRID_H

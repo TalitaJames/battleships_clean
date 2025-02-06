@@ -22,42 +22,6 @@ void dividePositions(int threadCount,std::vector<Worker> &workerVector){
 };
 
 /**
- * @brief Given a board, if there is a ship in each cell, update the corresponding probability data
- * @param b a board to gather data from
- * @param p reference to a probability grid
-*/
-void flattenBoardToProbabilityGrid(Board b, ProbabilityGrid &pG){ //TODO add test
-    if (!b.isValid) return;
-
-    pG.totalGoodBoards++;
-
-    // TODO possibly fewer checks if we only add from the ship positions?
-    // for (int y = 0; y < BOARD_SIZE; y++){
-    //     for (int x = 0; x < BOARD_SIZE; x++){
-    //         if (b.board[x][y] != BOARD_DEFAULT) pG.shipGrid[x][y]++;
-    //     }
-    // }
-
-    for(int i = 0; i < FLEET_SIZE; i++){
-        b.shipPos[i];
-        for (size_t i = 0; i < b.shipPos[i].length; i++){
-            int xPosition = b.shipPos[i].x;
-            int yPosition = b.shipPos[i].y;
-
-            // Offset the ship by i values (to get each cell)
-            if(b.shipPos[i].direction){
-                xPosition += i;
-            }
-            else {
-                yPosition += i;
-            }
-
-        }
-    }
-};
-
-
-/**
  * @brief Counts, for a given worker section of boards, the number of boards that match the hitmask
  * @param w a section of boards to check
  * @param hitM the hitmask for board comparisons
