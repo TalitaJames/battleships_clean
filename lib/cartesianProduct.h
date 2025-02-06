@@ -70,8 +70,6 @@ std::vector<std::vector<T>> cartesianProduct(std::vector<T> setA, std::vector<T>
 }
 
 
-
-
 /**
  * @brief Computes the filtered Cartesian product of two sets.
  *
