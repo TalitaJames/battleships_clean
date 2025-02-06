@@ -53,8 +53,8 @@ std::vector<std::vector<T>> cartesianProduct(std::vector<std::vector<T>> sets){
 template <typename T>
 std::vector<std::vector<T>> cartesianProduct(std::vector<std::vector<T>> sets, std::function<bool(std::vector<T>)> filter){
     std::vector<std::vector<T>> result = cartesianProduct(sets[0], sets[1], filter); //cartesian product of the first two
-
     for(size_t i = 2; i < sets.size(); i++){ //update the result to append the next ship positions
+        printf("Total of %li items\n", result.size());
         result = cartesianProduct(result, sets[i], filter);
 	}
 
