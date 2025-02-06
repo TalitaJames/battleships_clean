@@ -13,6 +13,7 @@ void TEST_SHIP_convertShipPositionToBoundingBox();
 void TEST_SHIP_convertBoundingboxToShipPosition();
 
 void TEST_SHIP_doShipsCollide();
+void TEST_SHIP_areShipsValid();
 
 void TEST_SHIP_operatorEqual();
 void TEST_SHIP_operatorRelational();

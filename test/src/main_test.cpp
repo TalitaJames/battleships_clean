@@ -15,6 +15,7 @@ int main(){
     TEST_SHIP_convertShipPositionToBoundingBox();
     TEST_SHIP_convertBoundingboxToShipPosition();
     TEST_SHIP_doShipsCollide();
+    TEST_SHIP_areShipsValid();
     TEST_SHIP_operatorEqual();
     TEST_SHIP_operatorRelational();
     TEST_SHIPS_nextShipPosition();

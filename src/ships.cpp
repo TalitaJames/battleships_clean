@@ -125,6 +125,27 @@ bool doShipsCollide(ShipBoundingBox shipA, ShipBoundingBox shipB){
     return true;
 };
 
+/**
+ * @brief Checks a vector of ships to ensure valid positions
+ *
+ * Iterates through the whole array (all I check all further positions of J)
+ * and checks for collisions
+ *
+ * @param vectorFleet a vector of ship poisitions
+ * @return true if ships collide, else false
+ */
+bool areShipsValid(std::vector<ShipPosition> vectorFleet){
+    if(vectorFleet.size() == 0) return true;
+
+    for (size_t i = 0; i < vectorFleet.size()-1; i++) {
+        for (size_t j = i+1; j < vectorFleet.size(); j++) {
+            if (doShipsCollide(vectorFleet[i], vectorFleet[j]))
+                return false;
+        }
+    }
+
+    return true;
+}
 
 /**
  * @brief toString overload for ship position

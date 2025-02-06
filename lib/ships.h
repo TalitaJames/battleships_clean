@@ -38,6 +38,7 @@ ShipPosition convertBoundingboxToShipPosition(ShipBoundingBox);
 // Check for collisions
 bool doShipsCollide(ShipPosition shipA, ShipPosition shipB);
 bool doShipsCollide(ShipBoundingBox shipA, ShipBoundingBox shipB);
+bool areShipsValid(std::vector<ShipPosition> shipFleet);
 
 // Opperator Overloads
 std::ostream& operator<<(std::ostream&, const struct ShipPosition&);

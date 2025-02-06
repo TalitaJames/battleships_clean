@@ -115,6 +115,31 @@ void TEST_SHIP_doShipsCollide(){
     printf("\tPASSED doShipsCollide\n");
 }
 
+void TEST_SHIP_areShipsValid(){
+
+    std::vector<ShipPosition> noCollision = {
+        {2, 2, 3, false},
+        {4, 4, 1, true},
+        {2, 2, 5, true},
+        {3, 9, 7, false},
+        {5, 0, 8, true}
+    };
+    ASSERT(areShipsValid(noCollision), "Ships should not collide");
+
+    std::vector<ShipPosition> collision = {
+        {4, 4, 1, true},
+        {2, 2, 5, true},
+        {3, 2, 3, false},
+    };
+    ASSERT(!areShipsValid(collision), "Ships should collide");
+
+    std::vector<ShipPosition> fleet = {};
+    printf("\tSTARTING areShipsValid\n");
+    ASSERT(areShipsValid(fleet), "Empty fleet should be valid");
+
+    printf("\tPASSED areShipsValid\n");
+}
+
 void TEST_SHIP_operatorEqual(){
     // Test if two ship positions are equal
     ShipPosition shipA = {4, 3, 4, 1};
