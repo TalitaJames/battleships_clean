@@ -14,32 +14,52 @@
 
 
 // template declarations
+template <typename T> std::vector<std::vector<T>> cartesianProduct(std::vector<std::vector<T>> sets);
+template <typename T> std::vector<std::vector<T>> cartesianProduct(std::vector<std::vector<T>> sets, std::function<bool(std::vector<T>)> filter);
+
 template <typename T> std::vector<std::vector<T>> cartesianProduct(std::vector<T> setA, std::vector<T> setB);
 template <typename T> std::vector<std::vector<T>> cartesianProduct(std::vector<T> setA, std::vector<T> setB, std::function<bool(std::vector<T>)> filter);
+
 template <typename T> std::vector<std::vector<T>> cartesianProduct(std::vector<std::vector<T>> setA, std::vector<T> setB);
 template <typename T> std::vector<std::vector<T>> cartesianProduct(std::vector<std::vector<T>> setA, std::vector<T> setB,std::function<bool(std::vector<T>)> filter);
+
 template <typename T> std::vector<std::vector<T>> vectorIntoVectorVector(std::vector<T> set);
 
 
 // template definitions
 
+/**
+ * @brief given a vector of "sets"(each vector in the vector is a list of things to check the cartesian product of)
+ * return the cartesian product of the sets eg {{a,b}, {c,d}} would return {{a,c}, {a,d}, {b, c}, {b, d}}
+ *
+ * @tparam T The type of elements in the sets.
+ * @param sets a vector of vectors that contain elements to get the cartesian product of
+ * @return a cartesian product of each elements in every set with the other sets
+ */
+template <typename T>
+std::vector<std::vector<T>> cartesianProduct(std::vector<std::vector<T>> sets){
+    std::function<bool(std::vector<T>)> alwaysTrue = [](std::vector<T>){ return true; };
+    return cartesianProduct(sets, alwaysTrue);
+}
 
 /**
- * @brief change a 1D vector into a 2D
- * @tparam T the type of vector
- * @param in a 1D vector eg {3, 4, 6}
- * @return the vector in transformed into n vectors each seperatly holding the element,
- * ie {3, 4, 6} becomes {{3}, {4}, {6}}
+ * @brief aiven a vector of "sets"(each vector in the vector is a list of things to check the cartesian product of)
+ *
+ * @tparam T The type of elements in the sets.
+ * @param sets a vector of vectors that contain elements to get the cartesian product of
+ * @param filter A function that determines which combinations should be included.
+ * @return a filtered cartesian product of each elements in every set with the other sets
  */
-template <typename T> std::vector<std::vector<T>> vectorIntoVectorVector(std::vector<T> in){
-    std::vector<std::vector<T>> result;
-    for(T element : in){
-        std::vector<T> elementVector = {element};
-        result.push_back(elementVector);
-    }
+template <typename T>
+std::vector<std::vector<T>> cartesianProduct(std::vector<std::vector<T>> sets, std::function<bool(std::vector<T>)> filter){
+    std::vector<std::vector<T>> result = cartesianProduct(sets[0], sets[1], filter); //cartesian product of the first two
+
+    for(size_t i = 2; i < sets.size(); i++){ //update the result to append the next ship positions
+        result = cartesianProduct(result, sets[i], filter);
+	}
 
     return result;
-}
+};
 
 
 /**
@@ -118,6 +138,25 @@ std::vector<std::vector<T>> cartesianProduct(std::vector<std::vector<T>> setA, s
                 result.push_back(productAB);
             }
         }
+    }
+
+    return result;
+}
+
+
+
+/**
+ * @brief change a 1D vector into a 2D
+ * @tparam T the type of vector
+ * @param in a 1D vector eg {3, 4, 6}
+ * @return the vector in transformed into n vectors each seperatly holding the element,
+ * ie {3, 4, 6} becomes {{3}, {4}, {6}}
+ */
+template <typename T> std::vector<std::vector<T>> vectorIntoVectorVector(std::vector<T> in){
+    std::vector<std::vector<T>> result;
+    for(T element : in){
+        std::vector<T> elementVector = {element};
+        result.push_back(elementVector);
     }
 
     return result;

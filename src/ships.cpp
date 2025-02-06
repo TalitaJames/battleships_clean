@@ -35,17 +35,18 @@ std::vector<ShipPosition> singleShipPositions(int boardSize, Ship shipLength) {
 /**
  * @brief Given an empty board, calculates all valid positions for all ships
  * @param board the dimensions of the grid to place ships on
- * @param ships array with lengths of all ships in the game
- * @return //TODO implement this function //Don't think its needed?
+ * @param fleet array with lengths of all ships in the game
+ * @param fleetSize number of ships in the fleet array
+ * @return a vector of vectors where each vector (0 to fleet) contains a vector of all possible valid positions
  */
-std::vector<std::vector<ShipPosition>> allshipPositions(int boardSize, Ship fleet[]) {
-    std::vector<std::vector<ShipPosition>> fixme;
-    // int shipsCount = sizeof(ships)/sizeof(ships[0]);
-    for (size_t i = 0; i < FLEET_SIZE; i++){
-        singleShipPositions(boardSize, FLEET[i]);
-    }
-    return fixme;
+std::vector<std::vector<ShipPosition>> allShipPositions(int boardSize, const Ship fleet[], int fleetSize) {
+    std::vector<std::vector<ShipPosition>> allSingleShipPositions;
 
+    for(size_t i = 0; i < fleetSize; i++){
+        allSingleShipPositions.push_back(singleShipPositions(boardSize, fleet[i]));
+	}
+
+    return allSingleShipPositions;
 }
 
 

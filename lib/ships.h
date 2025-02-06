@@ -34,7 +34,7 @@ typedef struct ShipPosition{
 
 // Generating ship positions
 std::vector<ShipPosition> singleShipPositions(int boardSize, Ship);
-std::vector<std::vector<ShipPosition>> allShipPositions(int boardSize, Ship[]);
+std::vector<std::vector<ShipPosition>> allShipPositions(int boardSize, const Ship fleet[], int fleetSize);
 ShipPosition rndShipPos(int boardSize, Ship);
 
 // Conversions between various formats
