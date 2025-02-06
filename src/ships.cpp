@@ -1,11 +1,11 @@
 #include "ships.h"
 
-/*!
-@brief Given an empty board, calculates all valid positions for the ship
-@param boardSize the dimensions of the grid to place ship on
-@param ship length of a single ship
-@return a vector of all legal ship positions
-*/
+/**
+ * @brief Given an empty board, calculates all valid positions for the ship
+ * @param boardSize the dimensions of the grid to place ship on
+ * @param ship length of a single ship
+ * @return a vector of all legal ship positions
+ */
 std::vector<ShipPosition> singleShipPositions(int boardSize, Ship shipLength) {
 
     int maxPositions = (boardSize-shipLength+1)*boardSize;
@@ -37,7 +37,7 @@ std::vector<ShipPosition> singleShipPositions(int boardSize, Ship shipLength) {
  * @param board the dimensions of the grid to place ships on
  * @param ships array with lengths of all ships in the game
  * @return //TODO implement this function //Don't think its needed?
-*/
+ */
 std::vector<std::vector<ShipPosition>> allshipPositions(int boardSize, Ship fleet[]) {
     std::vector<std::vector<ShipPosition>> fixme;
     // int shipsCount = sizeof(ships)/sizeof(ships[0]);
@@ -73,14 +73,14 @@ ShipPosition rndShipPos(int boardSize, Ship len){
 };
 
 
-/*!
-@brief Turn a major, minor and direction into a ship (bounding box)
-@param length a ship length
-@param major where the ship sits along the non bounded axis
-@param minor where the ship sits along the bounded axis
-@param direction which way the ship faces (1 for horizontal)
-@return ShipBoundingBox
-*/
+/**
+ * @brief Turn a major, minor and direction into a ship (bounding box)
+ * @param length a ship length
+ * @param major where the ship sits along the non bounded axis
+ * @param minor where the ship sits along the bounded axis
+ * @param direction which way the ship faces (1 for horizontal)
+ * @return ShipBoundingBox
+ */
 ShipBoundingBox convertShipPositionToBoundingBox(ShipPosition sP){
     ShipBoundingBox shipBounds;
     shipBounds.north = sP.y;
@@ -97,23 +97,23 @@ ShipBoundingBox convertShipPositionToBoundingBox(ShipPosition sP){
     return shipBounds;
 }
 
-/*!
-@brief Determines if the board is valid (ie ship follows placement rules)
-@param shipA the first ship in ship position format
-@param shipB the second ship in ship position format
-@return bool, true if the two ships intersect
-*/
+/**
+ * @brief Determines if the board is valid (ie ship follows placement rules)
+ * @param shipA the first ship in ship position format
+ * @param shipB the second ship in ship position format
+ * @return bool, true if the two ships intersect
+ */
 bool doShipsCollide(ShipPosition shipA, ShipPosition shipB){
     return doShipsCollide(convertShipPositionToBoundingBox(shipA),
                             convertShipPositionToBoundingBox(shipB));
 };
 
-/*!
-@brief Determines if the board is valid (ie ship follows placement rules)
-@param shipA the first ship
-@param shipB the second ship
-@return bool, true if the two ships intersect
-*/
+/**
+ * @brief Determines if the board is valid (ie ship follows placement rules)
+ * @param shipA the first ship
+ * @param shipB the second ship
+ * @return bool, true if the two ships intersect
+ */
 bool doShipsCollide(ShipBoundingBox shipA, ShipBoundingBox shipB){
     if (shipA.south < shipB.north || // shipA is completely above shipB
         shipA.north > shipB.south || // shipA is completely below shipB
@@ -226,7 +226,7 @@ bool operator>(const struct ShipPosition &A, const struct ShipPosition &B){
  * @param pA position A
  * @param pB position B
  * @return int comparing the sizes, ie -1 if pA>pB, 0 if pA=pB, 1 if pA<pB
-*/
+ */
 int compareShipArray(ShipPosition *pA, ShipPosition *pB){
     for (size_t i = 0; i < FLEET_SIZE; i++){
         if (pA[i] != pB[i]){
@@ -244,7 +244,7 @@ int compareShipArray(ShipPosition *pA, ShipPosition *pB){
  * and moves down, then right, then flips direction (to be horizontal)
  *
  * @param shipPos the given ship position
-*/
+ */
 void nextShipPosition(ShipPosition &shipPos){
     shipPos.y++;
 
@@ -275,7 +275,7 @@ void nextShipPosition(ShipPosition &shipPos){
  * or all positions in the array have been incremented.
  *
  * @param shipPosArray a pointer to the ship position array
-*/
+ */
 void nextShipPosArray(ShipPosition* shipPosArray){
     ShipPosition startingShipPos = {0,0,0,0};
 
@@ -307,7 +307,7 @@ void setStartArray(ShipPosition * shipPosArray){
  * The last value is the bottom right horizontal position
  *
  * @param shipPosArray a pointer to a ship posion array
-*/
+ */
 void setEndArray(ShipPosition * shipPosArray){
     for (size_t i = 0; i < FLEET_SIZE; i++){
         shipPosArray[i].length = FLEET[i];
