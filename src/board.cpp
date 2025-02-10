@@ -36,6 +36,16 @@ void wipeBoard(Board &b){
  * @param shipPos a pointer to an array of ship Positions
 */
 void drawBoard(Board &board, ShipPosition* shipPos){
+    return drawBoard(board, shipPos, FLEET_SIZE);
+}
+
+/**
+ * @brief Draws a list of ship positions onto a board
+ * @param board the referenced board
+ * @param shipPos a pointer to an array of ship Positions
+ * @param shipCount the number of ships to add
+*/
+void drawBoard(Board &board, ShipPosition* shipPos, int shipCount ){
     wipeBoard(board);
     board.isEmpty = false;
 
@@ -71,7 +81,6 @@ void drawBoard(Board &board, ShipPosition* shipPos){
 */
 Board rndBoard(){
     Board b = initBlankBoard();
-
     ShipPosition boardPositions[FLEET_SIZE];
 
     while (!b.isValid){

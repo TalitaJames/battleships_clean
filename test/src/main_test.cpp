@@ -34,7 +34,6 @@ int main(){
     };
     TEST_ALL(testShips, "Ships");
 
-    // printf("\nTESTING BOARD\n");
     std::vector<TestFunction> testBoard = {
         TEST_BOARD_initBlankBoard,
         TEST_BOARD_wipeBoard,
@@ -54,9 +53,12 @@ int main(){
     // TEST_HITMASK_isHit();
     // TEST_HITMASK_operatorEqual();
 
-    // printf("\nTESTING PROBABILITYGRID\n");
-    // TEST_PROBABILITYGRID_initProbabilityGrid();
-    // TEST_PROBABILITYGRID_calcProbabilityGrid();
+    std::vector<TestFunction> testProbabilityGrid = {
+        TEST_PROBABILITYGRID_initProbabilityGrid,
+        TEST_PROBABILITYGRID_calcProbabilityGrid,
+        TEST_PROBABILITYGRID_flattenBoardToProbabilityGrid,
+    };
+    TEST_ALL(testProbabilityGrid, "ProbabilityGrid");
 
     // printf("\nTESTING BOARDITERATOR\n");
     // TEST_BOARDITERATOR_dividePositions();

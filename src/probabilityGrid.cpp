@@ -44,27 +44,28 @@ void flattenBoardToProbabilityGrid(Board b, ProbabilityGrid &pG){ //TODO add tes
 
     pG.totalGoodBoards++;
 
-    // TODO possibly fewer checks if we only add from the ship positions?
-    // for (int y = 0; y < BOARD_SIZE; y++){
-    //     for (int x = 0; x < BOARD_SIZE; x++){
-    //         if (b.board[x][y] != BOARD_DEFAULT) pG.shipGrid[x][y]++;
-    //     }
-    // }
-
-    for(int i = 0; i < FLEET_SIZE; i++){
-        b.shipPos[i];
-        for (size_t i = 0; i < b.shipPos[i].length; i++){
-            int xPosition = b.shipPos[i].x;
-            int yPosition = b.shipPos[i].y;
-
-            // Offset the ship by i values (to get each cell)
-            if(b.shipPos[i].direction){
-                xPosition += i;
-            }
-            else {
-                yPosition += i;
-            }
-
+    for (int y = 0; y < BOARD_SIZE; y++){
+        for (int x = 0; x < BOARD_SIZE; x++){
+            if (b.board[x][y] != BOARD_DEFAULT) pG.shipGrid[x][y]++;
         }
     }
+
+    // TODO possibly fewer checks if we only add from the ship positions?
+    // for(int i = 0; i < FLEET_SIZE; i++){
+    //     b.shipPos[i];
+    //     for (size_t i = 0; i < b.shipPos[i].length; i++){
+    //         int xPosition = b.shipPos[i].x;
+    //         int yPosition = b.shipPos[i].y;
+
+    //         // Offset the ship by i values (to get each cell)
+    //         if(b.shipPos[i].direction){
+    //             xPosition += i;
+    //         }
+    //         else {
+    //             yPosition += i;
+    //         }
+
+    //         pG.shipGrid[xPosition][yPosition]++;
+    //     }
+    // }
 };

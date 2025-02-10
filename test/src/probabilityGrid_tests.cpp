@@ -1,6 +1,6 @@
 #include "probabilityGrid_tests.h"
 
-void TEST_PROBABILITYGRID_initProbabilityGrid() {
+bool TEST_PROBABILITYGRID_initProbabilityGrid() {
     ProbabilityGrid p;
     ASSERT(p.totalGoodBoards == 0, "totalGoodBoards should start with value of 0");
 
@@ -13,33 +13,69 @@ void TEST_PROBABILITYGRID_initProbabilityGrid() {
         }
     }
 
-    printf("\tPASSED initProbabilityGrid\n");
+    ENDTEST();
 }
 
-void TEST_PROBABILITYGRID_calcProbabilityGrid() {
-    ProbabilityGrid p;
+bool TEST_PROBABILITYGRID_calcProbabilityGrid() {
+    ProbabilityGrid probGrid;
 
     // Give it some numbers
-    p.totalGoodBoards = 10;
+    probGrid.totalGoodBoards = 10;
 
     for (int y = 0; y < BOARD_SIZE; y++) {
         for (int x = 0; x < BOARD_SIZE; x++) {
-            p.shipGrid[x][y] = (2*x + y) % 3;
+            probGrid.shipGrid[x][y] = (2*x + y) % 3;
         }
     }
 
     // Call the function to calculate probabilities
-    calcProbabilityGrid(p);
+    calcProbabilityGrid(probGrid);
 
     for (int y = 0; y < BOARD_SIZE; y++) {
         for (int x = 0; x < BOARD_SIZE; x++) {
-            double expectedProb = static_cast<double>(p.shipGrid[x][y]) / static_cast<double>(p.totalGoodBoards);
+            double expectedProb = static_cast<double>(probGrid.shipGrid[x][y]) / static_cast<double>(probGrid.totalGoodBoards);
             double expectedPChange = pow(expectedProb, 2) + pow(1 - expectedProb, 2);
 
-            ASSERT(fabs(p.shipProb[x][y] - expectedProb) < 1e-6, "Probability calculation is incorrect");
-            ASSERT(fabs(p.pChange[x][y] - expectedPChange) < 1e-6, "Probability change calculation is incorrect");
+            ASSERT(fabs(probGrid.shipProb[x][y] - expectedProb) < 1e-6, "Probability calculation is incorrect");
+            ASSERT(fabs(probGrid.pChange[x][y] - expectedPChange) < 1e-6, "Probability change calculation is incorrect");
         }
     }
-    printf("\tPASSED calcProbabilityGrid\n");
+    ENDTEST();
 }
 
+
+bool TEST_PROBABILITYGRID_flattenBoardToProbabilityGrid(){
+    ASSERT(BOARD_SIZE >= 3, "Board size must be at least three to test this");
+
+    // Horizontal ship at [0][0], [1][0], [2][0]
+    // Vertical ship at [1][1], [1][2]
+    Board board = initBlankBoard();
+    board.board[0][0] = 0;
+    board.board[1][0] = 0;
+    board.board[2][0] = 0;
+
+    board.board[1][1] = 1;
+    board.board[1][2] = 1;
+    board.isValid = true;
+
+    ProbabilityGrid probGrid;
+    probGrid.shipGrid[0][0] = 3;
+    probGrid.shipGrid[0][2] = 6;
+
+    flattenBoardToProbabilityGrid(board, probGrid);
+
+    ASSERT(probGrid.totalGoodBoards == 1, "Adding a board should increase the number of good boards");
+    ASSERT(probGrid.shipGrid[0][0] == 4, "Adding a ship should add one to the shipgrid here");
+    ASSERT(probGrid.shipGrid[1][0] == 1, "Adding a ship should add one to the shipgrid here");
+    ASSERT(probGrid.shipGrid[2][0] == 1, "Adding a ship should add one to the shipgrid here");
+
+    ASSERT(probGrid.shipGrid[1][1] == 1, "Adding a ship should add one to the shipgrid here");
+    ASSERT(probGrid.shipGrid[1][2] == 1, "Adding a ship should add one to the shipgrid here");
+
+    ASSERT(probGrid.shipGrid[0][1] == 0, "Empty space without a boat should stay zero");
+    ASSERT(probGrid.shipGrid[0][2] == 6, "Empty space with preixisting data shouldn't be changed");
+    ASSERT(probGrid.shipGrid[2][1] == 0, "Empty space without a boat should stay zero");
+    ASSERT(probGrid.shipGrid[2][2] == 0, "Empty space without a boat should stay zero");
+
+    ENDTEST();
+}

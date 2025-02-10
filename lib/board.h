@@ -23,6 +23,7 @@ typedef struct Board{
 Board initBlankBoard(void);
 void wipeBoard(Board &);
 void drawBoard(Board &, ShipPosition*);
+void drawBoard(Board &, ShipPosition*, int);
 Board rndBoard(void);
 
 std::ostream& operator<<(std::ostream&, Board&);

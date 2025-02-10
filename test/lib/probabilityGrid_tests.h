@@ -5,7 +5,8 @@
 #include "test_utils.h"
 #include <cmath>
 
-void TEST_PROBABILITYGRID_initProbabilityGrid();
-void TEST_PROBABILITYGRID_calcProbabilityGrid();
+bool TEST_PROBABILITYGRID_initProbabilityGrid();
+bool TEST_PROBABILITYGRID_calcProbabilityGrid();
+bool TEST_PROBABILITYGRID_flattenBoardToProbabilityGrid();
 
 #endif //PROBABILITYGRID_TESTS_H
