@@ -45,17 +45,17 @@ void drawBoard(Board &board, ShipPosition* shipPos){
  * @param shipPos a pointer to an array of ship Positions
  * @param shipCount the number of ships to add
 */
-void drawBoard(Board &board, ShipPosition* shipPos, int shipCount ){
+void drawBoard(Board &board, ShipPosition* shipPos, int shipCount){
     wipeBoard(board);
     board.isEmpty = false;
 
-    if(!areShipsValidInBoardArray(shipPos, FLEET_SIZE)){
+    if(!areShipsValidInBoardArray(shipPos, shipCount)){
         board.isValid = false;
         return;
     }
 
     // Draw the grid
-    for (size_t i = 0; i < FLEET_SIZE; i++){ // for each ship
+    for (size_t i = 0; i < shipCount; i++){ // for each ship
         for (size_t j = 0; j < shipPos[i].length; j++){ // for the length of each ship
             // early return if a ship already there or if it is out of bounds
             if (shipPos[i].direction){
@@ -68,7 +68,7 @@ void drawBoard(Board &board, ShipPosition* shipPos, int shipCount ){
     }
 
     // Update the ship positions
-    for (size_t i = 0; i < FLEET_SIZE; i++){
+    for (size_t i = 0; i < shipCount; i++){
         board.shipPos[i] = shipPos[i];
     }
 

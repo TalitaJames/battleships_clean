@@ -36,11 +36,11 @@ bool TEST_BOARD_drawBoard() {
     ASSERT(BOARD_SIZE >= 3, "Board height should be at least 3 to test properly");
 
     // test for a valid state
-    ShipPosition shipPosValid[FLEET_SIZE] = {
+    ShipPosition shipPosValid[2] = {
         {3, 0, 0, true}, // Horizontal ship at [0][0], [1][0], [2][0]
         {2, 1, 1, false} // Vertical ship at [1][1], [1][2]
     };
-    drawBoard(b, shipPosValid);
+    drawBoard(b, shipPosValid, 2);
 
     ASSERT(b.isEmpty == false, "Board should not be empty after drawing ships");
     ASSERT(b.board[0][0] == 0, "Ship 0 should be at (0,0)");
@@ -55,16 +55,16 @@ bool TEST_BOARD_drawBoard() {
     ASSERT(b.board[2][1] == BOARD_DEFAULT, "Empty space should be BOARD_DEFAULT");
     ASSERT(b.board[2][2] == BOARD_DEFAULT, "Empty space should be BOARD_DEFAULT");
 
-    for (size_t i = 0; i < FLEET_SIZE; i++){
+    for (size_t i = 0; i < 2; i++){
         ASSERT(b.shipPos[i] == shipPosValid[i], "Ship positions should be stored in board");
     }
 
     // test an invalid state
-    ShipPosition shipPosInvalid[FLEET_SIZE] = {
+    ShipPosition shipPosInvalid[2] = {
         {3, 0, 0, true}, // Horizontal ship at [0][0], [1][0], [2][0]
         {2, 1, 0, false} // Vertical ship at [1][0], [1][1]
     };
-    drawBoard(b, shipPosInvalid);
+    drawBoard(b, shipPosInvalid, 2);
     for (int y = 0; y < BOARD_SIZE; y++) {
         for (int x = 0; x < BOARD_SIZE; x++) {
             ASSERT(b.board[x][y] == BOARD_DEFAULT, "Board cells should be set to BOARD_DEFAULT after drawing an invalid board");
