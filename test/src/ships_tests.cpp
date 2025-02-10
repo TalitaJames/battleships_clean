@@ -1,24 +1,39 @@
 #include "ships_tests.h"
 #include <set>
 
-void TEST_SHIP_singleShipPositions(){
-    std::vector<ShipPosition> allShips_3in5 = singleShipPositions(5, 3);
-    ASSERT(allShips_3in5.size() == 30, "The wrong number of ships for a size 3 on a 5x5 board");
+bool TEST_SHIPS_singleShipPositions(){
+    ASSERT(singleShipPositions(5, 3).size() == 30, "The wrong number of ships for a size 3 on a 5x5 board");
+    ASSERT(singleShipPositions(5, 5).size() == 10, "The wrong number of ships for a size 5 on a 5x5 board");
+    ASSERT(singleShipPositions(10, 1).size() == 100, "The wrong number of ships for a size 1 on a 10x10 board");
+    ASSERT(singleShipPositions(7, 0).size() == 0, "A zero size ship shouldn't have any ship positions");
+    ASSERT(singleShipPositions(10, 2).size() == 180, "2 size ship on 10x10 should be 180");
+    ASSERT(singleShipPositions(8, 201).size() == 0, "Ships bigger than the board shouldn't have any ship positions");
+    ASSERT(singleShipPositions(7, -20).size() == 0, "A negative size ship shouldn't have any ship positions");
 
-    std::vector<ShipPosition> allShips_5in5 = singleShipPositions(5, 5);
-    ASSERT(allShips_5in5.size() == 10, "The wrong number of ships for a size 5 on a 5x5 board");
-
-    std::vector<ShipPosition> allShips_1in10 = singleShipPositions(10, 1);
-    ASSERT(allShips_1in10.size() == 100, "The wrong number of ships for a size 1 on a 10x10 board");
     //TODO would a test to check contents?
     // (Possibly put all in a set and check same size, ie no duplicates)
-    printf("\tPASSED singleShipPositions\n");
-}
-void TEST_SHIP_allShipPositions(){
-    printf("\tNOT IMPLEMENTED allShipPositions\n"); //TODO implelemt
+
+    ENDTEST();
 }
 
-void TEST_SHIP_rndShipPos() {
+bool TEST_SHIPS_allShipPositions(){
+    Ship testFleetSingle[] = {2};
+    auto resultFleetSingle = allShipPositions(10, testFleetSingle, 1);
+    ASSERT(resultFleetSingle.size() == 1, "A single ship should have only one vector of ship positions");
+    ASSERT(resultFleetSingle[0].size() == 180, "The single ship first element shound contain the correct number of ship positions");
+
+    Ship testFleetMultiple[] = {4, 7, 5};
+    auto resultFleetMultiple = allShipPositions(10, testFleetMultiple, 3);
+    ASSERT(resultFleetMultiple.size() == 3, "Many ships should return a vector the same size as the number of input ships");
+    ASSERT(resultFleetMultiple[0].size() == 140, "The first element should contain correct number of ships for the first ship");
+    ASSERT(resultFleetMultiple[1].size() == 80, "The seccond element should contain correct number of ships for the seccond ship");
+    ASSERT(resultFleetMultiple[2].size() == 120, "The third element should contain correct number of ships for the third ship");
+
+
+    ENDTEST();
+}
+
+bool TEST_SHIPS_rndShipPos() {
     int boardSize = 10;
 
     int numberOfRndShips = 5;
@@ -30,9 +45,9 @@ void TEST_SHIP_rndShipPos() {
         ASSERT(ships[i].y >= 0 && ships[i].y < boardSize, "Ship y position should be within board bounds");
     }
 
-    // check all the ships are being generated in different positions
+    // compare all the ships to ensure each random ship is distinct
     bool isRandom = false;
-    for (size_t i = 0; i < numberOfRndShips; i++) {
+    for (size_t i = 0; i < numberOfRndShips - 1; i++) {
         for (size_t j = i + 1; j < numberOfRndShips; j++) {
             if (ships[i].x != ships[j].x || ships[i].y != ships[j].y) {
                 isRandom = true;
@@ -44,12 +59,12 @@ void TEST_SHIP_rndShipPos() {
 
     ASSERT(isRandom, "Ship positions should be random");
 
-    printf("\tPASSED rndShipPos\n");
+    ENDTEST();
 }
 
-void TEST_SHIP_convertShipPositionToBoundingBox(){
+bool TEST_SHIPS_convertShipPositionToBoundingBox(){
 
-    // Test conversion from a (major, minor, orientation) to a ShipPlacement box
+    // Test conversion from a ship position (with len, x, y, direction) to a ShipBoundingBox (with cardinal directions)
     ShipBoundingBox testShip;
     ShipPosition shipA = {4, 3, 4, 1};
     testShip = convertShipPositionToBoundingBox(shipA);
@@ -80,14 +95,73 @@ void TEST_SHIP_convertShipPositionToBoundingBox(){
     ASSERT(testShip.west == 0, "West expected 0");
 
     // printf("N%i, E%i, S%i, W%i\n", testShip.north, testShip.east, testShip.south, testShip.west);
-    printf("\tPASSED convertShipPositionToBoundingBox\n");
+    ENDTEST();
 }
 
-void TEST_SHIP_convertBoundingboxToShipPosition(){
+bool TEST_SHIPS_convertBoundingboxToShipPosition(){
 
+    // Test conversion from a bounding box (north, south, east, west) to a ship position
+    ShipPosition testShip;
+    ShipBoundingBox shipA = {4, 6, 4, 3};
+    testShip = convertBoundingboxToShipPosition(shipA);
+    ASSERT(testShip.length == 4, "length expected 4");
+    ASSERT(testShip.x == 3, "x expected 3");
+    ASSERT(testShip.y == 4, "y expected 4");
+    ASSERT(testShip.direction == 1, "direction expected 1");
+
+    ShipBoundingBox shipB = {2, 2, 3, 2};
+    testShip = convertBoundingboxToShipPosition(shipB);
+    ASSERT(testShip.length == 2, "length expected 2");
+    ASSERT(testShip.x == 2, "x expected 2");
+    ASSERT(testShip.y == 2, "y expected 2");
+    ASSERT(testShip.direction == 0, "direction expected 0");
+
+    ShipBoundingBox shipC = {7, 5, 9, 5};
+    testShip = convertBoundingboxToShipPosition(shipC);
+    ASSERT(testShip.length == 3, "length expected 3");
+    ASSERT(testShip.x == 5, "x expected 5");
+    ASSERT(testShip.y == 7, "y expected 7");
+    ASSERT(testShip.direction == 0, "direction expected 0");
+
+    ShipBoundingBox shipD = {0, 0, 0, 0};
+    testShip = convertBoundingboxToShipPosition(shipD);
+    ASSERT(testShip.length == 1, "length expected 0");
+    ASSERT(testShip.x == 0, "x expected 0");
+    ASSERT(testShip.y == 0, "y expected 0");
+    ASSERT(testShip.direction == 0, "direction expected 0");
+
+    ENDTEST();
 }
 
-void TEST_SHIP_doShipsCollide(){
+bool TEST_SHIPS_shipVectorToArray() {
+    // Test with an empty vector
+    std::vector<ShipPosition> emptyFleetVector = {};
+    ShipPosition emptyFleetArray[emptyFleetVector.size()];
+    shipVectorToArray(emptyFleetVector, emptyFleetArray, emptyFleetVector.size());
+    ASSERT(emptyFleetVector.size() == 0, "Empty vector should result in an empty array");
+
+    // Test with a single ship
+    std::vector<ShipPosition> singleShipVector = {{3, 2, 1, true}};
+    ShipPosition singleShipArray[singleShipVector.size()];
+    shipVectorToArray(singleShipVector, singleShipArray, singleShipVector.size());
+    ASSERT(singleShipArray[0] == singleShipVector[0], "Expected the two ships to be equal");
+
+    // Test with multiple ships
+    std::vector<ShipPosition> multipleShipsVector = {
+        {4, 3, 4, false},
+        {2, 5, 6, true},
+        {5, 1, 2, false}
+    };
+    ShipPosition multipleShipsArray[multipleShipsVector.size()];
+    shipVectorToArray(multipleShipsVector, multipleShipsArray, multipleShipsVector.size());
+    ASSERT(multipleShipsArray[0] == multipleShipsVector[0], "Expected the two ships to be equal");
+    ASSERT(multipleShipsArray[1] == multipleShipsVector[1], "Expected the two ships to be equal");
+    ASSERT(multipleShipsArray[2] == multipleShipsVector[2], "Expected the two ships to be equal");
+
+    ENDTEST();
+}
+
+bool TEST_SHIPS_doShipsCollide_shipPosition(){
     // Ship Position method
     ShipPosition shipZ = {5, 6, 5, 0};
     ShipPosition shipX = {3, 2, 0, 0};
@@ -96,7 +170,10 @@ void TEST_SHIP_doShipsCollide(){
     ASSERT(doShipsCollide(shipZ, shipX) == false, "Ships with Position Z & X should not collide");
     ASSERT(doShipsCollide(shipX, shipZ) == false, "Ships with Position X & Z should not collide");
     ASSERT(doShipsCollide(shipZ, shipY) == true, "Ships with Position Z & Y should collide");
+    ENDTEST();
+}
 
+bool TEST_SHIPS_doShipsCollide_shipBoundingBox(){
     // Calling the bounding box method
     ShipBoundingBox shipA = {4,3,4,0};
     ShipBoundingBox shipB = {1,2,3,2};
@@ -112,35 +189,116 @@ void TEST_SHIP_doShipsCollide(){
     ASSERT(doShipsCollide(shipA, shipD) == true, "Ships with BoundingBoxes A & E should collide");
     ASSERT(doShipsCollide(shipB, shipE) == true, "Ships with BoundingBoxes B & E should collide");
 
-    printf("\tPASSED doShipsCollide\n");
+    ENDTEST();
 }
 
-void TEST_SHIP_areShipsValid(){
+bool TEST_SHIPS_areShipsValid() {
 
-    std::vector<ShipPosition> noCollision = {
+    ASSERT(BOARD_SIZE <= 11, "The board must be less than 11x11 to do these tests");
+
+    // Test with valid ships
+    ShipPosition validFleet[] = {
+        {4, 0, 0, true},
+        {3, 2, 2, false},
+        {2, 5, 5, true}
+    };
+    ASSERT(areShipsValid(validFleet, 3), "Valid fleet should be considered valid");
+
+    // Test with overlapping ships
+    ShipPosition overlappingFleet[] = {
+        {4, 0, 0, true},
+        {3, 0, 0, false},
+        {2, 5, 5, true}
+    };
+    ASSERT(!areShipsValid(overlappingFleet, 3), "Overlapping fleet should be considered invalid");
+
+    // Test with an empty fleet
+    ShipPosition emptyFleet[] = {};
+    ASSERT(areShipsValid(emptyFleet, 0), "Empty fleet should be considered valid");
+
+    // Test with a single valid ship
+    ShipPosition singleValidShip[] = {
+        {10, 0, 0, true}
+    };
+    ASSERT(areShipsValid(singleValidShip, 1), "Single valid ship should be considered valid");
+
+    ENDTEST();
+}
+
+bool TEST_SHIPS_areShipsValidInBoardArray() {
+    // Test with valid ships
+    ShipPosition validFleet[] = {
+        {4, 0, 0, true},
+        {3, 2, 2, true},
+        {2, 1, 1, true}
+    };
+    ASSERT(areShipsValidInBoardArray(validFleet, 3), "Valid fleet should be considered valid");
+
+    // Test with overlapping ships
+    ShipPosition overlappingFleet[] = {
+        {4, 0, 0, true},
+        {3, 0, 0, false},
+        {2, 5, 5, true}
+    };
+    ASSERT(!areShipsValidInBoardArray(overlappingFleet, 3), "Overlapping fleet should be considered invalid");
+
+    // Test with ships out of bounds
+    ShipPosition outOfBoundsFleet[] = {
+        {107, 0, 0, false},
+        {2, 5, 5, true}
+    };
+    ASSERT(!areShipsValidInBoardArray(outOfBoundsFleet, 2), "Fleet with ships out of bounds should be considered invalid");
+
+    // Test with an empty fleet
+    ShipPosition emptyFleet[] = {};
+    ASSERT(areShipsValidInBoardArray(emptyFleet, 0), "Empty fleet should be considered valid");
+
+    // Test with a single valid ship
+    ShipPosition singleValidShip[] = {
+        {4, 0, 0, true}
+    };
+    ASSERT(areShipsValidInBoardArray(singleValidShip, 1), "Single valid ship should be considered valid");
+
+    // Test with a single invalid ship (out of bounds)
+    ShipPosition singleInvalidShip[] = {
+        {4, 10, 10, true}
+    };
+    ASSERT(!areShipsValidInBoardArray(singleInvalidShip, 1), "Single invalid ship should be considered invalid");
+
+    ENDTEST();
+}
+
+bool TEST_SHIPS_areShipsValidInBoardVector(){
+    std::vector<ShipPosition> validShips = {
+        {2, 2, 3, false},
+        {3, 0, 1, true},
+    };
+    ASSERT(areShipsValidInBoardVector(validShips), "These ships should be valid");
+
+
+    std::vector<ShipPosition> outOfBounds = {
         {2, 2, 3, false},
         {4, 4, 1, true},
         {2, 2, 5, true},
-        {3, 9, 7, false},
+        {10, 9, 7, false},
         {5, 0, 8, true}
     };
-    ASSERT(areShipsValid(noCollision), "Ships should not collide");
+    ASSERT(!areShipsValidInBoardVector(outOfBounds), "Ships are not valid when they're out of bounds");
 
     std::vector<ShipPosition> collision = {
         {4, 4, 1, true},
         {2, 2, 5, true},
         {3, 2, 3, false},
     };
-    ASSERT(!areShipsValid(collision), "Ships should collide");
+    ASSERT(!areShipsValidInBoardVector(collision), "Ships should collide");
 
     std::vector<ShipPosition> fleet = {};
-    printf("\tSTARTING areShipsValid\n");
-    ASSERT(areShipsValid(fleet), "Empty fleet should be valid");
+    ASSERT(areShipsValidInBoardVector(fleet), "Empty fleet should be valid");
 
-    printf("\tPASSED areShipsValid\n");
+    ENDTEST();
 }
 
-void TEST_SHIP_operatorEqual(){
+bool TEST_SHIPS_operatorEqual(){
     // Test if two ship positions are equal
     ShipPosition shipA = {4, 3, 4, 1};
     ShipPosition shipB = {4, 3, 4, 1};
@@ -157,10 +315,10 @@ void TEST_SHIP_operatorEqual(){
     ASSERT(shipA != shipF, "Ships with y positions lengths shouldn't be equal");
 
 
-    printf("\tPASSED operatorEqual\n");
+    ENDTEST();
 }
 
-void TEST_SHIP_operatorRelational(){
+bool TEST_SHIPS_operatorRelational(){
     // Test if two ship positions are equal
     ShipPosition shipA = {4, 3, 4, 1};
     ShipPosition shipB = {4, 3, 4, 1};
@@ -186,11 +344,38 @@ void TEST_SHIP_operatorRelational(){
     ASSERT((shipA > shipF) == false, "Equal positioned ships with different lengths are still considered equal (2)");
 
 
-    printf("\tPASSED operatorRelational\n");
-
+    ENDTEST();
 }
 
-void TEST_SHIPS_nextShipPosition() {
+bool TEST_SHIPS_compareShipArray() {
+    ShipPosition pA[FLEET_SIZE];
+    ShipPosition pB[FLEET_SIZE];
+
+    // Initialize pA and pB with some values
+    for (int i = 0; i < FLEET_SIZE; i++) {
+        pA[i] = {(unsigned int)i, i, i, true};
+        pB[i] = {(unsigned int)i, i, i, true};
+    }
+
+    // pA == pB
+    int result = compareShipArray(pA, pB);
+    ASSERT(result == 0, "compareShipArray should return 0 when arrays are equal");
+
+    // pA > pB
+    pA[0] = {1, 1, 2, true}; // Make pA greater than pB
+    result = compareShipArray(pA, pB);
+    ASSERT(result == -1, "compareShipArray should return -1 when pA > pB");
+
+    // pA < pB
+    pA[0] = {0, 0, 0, true}; // Reset pA
+    pB[1] = {1, 1, 2, true}; // Make pB greater than pA
+    result = compareShipArray(pA, pB);
+    ASSERT(result == 1, "compareShipArray should return 1 when pA < pB");
+
+    ENDTEST();
+}
+
+bool TEST_SHIPS_nextShipPosition() {
     ASSERT(BOARD_SIZE > 4, "Board size must be greater than 4 for valid tests");
 
     // just change y (no rollover)
@@ -221,13 +406,12 @@ void TEST_SHIPS_nextShipPosition() {
     ASSERT(finalShipPos.y == 0, "Expected y to be 0 when rolling over x,y,direction");
     ASSERT(finalShipPos.direction == false, "Expected direction to be false when rolling over x,y,direction");
 
-    printf("\tPASSED nextShipPosition\n");
+    ENDTEST();
 }
 
-void TEST_SHIPS_nextShipPosArray() {
+bool TEST_SHIPS_nextShipPosArray() {
     ShipPosition shipPosArray[FLEET_SIZE];
     setStartArray(shipPosArray);
-
     nextShipPosArray(shipPosArray);
     ASSERT(shipPosArray[FLEET_SIZE-1].x == 0, "Expected x to be 0");
     ASSERT(shipPosArray[FLEET_SIZE-1].y == 1, "Expected y to be 1");
@@ -244,10 +428,10 @@ void TEST_SHIPS_nextShipPosArray() {
         ASSERT(shipPosArray[i].direction == 0, "Expected direction to be 0");
     }
 
-    printf("\tPASSED nextShipPosArray\n");
+    ENDTEST();
 }
 
-void TEST_SHIPS_setStartArray() {
+bool TEST_SHIPS_setStartArray() {
     ShipPosition shipPosArray[FLEET_SIZE];
     setStartArray(shipPosArray);
 
@@ -258,10 +442,10 @@ void TEST_SHIPS_setStartArray() {
         ASSERT(shipPosArray[i].direction == 0, "Expected direction to be 0");
     }
 
-    printf("\tPASSED setStartArray\n");
+    ENDTEST();
 }
 
-void TEST_SHIPS_setEndArray() {
+bool TEST_SHIPS_setEndArray() {
     ShipPosition shipPosArray[FLEET_SIZE];
     setEndArray(shipPosArray);
 
@@ -272,34 +456,5 @@ void TEST_SHIPS_setEndArray() {
         ASSERT(shipPosArray[i].direction == 1, "Expected direction to be 1");
     }
 
-    printf("\tPASSED setEndArray\n");
-}
-
-
-void TEST_SHIPS_compareShipArray() {
-    ShipPosition pA[FLEET_SIZE];
-    ShipPosition pB[FLEET_SIZE];
-
-    // Initialize pA and pB with some values
-    for (int i = 0; i < FLEET_SIZE; i++) {
-        pA[i] = {(unsigned int)i, i, i, true};
-        pB[i] = {(unsigned int)i, i, i, true};
-    }
-
-    // pA == pB
-    int result = compareShipArray(pA, pB);
-    ASSERT(result == 0, "compareShipArray should return 0 when arrays are equal");
-
-    // pA > pB
-    pA[0] = {1, 1, 2, true}; // Make pA greater than pB
-    result = compareShipArray(pA, pB);
-    ASSERT(result == -1, "compareShipArray should return -1 when pA > pB");
-
-    // pA < pB
-    pA[0] = {0, 0, 0, true}; // Reset pA
-    pB[1] = {1, 1, 2, true}; // Make pB greater than pA
-    result = compareShipArray(pA, pB);
-    ASSERT(result == 1, "compareShipArray should return 1 when pA < pB");
-
-    printf("\tPASSED compareShipArray\n");
+    ENDTEST();
 }

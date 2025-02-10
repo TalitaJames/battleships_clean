@@ -5,23 +5,28 @@
 #include "constants.h"
 #include "test_utils.h"
 
-void TEST_SHIP_singleShipPositions();
-void TEST_SHIP_allShipPositions();
-void TEST_SHIP_rndShipPos();
+bool TEST_SHIPS_singleShipPositions();
+bool TEST_SHIPS_allShipPositions();
+bool TEST_SHIPS_rndShipPos();
 
-void TEST_SHIP_convertShipPositionToBoundingBox();
-void TEST_SHIP_convertBoundingboxToShipPosition();
+bool TEST_SHIPS_convertShipPositionToBoundingBox();
+bool TEST_SHIPS_convertBoundingboxToShipPosition();
+bool TEST_SHIPS_shipVectorToArray();
 
-void TEST_SHIP_doShipsCollide();
-void TEST_SHIP_areShipsValid();
+bool TEST_SHIPS_doShipsCollide_shipPosition();
+bool TEST_SHIPS_doShipsCollide_shipBoundingBox();
+bool TEST_SHIPS_areShipsValid();
+bool TEST_SHIPS_areShipsValidInBoardArray();
+bool TEST_SHIPS_areShipsValidInBoardVector();
 
-void TEST_SHIP_operatorEqual();
-void TEST_SHIP_operatorRelational();
-void TEST_SHIPS_compareShipArray();
+bool TEST_SHIPS_operatorEqual();
+bool TEST_SHIPS_operatorRelational();
+bool TEST_SHIPS_compareShipArray();
 
-void TEST_SHIPS_nextShipPosition();
-void TEST_SHIPS_nextShipPosArray();
-void TEST_SHIPS_setStartArray();
-void TEST_SHIPS_setEndArray();
+bool TEST_SHIPS_nextShipPosition();
+bool TEST_SHIPS_nextShipPosArray();
+bool TEST_SHIPS_setStartArray();
+bool TEST_SHIPS_setEndArray();
+
 
 #endif //SHIPS_TESTS_H

@@ -16,7 +16,7 @@
 #include "constants.h"
 
 /// @brief a ship position, stored as the space the ship takes
-typedef struct {
+typedef struct ShipBoundingBox{
     // Bounding box
     int north;
     int east;
@@ -26,10 +26,10 @@ typedef struct {
 
 /// @brief the position of a ship
 typedef struct ShipPosition{
-    unsigned int length;
-    int x;
-    int y;
-    bool direction; // 1 represents horizontal
+    unsigned int length = 0;
+    int x = 0;
+    int y = 0;
+    bool direction = 0; // 1 represents horizontal
 } ShipPosition;
 
 // Generating ship positions
@@ -40,15 +40,26 @@ ShipPosition rndShipPos(int boardSize, Ship);
 // Conversions between various formats
 ShipBoundingBox convertShipPositionToBoundingBox(ShipPosition);
 ShipPosition convertBoundingboxToShipPosition(ShipBoundingBox);
+void shipVectorToArray(std::vector<ShipPosition>, ShipPosition*, int);
+
 
 // Check for collisions
 bool doShipsCollide(ShipPosition shipA, ShipPosition shipB);
 bool doShipsCollide(ShipBoundingBox shipA, ShipBoundingBox shipB);
-bool areShipsValid(std::vector<ShipPosition> shipFleet);
+
+bool doesShipFitOnBoard(ShipPosition shipA); //TODO test me
+bool doesShipFitOnBoard(ShipBoundingBox shipA); //TODO test me
+bool doesShipFitOnBoard(ShipPosition shipA, int boardSize); //TODO test me
+bool doesShipFitOnBoard(ShipBoundingBox shipA, int boardSize); //TODO test me
+
+bool areShipsValid(ShipPosition *fleet, int fleetSize);
+bool areShipsValidInBoardArray(ShipPosition *fleet, int fleetSize);
+bool areShipsValidInBoardVector(std::vector<ShipPosition> shipFleet);
 
 // Opperator Overloads
 std::ostream& operator<<(std::ostream&, const struct ShipPosition&);
 std::ostream& operator<<(std::ostream&, const struct ShipPosition*);
+std::ostream& operator<<(std::ostream&, const struct ShipBoundingBox&);
 
 bool operator==(const struct ShipPosition&, const struct ShipPosition&);
 bool operator!=(const struct ShipPosition&, const struct ShipPosition&);

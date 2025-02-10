@@ -7,6 +7,7 @@
  * @return a vector of all legal ship positions
  */
 std::vector<ShipPosition> singleShipPositions(int boardSize, Ship shipLength) {
+    if (0 == shipLength || shipLength > boardSize ) return std::vector<ShipPosition>{};
 
     int maxPositions = (boardSize-shipLength+1)*boardSize;
     if (shipLength>1) maxPositions += (boardSize-shipLength+1)*boardSize;
@@ -14,19 +15,16 @@ std::vector<ShipPosition> singleShipPositions(int boardSize, Ship shipLength) {
     std::vector<ShipPosition> allSingleShipPositions;
     allSingleShipPositions.reserve(maxPositions);
 
-    for (int major = 0; major < boardSize; major++) {
-        for (int minor = 0; minor < boardSize - shipLength + 1; minor++) {
-            if(shipLength == 1){
-                ShipPosition newShip = {shipLength, major, minor, true};
-                allSingleShipPositions.push_back(newShip);
-                continue; // if the shipLength 1, orientation doesn't matter
-            }
-
-            for (int orientation = 0; orientation < 2; orientation++) {
-                ShipPosition newShip = {shipLength, major, minor, (bool) orientation};
-                allSingleShipPositions.push_back(newShip);
+    for(int orientation = 0; orientation < 2; orientation++){
+        for (int x = 0; x < boardSize; x++) {
+            for (int y = 0; y < boardSize; y++) {
+                ShipPosition newShip = {shipLength, x, y, (bool) orientation};
+                if(doesShipFitOnBoard(newShip, boardSize)){
+                    allSingleShipPositions.push_back(newShip);
+                }
             }
         }
+        if(shipLength == 1) break; // For 1 length ships, orientation doesn't matter
     }
     return allSingleShipPositions;
 }
@@ -75,11 +73,8 @@ ShipPosition rndShipPos(int boardSize, Ship len){
 
 
 /**
- * @brief Turn a major, minor and direction into a ship (bounding box)
- * @param length a ship length
- * @param major where the ship sits along the non bounded axis
- * @param minor where the ship sits along the bounded axis
- * @param direction which way the ship faces (1 for horizontal)
+ * @brief Turn a ship position into a bounding box
+ * @param sP the ship, including length, x, y &direction
  * @return ShipBoundingBox
  */
 ShipBoundingBox convertShipPositionToBoundingBox(ShipPosition sP){
@@ -97,6 +92,28 @@ ShipBoundingBox convertShipPositionToBoundingBox(ShipPosition sP){
     }
     return shipBounds;
 }
+
+/**
+ * @brief Turn a a boundng box into a real ship
+ * @param sBB the ship bounding box
+ * @return ShipPosition
+ */
+ShipPosition convertBoundingboxToShipPosition(ShipBoundingBox sBB){
+    ShipPosition shipPos;
+    shipPos.x = sBB.west;
+    shipPos.y = sBB.north;
+    shipPos.direction = (sBB.east > sBB.west); // true if horizontal
+    shipPos.length = (shipPos.direction) ? (sBB.east - sBB.west + 1) : (sBB.south - sBB.north + 1);
+
+    return shipPos;
+}
+
+void shipVectorToArray(std::vector<ShipPosition> shipPosVector, ShipPosition* shipPos, int arraySize){
+    for (size_t i = 0; i < arraySize; i++){
+        shipPos[i] = shipPosVector[i];
+    }
+}
+
 
 /**
  * @brief Determines if the board is valid (ie ship follows placement rules)
@@ -127,25 +144,97 @@ bool doShipsCollide(ShipBoundingBox shipA, ShipBoundingBox shipB){
 };
 
 /**
- * @brief Checks a vector of ships to ensure valid positions
+ * @brief checks if a ship is within the board size
+ *
+ * @param shipA the ship in question
+ * @return true if the ship is within the bounds of the board, else false
+ */
+bool doesShipFitOnBoard(ShipPosition shipA){
+    return doesShipFitOnBoard(convertShipPositionToBoundingBox(shipA), BOARD_SIZE);
+};
+
+/**
+ * @brief checks if a ship is within the board size
+ *
+ * @param shipA the ship in question
+ * @return true if the ship is within the bounds of the board, else false
+ */
+bool doesShipFitOnBoard(ShipBoundingBox shipA){
+   return doesShipFitOnBoard(shipA, BOARD_SIZE);
+};
+
+/**
+ * @brief checks if a ship is within the board size
+ *
+ * @param shipA the ship in question
+ * @param boardSize size of the board to test bounds of
+ * @return true if the ship is within the bounds of the board, else false
+ */
+bool doesShipFitOnBoard(ShipPosition shipA, int boardSize){
+    return doesShipFitOnBoard(convertShipPositionToBoundingBox(shipA), boardSize);
+};
+
+/**
+ * @brief checks if a ship is within the board size
+ *
+ * @param shipA the ship in question
+ * @param boardSize size of the board to test bounds of
+ * @return true if the ship is within the bounds of the board, else false
+ */
+bool doesShipFitOnBoard(ShipBoundingBox shipA, int boardSize){
+    bool fitOnBoardVertical = ((0 <= shipA.north && shipA.north < boardSize) && ( 0 <= shipA.south && shipA.south < boardSize));
+    bool fitOnBoardHorizontal = ((0 <= shipA.east && shipA.east < boardSize) && ( 0 <= shipA.west && shipA.west < boardSize));
+
+    return fitOnBoardVertical && fitOnBoardHorizontal;
+};
+
+/**
+ * @brief Checks an array of ships to ensure valid positions (no collisions)
  *
  * Iterates through the whole array (all I check all further positions of J)
  * and checks for collisions
+ * Note: Does not check the bounds of the board
  *
- * @param vectorFleet a vector of ship poisitions
+ * @param fleet an array of ship poisitions
+ * @param fleetSize number of ships in the fleet
  * @return true if ships collide, else false
  */
-bool areShipsValid(std::vector<ShipPosition> vectorFleet){
-    if(vectorFleet.size() == 0) return true;
+bool areShipsValid(ShipPosition *fleet, int fleetSize){
+    if(fleetSize == 0) return true;
 
-    for (size_t i = 0; i < vectorFleet.size()-1; i++) {
-        for (size_t j = i+1; j < vectorFleet.size(); j++) {
-            if (doShipsCollide(vectorFleet[i], vectorFleet[j]))
+    for (size_t i = 0; i < fleetSize-1; i++) {
+        for (size_t j = i+1; j < fleetSize; j++) {
+            if (doShipsCollide(fleet[i], fleet[j]))
                 return false;
         }
     }
 
     return true;
+}
+
+/**
+ * @brief checks the array of ships for colisions and ensures the boards fit in the bounds
+ *
+ * @param fleet the ships to check positional validity
+ * @param fleetSize number of ships in fleet
+ * @return true if no colisions or out of bounds
+ */
+bool areShipsValidInBoardArray(ShipPosition *fleet, int fleetSize){
+    if(!areShipsValid(fleet, fleetSize)) return false; // if the ships colide
+
+    // check each board doesn't extend past BOARD_SIZE
+    for (size_t i = 0; i < fleetSize; i++){ // for each ship
+        if (!doesShipFitOnBoard(fleet[i])) return false; //ship doesn't fit on board
+    }
+
+    return true;
+}
+
+bool areShipsValidInBoardVector(std::vector<ShipPosition> vectorFleet){
+    ShipPosition arrayFleet[vectorFleet.size()];
+    shipVectorToArray(vectorFleet, arrayFleet, vectorFleet.size());
+
+    return areShipsValidInBoardArray(arrayFleet, vectorFleet.size());
 }
 
 /**
@@ -176,11 +265,23 @@ std::ostream& operator<<(std::ostream& os,  const struct ShipPosition* shipArray
     return os;
 };
 
+/**
+ * @brief toString overload for ship bounding box
+ * @param os a stream
+ * @param shipPos given ship box
+ * @return the stream
+ */
+std::ostream& operator<<(std::ostream& os,  const struct ShipBoundingBox& shipBox){
+
+    os << "N:" << shipBox.north << " S: " << shipBox.south << " E:" << shipBox.east << " W: " << shipBox.west;
+
+    return os;
+};
 
 /**
  * @brief Checks if two ShipPositions match.
  * Note that length isn't checked, as it is negligible for considering the same positions
- * 
+ *
  * @param A first ship position
  * @param B second ship position
  * @return bool true if equal
