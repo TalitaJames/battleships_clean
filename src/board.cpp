@@ -39,30 +39,19 @@ void drawBoard(Board &board, ShipPosition* shipPos){
     wipeBoard(board);
     board.isEmpty = false;
 
+    if(!areShipsValidInBoardArray(shipPos, FLEET_SIZE)){
+        board.isValid = false;
+        return;
+    }
+
     // Draw the grid
     for (size_t i = 0; i < FLEET_SIZE; i++){ // for each ship
         for (size_t j = 0; j < shipPos[i].length; j++){ // for the length of each ship
             // early return if a ship already there or if it is out of bounds
             if (shipPos[i].direction){
-                if (shipPos[i].x+j>= BOARD_SIZE ||shipPos[i].y>= BOARD_SIZE) { // out of horizonal bounds
-                    board.isValid=false;
-                    return;
-                }
-                else if (board.board[shipPos[i].x+j][shipPos[i].y] != BOARD_DEFAULT) { // intersection!
-                    board.isValid=false;
-                    return;
-                }
                 board.board[shipPos[i].x+j][shipPos[i].y] = i; // update board value
             }
             else{
-                if (shipPos[i].x>= BOARD_SIZE ||shipPos[i].y+j>= BOARD_SIZE) { // out of vertical bounds
-                    board.isValid=false;
-                    return;
-                }
-                else if (board.board[shipPos[i].x][shipPos[i].y+j] != BOARD_DEFAULT) { // intersection!
-                    board.isValid=false;
-                    return;
-                }
                 board.board[shipPos[i].x][shipPos[i].y+j] = i; // update board value
             }
         }

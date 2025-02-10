@@ -1,6 +1,6 @@
 #include "board_tests.h"
 
-void TEST_BOARD_initBlankBoard() {
+bool TEST_BOARD_initBlankBoard() {
     Board b = initBlankBoard();
 
     ASSERT(b.isEmpty == true, "Board should be empty after initialization");
@@ -10,13 +10,15 @@ void TEST_BOARD_initBlankBoard() {
             ASSERT(b.board[x][y] == BOARD_DEFAULT, "Board cells should be set to BOARD_DEFAULT");
         }
     }
-
-    printf("\tPASSED initBlankBoard\n");
+    // TODO check ship positions are null?
+    ENDTEST();
 }
 
-void TEST_BOARD_wipeBoard() {
+bool TEST_BOARD_wipeBoard() {
     Board b;
-    b.board[0][0] = 1; // Set a cell to non-default value
+    b.board[0][0] = 1; // put fake data in cells
+    b.board[0][BOARD_SIZE-1] = -7;
+
     wipeBoard(b);
     ASSERT(b.isEmpty == true, "Board should be empty after wiping");
     ASSERT(b.isValid == false, "Board should be invalid after wiping");
@@ -26,18 +28,19 @@ void TEST_BOARD_wipeBoard() {
         }
     }
     // TODO test shipPos is cleared
-    printf("\tPASSED wipeBoard\n");
+    ENDTEST();
 }
 
-void TEST_BOARD_drawBoard() {
+bool TEST_BOARD_drawBoard() {
     Board b = initBlankBoard();
     ASSERT(BOARD_SIZE >= 3, "Board height should be at least 3 to test properly");
 
-    ShipPosition shipPos[FLEET_SIZE] = {
+    // test for a valid state
+    ShipPosition shipPosValid[FLEET_SIZE] = {
         {3, 0, 0, true}, // Horizontal ship at [0][0], [1][0], [2][0]
         {2, 1, 1, false} // Vertical ship at [1][1], [1][2]
     };
-    drawBoard(b, shipPos);
+    drawBoard(b, shipPosValid);
 
     ASSERT(b.isEmpty == false, "Board should not be empty after drawing ships");
     ASSERT(b.board[0][0] == 0, "Ship 0 should be at (0,0)");
@@ -53,17 +56,31 @@ void TEST_BOARD_drawBoard() {
     ASSERT(b.board[2][2] == BOARD_DEFAULT, "Empty space should be BOARD_DEFAULT");
 
     for (size_t i = 0; i < FLEET_SIZE; i++){
-        ASSERT(b.shipPos[i] == shipPos[i], "Ship positions should be copied");
+        ASSERT(b.shipPos[i] == shipPosValid[i], "Ship positions should be stored in board");
     }
 
-    printf("\tPASSED drawBoard\n");
+    // test an invalid state
+    ShipPosition shipPosInvalid[FLEET_SIZE] = {
+        {3, 0, 0, true}, // Horizontal ship at [0][0], [1][0], [2][0]
+        {2, 1, 0, false} // Vertical ship at [1][0], [1][1]
+    };
+    drawBoard(b, shipPosInvalid);
+    for (int y = 0; y < BOARD_SIZE; y++) {
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            ASSERT(b.board[x][y] == BOARD_DEFAULT, "Board cells should be set to BOARD_DEFAULT after drawing an invalid board");
+        }
+    }
+    ASSERT(b.isEmpty == false, "Board should not be empty after drawing ships");
+    ASSERT(b.isValid == false, "Board should not be empty after drawing ships");
+
+    ENDTEST();
 }
 
-void TEST_BOARD_rndBoard() {
+bool TEST_BOARD_rndBoard() {
     Board b = rndBoard();
     ASSERT(b.isEmpty == false, "Random board should not be empty");
     ASSERT(b.isValid == true, "Random board should be valid");
 
     // TODO add test to ensure random board is actually random
-    printf("\tPASSED rndBoard\n");
+    ENDTEST();
 }
