@@ -6,5 +6,7 @@ Uses the [`JsonCPP`](https://github.com/open-source-parsers/jsoncpp)
 
 ## To Do list
 - [ ] MonteCarlo Tree search
+- [ ] implement hitmask checking in `cartesianProduct` calculations
+    - [ ] also is it checking in `iterateBoardsToGenerateProbabilityGrid`?
 - [x] change `runThreads` to have a better name (iterateBoardsToGenerateProbabilityGrid?)
     - [ ] make the function a parseable option to play methods(so that a different function could be used instead)

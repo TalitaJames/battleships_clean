@@ -15,7 +15,7 @@ DEPS = $(OBJS:.o=.d)
 
 # Target
 .PHONY: all clean
-TARGET = $(BUILD)/runner.exe
+TARGET = $(BUILD)/runner
 
 all: $(TARGET)
 

@@ -3,6 +3,7 @@
 *.out
 *.exe
 *.d
+build/*
 
 # Editor files
 .vscode

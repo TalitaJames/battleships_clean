@@ -19,7 +19,7 @@ SRC_OBJS = $(filter-out $(SRC_BUILD)/main.o, $(wildcard $(SRC_BUILD)/*.o))
 
 # Target
 .PHONY: all clean
-TEST_TARGET = $(TEST_BUILD)/test_runner.exe
+TEST_TARGET = $(TEST_BUILD)/test_runner
 
 all: $(TEST_TARGET)
 
