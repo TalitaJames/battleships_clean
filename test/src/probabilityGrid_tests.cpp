@@ -77,5 +77,22 @@ bool TEST_PROBABILITYGRID_flattenBoardToProbabilityGrid(){
     ASSERT(probGrid.shipGrid[2][1] == 0, "Empty space without a boat should stay zero");
     ASSERT(probGrid.shipGrid[2][2] == 0, "Empty space without a boat should stay zero");
 
+
+    // Set to invalid and ensure it doesn't add anything
+    board.isValid = false;
+    ASSERT(probGrid.totalGoodBoards == 1, "Probability Grid shouldn't change when board is invalid");
+    ASSERT(probGrid.shipGrid[0][0] == 4, "Probability Grid shouldn't change when board is invalid");
+    ASSERT(probGrid.shipGrid[1][0] == 1, "Probability Grid shouldn't change when board is invalid");
+    ASSERT(probGrid.shipGrid[2][0] == 1, "Probability Grid shouldn't change when board is invalid");
+
+    ASSERT(probGrid.shipGrid[1][1] == 1, "Probability Grid shouldn't change when board is invalid");
+    ASSERT(probGrid.shipGrid[1][2] == 1, "Probability Grid shouldn't change when board is invalid");
+
+    ASSERT(probGrid.shipGrid[0][1] == 0, "Probability Grid shouldn't change when board is invalid");
+    ASSERT(probGrid.shipGrid[0][2] == 6, "Probability Grid shouldn't change when board is invalid");
+    ASSERT(probGrid.shipGrid[2][1] == 0, "Probability Grid shouldn't change when board is invalid");
+    ASSERT(probGrid.shipGrid[2][2] == 0, "Probability Grid shouldn't change when board is invalid");
+
+
     ENDTEST();
 }
