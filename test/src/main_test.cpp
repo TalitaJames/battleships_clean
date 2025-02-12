@@ -65,9 +65,15 @@ int main(){
     // TEST_BOARDITERATOR_appendWorkerToProbGrid();
     // TEST_BOARDITERATOR_gatherProbabilityFromWorkers();
 
-    // printf("\nTESTING CARTESIANPRODUCT\n");
-    // TEST_CARTESIANPRODUCT_vectorIntoVectorVector();
-    // TEST_CARTESIANPRODUCT_cartesianProduct();
+    std::vector<TestFunction> testCartesianProduct = {
+        TEST_CARTESIANPRODUCT_cartesianProduct_singleVector,
+        TEST_CARTESIANPRODUCT_cartesianProduct_singleVector_filter,
+        TEST_CARTESIANPRODUCT_cartesianProduct_twoVector,
+        TEST_CARTESIANPRODUCT_cartesianProduct_twoVector_filter,
+        TEST_CARTESIANPRODUCT_cartesianProduct_VectorsAndVector,
+        TEST_CARTESIANPRODUCT_cartesianProduct_VectorsAndVector_filter,
+    };
+    TEST_ALL(testCartesianProduct, "CartesianProduct");
 
     return 0;
 }

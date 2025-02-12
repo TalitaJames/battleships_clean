@@ -54,7 +54,6 @@ template <typename T>
 std::vector<std::vector<T>> cartesianProduct(std::vector<std::vector<T>> sets, std::function<bool(std::vector<T>)> filter){
     std::vector<std::vector<T>> result = cartesianProduct(sets[0], sets[1], filter); //cartesian product of the first two
     for(size_t i = 2; i < sets.size(); i++){ //update the result to append the next ship positions
-        printf("Total of %li items\n", result.size());
         result = cartesianProduct(result, sets[i], filter);
 	}
 
@@ -142,25 +141,5 @@ std::vector<std::vector<T>> cartesianProduct(std::vector<std::vector<T>> setA, s
 
     return result;
 }
-
-
-
-/**
- * @brief change a 1D vector into a 2D
- * @tparam T the type of vector
- * @param in a 1D vector eg {3, 4, 6}
- * @return the vector in transformed into n vectors each seperatly holding the element,
- * ie {3, 4, 6} becomes {{3}, {4}, {6}}
- */
-template <typename T> std::vector<std::vector<T>> vectorIntoVectorVector(std::vector<T> in){
-    std::vector<std::vector<T>> result;
-    for(T element : in){
-        std::vector<T> elementVector = {element};
-        result.push_back(elementVector);
-    }
-
-    return result;
-}
-
 
 #endif //CARTESIANPRODUCT_H

@@ -4,8 +4,13 @@
 #include "cartesianProduct.h"
 #include "test_utils.h"
 
-void TEST_CARTESIANPRODUCT_cartesianProduct();
-void TEST_CARTESIANPRODUCT_vectorIntoVectorVector();
+bool TEST_CARTESIANPRODUCT_cartesianProduct_singleVector();
+bool TEST_CARTESIANPRODUCT_cartesianProduct_singleVector_filter();
+bool TEST_CARTESIANPRODUCT_cartesianProduct_twoVector();
+bool TEST_CARTESIANPRODUCT_cartesianProduct_twoVector_filter();
+bool TEST_CARTESIANPRODUCT_cartesianProduct_VectorsAndVector();
+bool TEST_CARTESIANPRODUCT_cartesianProduct_VectorsAndVector_filter();
+
 
 
 

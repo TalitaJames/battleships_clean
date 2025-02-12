@@ -1,35 +1,57 @@
 #include "cartesianProduct_tests.h"
 #include <iostream>
 
-void TEST_CARTESIANPRODUCT_cartesianProduct(){
-    // void TEST_CARTESIANPRODUCT_cartesianProduct(std::vector<T> setA, std::vector<T> setB, std::function<bool(std::vector<T>)> filter);
-    // void TEST_CARTESIANPRODUCT_cartesianProduct(std::vector<std::vector<T>> setA, std::vector<T> setB,std::function<bool(std::vector<T>)> filter);
 
-    // Test two bit binary (single vectors)
-    std::vector<int> A = {0, 1};
-    std::vector<std::vector<int>> expectedTestA = {
+bool TEST_CARTESIANPRODUCT_cartesianProduct_singleVector(){
+    std::vector<std::vector<int>> A = {{0, 1}, {0,1}};
+    std::function<bool(std::vector<int>)> trueIfEvenFirst = [](std::vector<int> S){ return S[0] % 2 == 0; };
+
+    std::vector<std::vector<int>> expectedTestAA = {
         {0, 0},
         {0, 1},
         {1, 0},
-        {1, 1}
+        {1, 1},
+    };
+    auto resultA = cartesianProduct(A);
+
+
+    ASSERT(resultA == expectedTestAA, "Expected {{0, 1}, {0, 1}} to equal all two bit binary");
+
+    ENDTEST();
+}
+
+bool TEST_CARTESIANPRODUCT_cartesianProduct_singleVector_filter(){
+
+    std::vector<std::vector<int>> A = {{0, 1}, {0,1}};
+    std::function<bool(std::vector<int>)> trueIfEvenFirst = [](std::vector<int> S){ return S[0] % 2 == 0; };
+
+    std::vector<std::vector<int>> expectedTestAA = {
+        {0, 0},
+        {0, 1},
+    };
+
+    auto resultA = cartesianProduct(A, trueIfEvenFirst);
+    ASSERT(resultA == expectedTestAA, "Expected {{0, 1}, {0, 1}} to equal all two bit binary with filter");
+
+    ENDTEST();
+}
+
+bool TEST_CARTESIANPRODUCT_cartesianProduct_twoVector(){
+    // Test two bit binary (single vectors)
+    std::vector<int> A = {0, 1};
+    std::vector<std::vector<int>> expectedTestAA = {
+        {0, 0},
+        {0, 1},
+        {1, 0},
+        {1, 1},
     };
     auto resultA = cartesianProduct(A, A);
-    ASSERT(resultA == expectedTestA, "Expected {{0, 1}, {0, 1}} to equal {{0, 0}, {0, 1}, {1, 0}, {1, 1}}");
+    ASSERT(resultA == expectedTestAA, "Expected {{0, 1}, {0, 1}} to equal {{0, 0}, {0, 1}, {1, 0}, {1, 1}}");
 
-    // Test three bit binary (double vector and single)
-    std::vector<std::vector<int>> expectedTestAAA = {
-        {0, 0, 0},
-        {0, 0, 1},
-        {0, 1, 0},
-        {0, 1, 1},
-        {1, 0, 0},
-        {1, 0, 1},
-        {1, 1, 0},
-        {1, 1, 1}
-    };
-    auto resultAAA = cartesianProduct(expectedTestA, A);
-    ASSERT(resultAAA == expectedTestAAA, "Expected 3 times repeated cartesian product of {0, 1} to give all 3-bit binary numbers");
+    ENDTEST();
+}
 
+bool TEST_CARTESIANPRODUCT_cartesianProduct_twoVector_filter(){
     // Test integers (single vectors and filter)
     std::function<bool(std::vector<int>)> trueIfEvenFirst = [](std::vector<int> S){ return S[0] % 2 == 0; };
     std::vector<int> C = {2, 3, 4, 5};
@@ -46,21 +68,54 @@ void TEST_CARTESIANPRODUCT_cartesianProduct(){
     auto resultCD = cartesianProduct(C, D, trueIfEvenFirst);
     ASSERT(resultCD == expectedTestCD, "Expected integers to filter based off function");
 
-    printf("\tPASSED cartesianProduct\n");
+    ENDTEST();
 }
 
-void TEST_CARTESIANPRODUCT_vectorIntoVectorVector(){
-    // void TEST_CARTESIANPRODUCT_vectorIntoVectorVector(std::vector<T> set);
-    std::vector<int> standardVector_in = {1,4,9};
-    std::vector<std::vector<int>> standardVector_out = vectorIntoVectorVector(standardVector_in);
-    ASSERT(standardVector_in.size() == standardVector_out.size(), "Vector size shouldn't change");
+bool TEST_CARTESIANPRODUCT_cartesianProduct_VectorsAndVector(){
+    // Test three bit binary (double vector and single)
+    std::vector<std::vector<int>> expectedTestAA = {
+        {0, 0},
+        {0, 1},
+        {1, 0},
+        {1, 1},
+    };
+    std::vector<int> A = {0, 1};
 
-    for (size_t i = 0; i < standardVector_out.size(); i++){
-        ASSERT(standardVector_in[i] == standardVector_out[i][0], "Element out should be identical to in");
-    }
+    std::vector<std::vector<int>> expectedTestAAA = {
+        {0, 0, 0},
+        {0, 0, 1},
+        {0, 1, 0},
+        {0, 1, 1},
+        {1, 0, 0},
+        {1, 0, 1},
+        {1, 1, 0},
+        {1, 1, 1}
+    };
+    auto resultAAA = cartesianProduct(expectedTestAA, A);
+    ASSERT(resultAAA == expectedTestAAA, "Expected 3 times repeated cartesian product of {0, 1} to give all 3-bit binary numbers");
 
-    printf("\tPASSED vectorIntoVectorVector\n");
+
+    ENDTEST();
 }
 
+bool TEST_CARTESIANPRODUCT_cartesianProduct_VectorsAndVector_filter(){
+    // Test three bit binary (double vector and single)
+    std::vector<int> A = {0, 1};
+    std::vector<std::vector<int>> expectedTestAA = {
+        {0, 0},
+        {0, 1},
+    };
 
+    std::function<bool(std::vector<int>)> trueIfEvenFirst = [](std::vector<int> S){ return S[0] % 2 == 0; };
 
+    std::vector<std::vector<int>> expectedTestAAA = {
+        {0, 0, 0},
+        {0, 0, 1},
+        {0, 1, 0},
+        {0, 1, 1},
+    };
+    auto resultAAA = cartesianProduct(expectedTestAA, A, trueIfEvenFirst);
+    ASSERT(resultAAA == expectedTestAAA, "Expected 3-bit binary numbers starting with zero");
+
+    ENDTEST();
+}
