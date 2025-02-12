@@ -6,7 +6,7 @@
  * @param ship length of a single ship
  * @return a vector of all legal ship positions
  */
-std::vector<ShipPosition> singleShipPositions(int boardSize, Ship shipLength) {
+std::vector<ShipPosition> singleShipPositions(int boardSize, ShipData shipLength) {
     if (0 == shipLength || shipLength > boardSize ) return std::vector<ShipPosition>{};
 
     int maxPositions = (boardSize-shipLength+1)*boardSize;
@@ -16,8 +16,8 @@ std::vector<ShipPosition> singleShipPositions(int boardSize, Ship shipLength) {
     allSingleShipPositions.reserve(maxPositions);
 
     for(int orientation = 0; orientation < 2; orientation++){
-        for (int x = 0; x < boardSize; x++) {
-            for (int y = 0; y < boardSize; y++) {
+        for (ShipData x = 0; x < boardSize; x++) {
+            for (ShipData y = 0; y < boardSize; y++) {
                 ShipPosition newShip = {shipLength, x, y, (bool) orientation};
                 if(doesShipFitOnBoard(newShip, boardSize)){
                     allSingleShipPositions.push_back(newShip);
@@ -37,7 +37,7 @@ std::vector<ShipPosition> singleShipPositions(int boardSize, Ship shipLength) {
  * @param fleetSize number of ships in the fleet array
  * @return a vector of vectors where each vector (0 to fleet) contains a vector of all possible valid positions
  */
-std::vector<std::vector<ShipPosition>> allShipPositions(int boardSize, const Ship fleet[], int fleetSize) {
+std::vector<std::vector<ShipPosition>> allShipPositions(int boardSize, const ShipData fleet[], int fleetSize) {
     std::vector<std::vector<ShipPosition>> allSingleShipPositions;
 
     for(size_t i = 0; i < fleetSize; i++){
@@ -54,7 +54,7 @@ std::vector<std::vector<ShipPosition>> allShipPositions(int boardSize, const Shi
  * @bug this is known to only generate ships stating in the top left corner
  * @return shipPosition a (semi) random shipPosition
  */
-ShipPosition rndShipPos(int boardSize, Ship len){
+ShipPosition rndShipPos(int boardSize, ShipData len){
     std::random_device rdDev;
     std::mt19937 rng(rdDev());
 

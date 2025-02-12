@@ -10,8 +10,8 @@
 #define BOARD_SIZE 10
 #define BOARD_DEFAULT -1
 
-typedef unsigned int Ship;
-const Ship FLEET[] = {2, 3, 3, 4, 5};
+typedef unsigned char ShipData;
+const ShipData FLEET[] = {2, 3, 3, 4, 5};
 const short FLEET_SIZE = sizeof(FLEET)/sizeof(FLEET[0]);
 
 #define THREAD_COUNT 8

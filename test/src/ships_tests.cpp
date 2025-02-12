@@ -17,12 +17,12 @@ bool TEST_SHIPS_singleShipPositions(){
 }
 
 bool TEST_SHIPS_allShipPositions(){
-    Ship testFleetSingle[] = {2};
+    ShipData testFleetSingle[] = {2};
     auto resultFleetSingle = allShipPositions(10, testFleetSingle, 1);
     ASSERT(resultFleetSingle.size() == 1, "A single ship should have only one vector of ship positions");
     ASSERT(resultFleetSingle[0].size() == 180, "The single ship first element shound contain the correct number of ship positions");
 
-    Ship testFleetMultiple[] = {4, 7, 5};
+    ShipData testFleetMultiple[] = {4, 7, 5};
     auto resultFleetMultiple = allShipPositions(10, testFleetMultiple, 3);
     ASSERT(resultFleetMultiple.size() == 3, "Many ships should return a vector the same size as the number of input ships");
     ASSERT(resultFleetMultiple[0].size() == 140, "The first element should contain correct number of ships for the first ship");
@@ -352,9 +352,9 @@ bool TEST_SHIPS_compareShipArray() {
     ShipPosition pB[FLEET_SIZE];
 
     // Initialize pA and pB with some values
-    for (int i = 0; i < FLEET_SIZE; i++) {
-        pA[i] = {(unsigned int)i, i, i, true};
-        pB[i] = {(unsigned int)i, i, i, true};
+    for (ShipData i = 0; i < FLEET_SIZE; i++) {
+        pA[i] = {i, i, i, true};
+        pB[i] = {i, i, i, true};
     }
 
     // pA == pB
@@ -418,11 +418,12 @@ bool TEST_SHIPS_nextShipPosArray() {
     ASSERT(shipPosArray[FLEET_SIZE-1].direction == 0, "Expected direction to be 0");
 
     //set the whole array to the end value
-    for (int i = 0; i < FLEET_SIZE; i++) {
-        shipPosArray[i] = {FLEET[i], (int)(BOARD_SIZE - FLEET[i] + 1), (int)(BOARD_SIZE - 1), 1};
+    for (ShipData i = 0; i < FLEET_SIZE; i++) {
+        shipPosArray[i] = {FLEET[i], (ShipData)(BOARD_SIZE - FLEET[i] + 1), (ShipData)(BOARD_SIZE - 1), 1};
     }
     nextShipPosArray(shipPosArray);
-    for (int i = 0; i < FLEET_SIZE; i++) {
+
+    for (ShipData i = 0; i < FLEET_SIZE; i++) {
         ASSERT(shipPosArray[i].x == 0, "Expected x to be 0");
         ASSERT(shipPosArray[i].y == 0, "Expected y to be 0");
         ASSERT(shipPosArray[i].direction == 0, "Expected direction to be 0");

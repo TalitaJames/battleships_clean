@@ -26,16 +26,16 @@ typedef struct ShipBoundingBox{
 
 /// @brief the position of a ship
 typedef struct ShipPosition{
-    unsigned int length = 0;
-    int x = 0;
-    int y = 0;
+    unsigned char length = 0;
+    unsigned char x = 0;
+    unsigned char y = 0;
     bool direction = 0; // 1 represents horizontal
 } ShipPosition;
 
 // Generating ship positions
-std::vector<ShipPosition> singleShipPositions(int boardSize, Ship);
-std::vector<std::vector<ShipPosition>> allShipPositions(int boardSize, const Ship fleet[], int fleetSize);
-ShipPosition rndShipPos(int boardSize, Ship);
+std::vector<ShipPosition> singleShipPositions(int boardSize, ShipData);
+std::vector<std::vector<ShipPosition>> allShipPositions(int boardSize, const ShipData fleet[], int fleetSize);
+ShipPosition rndShipPos(int boardSize, ShipData);
 
 // Conversions between various formats
 ShipBoundingBox convertShipPositionToBoundingBox(ShipPosition);
