@@ -26,9 +26,9 @@ typedef struct ShipBoundingBox{
 
 /// @brief the position of a ship
 typedef struct ShipPosition{
-    unsigned char length = 0;
-    unsigned char x = 0;
-    unsigned char y = 0;
+    ShipData length = 0;
+    ShipData x = 0;
+    ShipData y = 0;
     bool direction = 0; // 1 represents horizontal
 } ShipPosition;
 

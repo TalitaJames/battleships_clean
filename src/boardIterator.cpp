@@ -44,6 +44,13 @@ void checkBoards(Worker &w, Hitmask hitM, int threadID){
     if (verbose) std::cout << "CheckBoards " << threadID << " done" << std::endl;
 };
 
+/**
+ * @brief Checks through all ship positions to count the probabilitiesx
+ *
+ * @param hitM The hitmask the boards must match to be counted in the probGrid
+ * @param probGrid matrix of data that gets updated with probability of the ships
+ * @param threadCount number of threads to make
+ */
 void iterateBoardsToGenerateProbabilityGrid(Hitmask hitM, ProbabilityGrid &probGrid, unsigned int threadCount){
     std::vector<Worker> sweatshop;
     std::vector<std::thread> sweatshopThreads;

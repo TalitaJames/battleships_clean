@@ -247,7 +247,7 @@ std::ostream& operator<<(std::ostream& os,  const struct ShipPosition& shipPos){
     std::string dirStr = "→";
     if (!shipPos.direction) dirStr = "↓";
 
-    os << "len:" << shipPos.length << " (" << shipPos.x << ", " << shipPos.y << ", " << dirStr << ")";
+    os << "len:" << (int) shipPos.length << " (" << (int) shipPos.x << ", " << (int)  shipPos.y << ", " << dirStr << ")";
 
     return os;
 };

@@ -12,6 +12,7 @@
 #include <array>
 #include <functional>
 
+#include "vector_utils.h"
 
 // template declarations
 template <typename T> std::vector<std::vector<T>> cartesianProduct(std::vector<std::vector<T>> sets);
