@@ -4,15 +4,15 @@
 #include "hitmask.h"
 #include "test_utils.h"
 
-void TEST_HITMASK_initHitmask();
-void TEST_HITMASK_hitBoard();
-void TEST_HITMASK_findHitmaskDifference();
-void TEST_HITMASK_howManyTurnsTaken();
-void TEST_HITMASK_checkCompatible();
-void TEST_HITMASK_turnsToShotmask();
+bool TEST_HITMASK_initHitmask();
+bool TEST_HITMASK_hitBoard();
+bool TEST_HITMASK_findHitmaskDifference();
+bool TEST_HITMASK_howManyTurnsTaken();
+bool TEST_HITMASK_checkCompatible();
+bool TEST_HITMASK_turnsToShotmask();
 
-void TEST_HITMASK_isHitmaskSolved();
-void TEST_HITMASK_isHit();
-void TEST_HITMASK_operatorEqual();
+bool TEST_HITMASK_isHitmaskSolved();
+bool TEST_HITMASK_isHit();
+bool TEST_HITMASK_operatorEqual();
 
 #endif //HITMASK_TESTS_H

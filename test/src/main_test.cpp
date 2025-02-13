@@ -42,16 +42,18 @@ int main(){
     };
     TEST_ALL(testBoard, "Board");
 
-    // printf("\nTESTING HITMASK\n");
-    // TEST_HITMASK_initHitmask();
-    // TEST_HITMASK_hitBoard();
-    // TEST_HITMASK_findHitmaskDifference();
-    // TEST_HITMASK_howManyTurnsTaken();
-    // TEST_HITMASK_checkCompatible();
-    // TEST_HITMASK_turnsToShotmask();
-    // TEST_HITMASK_isHitmaskSolved();
-    // TEST_HITMASK_isHit();
-    // TEST_HITMASK_operatorEqual();
+    std::vector<TestFunction> testHistmask = {
+        TEST_HITMASK_initHitmask,
+        TEST_HITMASK_hitBoard,
+        TEST_HITMASK_findHitmaskDifference,
+        TEST_HITMASK_howManyTurnsTaken,
+        TEST_HITMASK_checkCompatible,
+        TEST_HITMASK_turnsToShotmask,
+        TEST_HITMASK_isHitmaskSolved,
+        TEST_HITMASK_isHit,
+        TEST_HITMASK_operatorEqual,
+    };
+    TEST_ALL(testHistmask, "Histmask");
 
     std::vector<TestFunction> testProbabilityGrid = {
         TEST_PROBABILITYGRID_initProbabilityGrid,

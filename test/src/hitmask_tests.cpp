@@ -1,6 +1,6 @@
 #include "hitmask_tests.h"
 
-void TEST_HITMASK_initHitmask() {
+bool TEST_HITMASK_initHitmask() {
     Hitmask h;
     for (int y = 0; y < BOARD_SIZE; y++){
         for (int x = 0; x < BOARD_SIZE; x++){
@@ -12,19 +12,18 @@ void TEST_HITMASK_initHitmask() {
         ASSERT(h.shipSunk[i] == false, "All ships should be initialised as not sunk");
     }
 
-    printf("\tPASSED initHitmask\n");
+    ENDTEST();
 }
 
-void TEST_HITMASK_hitBoard() {
+bool TEST_HITMASK_hitBoard() {
     Board b = initBlankBoard();
-    ASSERT(FLEET_SIZE >= 2, "Must have two or more ships to test this");
 
-    ShipPosition shipPos[FLEET_SIZE] = {
+    ShipPosition shipPos[2] = {
         {3, 0, 0, true}, // Horizontal 3 ship at (0,0) (1,0) (2,0)
         {2, 1, 1, false} // Vertical 2 ship at (1,1) (1,2)
     };
 
-    drawBoard(b, shipPos);
+    drawBoard(b, shipPos, 2);
 
     Hitmask h;
     hitBoard(b, h, 1, 2);
@@ -45,10 +44,10 @@ void TEST_HITMASK_hitBoard() {
     ASSERT(h.shipSunk[1] == true, "Ship should be sunk after all segments are hit");
     ASSERT(h.shipSunk[0] == false, "Other ship should not be impacted by hitting the ship");
 
-    printf("\tPASSED hitBoard\n");
+    ENDTEST();
 }
 
-void TEST_HITMASK_findHitmaskDifference() {
+bool TEST_HITMASK_findHitmaskDifference() {
     Hitmask oldHitmask = {};
     Hitmask newHitmask = {};
     int x = 2, y = 3;
@@ -61,10 +60,10 @@ void TEST_HITMASK_findHitmaskDifference() {
     ASSERT(xDifference == x && yDifference == y, "findHitmaskDifference should find the correct difference");
     // TODO future test for multiple differences and misses/sinks
 
-    printf("\tPASSED findHitmaskDifference\n");
+    ENDTEST();
 }
 
-void TEST_HITMASK_howManyTurnsTaken() {
+bool TEST_HITMASK_howManyTurnsTaken() {
     Hitmask h = {};
     //TODO some kind of check to see that the hitmask is big enough for the test to be considered valid
     h.hitmask[2][3] = HIT;
@@ -74,20 +73,19 @@ void TEST_HITMASK_howManyTurnsTaken() {
 
     ASSERT(turns == 2, "howManyTurnsTaken should count the correct number of turns");
 
-    printf("\tPASSED howManyTurnsTaken\n");
+    ENDTEST();
 }
 
 
-void TEST_HITMASK_checkCompatible(){
+bool TEST_HITMASK_checkCompatible(){
     Board b = initBlankBoard();
-    ASSERT(FLEET_SIZE >= 2, "Must have two or more ships to test checkCompatible");
 
     ShipPosition shipPos[2] = {
         {3, 0, 0, true}, // Horizontal 3 ship at (0,0) (1,0) (2,0)
         {2, 1, 1, false} // Vertical 2 ship at (1,1) (1,2)
     };
 
-    drawBoard(b, shipPos);
+    drawBoard(b, shipPos, 2);
     Hitmask h;
     ASSERT(checkCompatible(b, h) == true, "An empty hitmask should always be compatible");
 
@@ -111,16 +109,17 @@ void TEST_HITMASK_checkCompatible(){
     h.shipSunk[1] = true;
     ASSERT(checkCompatible(b, h) == true, "Sinking a ship should not change compatability");
 
-    printf("\tPASSED checkCompatible\n");
+    ENDTEST();
 }
 
 
-void TEST_HITMASK_turnsToShotmask(){
+bool TEST_HITMASK_turnsToShotmask(){
 
     printf("\tNOT IMPLEMENTED turnsToShotmask\n");
+    return false;
 }
 
-void TEST_HITMASK_isHitmaskSolved(){
+bool TEST_HITMASK_isHitmaskSolved(){
     Hitmask h;
     ASSERT(isHitmaskSolved(h) == false, "An empty hitmask should not be considered solved");
 
@@ -137,11 +136,11 @@ void TEST_HITMASK_isHitmaskSolved(){
     }
     ASSERT(isHitmaskSolved(h) == true, "A fully solved hitmask should be considered solved");
 
-    printf("\tPASSED isHitmaskSolved\n");
+    ENDTEST();
 }
 
 
-void TEST_HITMASK_isHit(){
+bool TEST_HITMASK_isHit(){
     Hitmask h;
     h.hitmask[2][3] = HIT;
     h.hitmask[4][1] = MISS;
@@ -152,11 +151,11 @@ void TEST_HITMASK_isHit(){
     ASSERT(isHit(h, 0, 1) == true, "isHit should return true for a sunk cell");
     ASSERT(isHit(h, 0, 0) == false, "isHit should return false for an unknown cell");
 
-    printf("\tPASSED isHit\n");
+    ENDTEST();
 }
 
 
-void TEST_HITMASK_operatorEqual(){
+bool TEST_HITMASK_operatorEqual(){
     Hitmask h1;
     Hitmask h2;
 
@@ -186,5 +185,5 @@ void TEST_HITMASK_operatorEqual(){
     h2.shipSunk[1] = true;
     ASSERT(h1 == h2, "Hitmasks should be equal if they have the same sunk ships");
 
-    printf("\tPASSED operatorEqual\n");
+    ENDTEST();
 }
