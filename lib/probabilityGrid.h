@@ -25,6 +25,7 @@ void calcProbabilityGrid(ProbabilityGrid &);
 std::ostream& operator<<(std::ostream&, ProbabilityGrid&);
 
 void flattenBoardToProbabilityGrid(Board b, ProbabilityGrid &pG);
+void clearProbabilityGrid(ProbabilityGrid &pG);
 
 
 #endif //PROBABILITYGRID_H

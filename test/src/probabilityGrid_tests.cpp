@@ -96,3 +96,32 @@ bool TEST_PROBABILITYGRID_flattenBoardToProbabilityGrid(){
 
     ENDTEST();
 }
+
+bool TEST_PROBABILITYGRID_clearProbabilityGrid(){
+    ProbabilityGrid pG;
+
+    // Fill the probability grid with nonsense data
+    pG.totalGoodBoards = 124;
+    for (int y = 0; y < BOARD_SIZE; y++) {
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            pG.shipGrid[x][y] = 5*x+y;
+            pG.shipProb[x][y] = 0.5*x*x;
+            pG.pChange[x][y] = 0.25*y;
+            pG.infoGain[x][y] = 0.1;
+        }
+    }
+
+    clearProbabilityGrid(pG);
+
+    ASSERT(pG.totalGoodBoards == 0, "Probability Grid should be zeroed");
+    for (int y = 0; y < BOARD_SIZE; y++) {
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            ASSERT(pG.shipGrid[x][y] == 0, "Probability Grid should be zeroed");
+            ASSERT(pG.shipProb[x][y] == 0.0, "Probability Grid should be zeroed");
+            ASSERT(pG.pChange[x][y] == 0.0, "Probability Grid should be zeroed");
+            ASSERT(pG.infoGain[x][y] == 0.0, "Probability Grid should be zeroed");
+        }
+    }
+
+    ENDTEST();
+}

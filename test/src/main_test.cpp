@@ -57,6 +57,7 @@ int main(){
         TEST_PROBABILITYGRID_initProbabilityGrid,
         TEST_PROBABILITYGRID_calcProbabilityGrid,
         TEST_PROBABILITYGRID_flattenBoardToProbabilityGrid,
+        TEST_PROBABILITYGRID_clearProbabilityGrid,
     };
     TEST_ALL(testProbabilityGrid, "ProbabilityGrid");
 

@@ -8,5 +8,6 @@
 bool TEST_PROBABILITYGRID_initProbabilityGrid();
 bool TEST_PROBABILITYGRID_calcProbabilityGrid();
 bool TEST_PROBABILITYGRID_flattenBoardToProbabilityGrid();
+bool TEST_PROBABILITYGRID_clearProbabilityGrid();
 
 #endif //PROBABILITYGRID_TESTS_H

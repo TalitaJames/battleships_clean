@@ -69,3 +69,17 @@ void flattenBoardToProbabilityGrid(Board b, ProbabilityGrid &pG){ //TODO add tes
     //     }
     // }
 };
+
+
+/**
+ * @brief reset the data in a given probability grid to zero
+ *
+ * @param pG the probability grid in question to clear
+ */
+void clearProbabilityGrid(ProbabilityGrid &pG){
+    pG.totalGoodBoards = 0;
+    memset(pG.shipGrid, 0 , BOARD_SIZE*BOARD_SIZE*sizeof(unsigned long));
+    memset(pG.shipProb, 0 , BOARD_SIZE*BOARD_SIZE*sizeof(double));
+    memset(pG.pChange, 0 , BOARD_SIZE*BOARD_SIZE*sizeof(double));
+    memset(pG.infoGain, 0 , BOARD_SIZE*BOARD_SIZE*sizeof(double));
+}
