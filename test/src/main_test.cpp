@@ -63,10 +63,13 @@ int main(){
     };
     TEST_ALL(testProbabilityGrid, "ProbabilityGrid");
 
-    // printf("\nTESTING BOARDITERATOR\n");
-    // TEST_BOARDITERATOR_dividePositions();
-    // TEST_BOARDITERATOR_appendWorkerToProbGrid();
-    // TEST_BOARDITERATOR_gatherProbabilityFromWorkers();
+    std::vector<TestFunction> testBoardIterator = {
+        TEST_BOARDITERATOR_dividePositions,
+        TEST_BOARDITERATOR_appendWorkerToProbGrid,
+        TEST_BOARDITERATOR_gatherProbabilityFromWorkers,
+    };
+    TEST_ALL(testBoardIterator, "BoardIterator");
+
 
     std::vector<TestFunction> testCartesianProduct = {
         TEST_CARTESIANPRODUCT_cartesianProduct_singleVector,

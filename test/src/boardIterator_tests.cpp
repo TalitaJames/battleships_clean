@@ -1,7 +1,7 @@
 #include "boardIterator_tests.h"
 
 
-void TEST_BOARDITERATOR_dividePositions(){
+bool TEST_BOARDITERATOR_dividePositions(){
     int threadCount = 4;
     std::vector<Worker> workerVector;
 
@@ -10,11 +10,11 @@ void TEST_BOARDITERATOR_dividePositions(){
         ASSERT(workerVector.size() == threadCount, "Worker vector should be the same size as the threadCount");
     }
 
-    printf("\tPASSED dividePositions\n");
+    ENDTEST();
 }
 
 
-void TEST_BOARDITERATOR_appendWorkerToProbGrid() {
+bool TEST_BOARDITERATOR_appendWorkerToProbGrid() {
     ProbabilityGrid p = {};
     Worker w = {};
     w.sub_probGrid.totalGoodBoards = 5;
@@ -27,10 +27,10 @@ void TEST_BOARDITERATOR_appendWorkerToProbGrid() {
     ASSERT(p.shipGrid[0][0] == 10, "appendWorkerToProbGrid should correctly sum shipGrid");
     ASSERT(p.infoGain[0][0] == 20, "appendWorkerToProbGrid should correctly sum infoGain");
 
-    printf("\tPASSED appendWorkerToProbGrid\n");
+    ENDTEST();
 }
 
-void TEST_BOARDITERATOR_gatherProbabilityFromWorkers() {
+bool TEST_BOARDITERATOR_gatherProbabilityFromWorkers() {
     ProbabilityGrid p = {};
     Worker w1 = {};
     Worker w2 = {};
@@ -50,5 +50,5 @@ void TEST_BOARDITERATOR_gatherProbabilityFromWorkers() {
     ASSERT(p.shipGrid[0][0] == 25, "gatherProbabilityFromWorkers should correctly sum shipGrid");
     ASSERT(p.infoGain[0][0] == 45, "gatherProbabilityFromWorkers should correctly sum infoGain");
 
-    printf("\tPASSED gatherProbabilityFromWorkers\n");
+    ENDTEST();
 }
