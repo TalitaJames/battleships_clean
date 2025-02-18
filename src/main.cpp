@@ -11,38 +11,27 @@
 #include "boardIterator.h"
 #include "playGame.h"
 #include "cartesianProduct.h"
+#include "cartesianProduct_board.h"
+#include "vector_utils.h"
 
-bool intFilter(std::vector<int> input){
-    return input[0] % 2;
+void describeState(){
+    std::cout << "BOARD_SIZE: " << BOARD_SIZE << "\t";
+    std::cout << "FLEET_SIZE: " << FLEET_SIZE << "\t";
+    std::cout << "THREAD_COUNT: " << THREAD_COUNT << std::endl;
+    std::cout << "verbosity: " << verbose << "\t";
+    std::cout << "CODE_VERSION: " << CODE_VERSION << "\t";
+    std::cout << "FLEET: {";
+    for (size_t i = 0; i < FLEET_SIZE; i++)
+        std::cout << (int) FLEET[i] << ", " ;
+    std::cout << "\b\b}" << std::endl;
 }
-
-template <typename T>
-void printDoubleVector(std::vector<std::vector<T>> in){
-    for(std::vector<T> line : in){
-        std::cout << "{";
-        for (size_t i = 0; i < line.size(); i++){
-            std::cout << line[i];
-            if (i != line.size()-1){
-                std::cout << ", ";
-            }
-        }
-        std::cout << "}\n";
-    }
-    std::cout << std::endl;
-}
-
 
 int main(int argc, char* args[]) {
-    Board board = rndBoard();
+    describeState();
 
-    std::function<bool(std::vector<ShipPosition>)> shipFilter = areShipsValid;
-    auto allSingleShipPositions = allShipPositions(BOARD_SIZE, FLEET, FLEET_SIZE);
+    makeProbGridFromCartesianProductOfAllShipPositions(1);
 
-    // Now compile them all
-    std::vector<std::vector<ShipPosition>> resultFiltered = cartesianProduct(allSingleShipPositions, shipFilter);
-    printf("Started with %li combinations\n", resultFiltered.size());
 
-    printf("\n\nTotal boards:%li\n", resultFiltered.size());
     printf("CODE DONE\n");
 
     return 0;
