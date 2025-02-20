@@ -42,6 +42,16 @@ ShipBoundingBox convertShipPositionToBoundingBox(ShipPosition);
 ShipPosition convertBoundingboxToShipPosition(ShipBoundingBox);
 void shipVectorToArray(std::vector<ShipPosition>, ShipPosition*, int);
 
+// Conversions between ship and ints (first posotion then whole array)
+int shipPosToInt(ShipPosition);
+int shipPosToInt(ShipPosition, int);
+ShipPosition intToShipPos(int);
+ShipPosition intToShipPos(int, int);
+
+unsigned long shipArrayToLong(ShipPosition *);
+unsigned long shipArrayToLong(ShipPosition *, int, int);
+void longToShipArray(unsigned long, ShipPosition *);
+void longToShipArray(unsigned long, ShipPosition *, int, int);
 
 // Check for collisions
 bool doShipsCollide(ShipPosition shipA, ShipPosition shipB);
@@ -68,13 +78,16 @@ bool operator<(const struct ShipPosition&, const struct ShipPosition&);
 bool operator>(const struct ShipPosition&, const struct ShipPosition&);
 
 int compareShipArray(ShipPosition *pA, ShipPosition *pB);
+int compareShipArray(ShipPosition *pA, ShipPosition *pB, int fleetSize);
 
 // Iterating through ships
 void nextShipPosition(ShipPosition &);
 void nextShipPosArray(ShipPosition *);
 
 void setStartArray(ShipPosition *);
+void setStartArray(ShipPosition *, int);
 void setEndArray(ShipPosition *);
+void setEndArray(ShipPosition *, int);
 
 
 

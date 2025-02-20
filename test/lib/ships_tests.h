@@ -13,6 +13,11 @@ bool TEST_SHIPS_convertShipPositionToBoundingBox();
 bool TEST_SHIPS_convertBoundingboxToShipPosition();
 bool TEST_SHIPS_shipVectorToArray();
 
+bool TEST_SHIPS_shipPosToInt();
+bool TEST_SHIPS_intToShipPos();
+bool TEST_SHIPS_shipArrayToLong();
+bool TEST_SHIPS_longToShipArray();
+
 bool TEST_SHIPS_doShipsCollide_shipPosition();
 bool TEST_SHIPS_doShipsCollide_shipBoundingBox();
 bool TEST_SHIPS_areShipsValid();

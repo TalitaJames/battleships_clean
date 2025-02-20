@@ -123,6 +123,146 @@ void shipVectorToArray(std::vector<ShipPosition> shipPosVector, ShipPosition* sh
 
 
 /**
+ * @brief Convert a shipPosition to a number, using the default board size
+ * @param p shipPosition to be converted
+ * @return positive int describing the position
+*/
+int shipPosToInt(ShipPosition p){
+    return shipPosToInt(p, BOARD_SIZE);
+};
+
+/**
+ * @brief Convert a shipPosition to a number
+ * @param p shipPosition to be converted
+ * @param boardSize size of the board
+ * @return positive int describing the position
+*/
+int shipPosToInt(ShipPosition p, int boardSize){
+    return p.direction*pow(boardSize,2)+p.x*(boardSize)+p.y;
+};
+
+/**
+ * @brief Convert a number to a ShipPosition with a default board size
+ * @param input the number detailing the position
+ * @param boardSize size of the board
+ * @param the ship position
+*/
+ShipPosition intToShipPos(int input){
+    return intToShipPos(input, BOARD_SIZE);
+};
+
+/**
+ * @brief Convert a number to a ShipPosition
+ * @param input the number detailing the position
+ * @param boardSize size of the board
+ * @param the ship position
+*/
+ShipPosition intToShipPos(int input, int boardSize){
+    ShipPosition p;
+
+    p.direction=floor(input/pow(boardSize,2));
+    if (p.direction) input-=pow(boardSize,2);
+    p.x = input/boardSize;
+    p.y = input%boardSize;
+
+    if (input>=pow(boardSize,2)) p.x= boardSize-1, p.y = boardSize-1;
+
+    return p;
+};
+
+/**
+ * @brief Convert a ShipPosition array to a number using the default board and fleet data
+ * @param p pointer to an array of ship positions to be converted
+ * @return positive int describing the positions
+*/
+unsigned long shipArrayToLong(ShipPosition *p){
+    return shipArrayToLong(p, BOARD_SIZE, FLEET_SIZE);
+};
+
+/**
+ * @brief Convert a ShipPosition array to a number using the default board and fleet data
+ *
+ * for a fleet of 5 ships, each ship $p_{i}$ (i in range of fleetSize)
+ * gets multiplied by maxShipValue^(fleetSize-1-i)) (one over the max number that )
+ *
+ * sum of $p_{i}*maxShipValue^(fleetSize-1-i)$ for all i
+ *
+ * @param p pointer to an array of ship positions to be converted
+ * @param boardSize size of the board
+ * @param fleetSize number of ships in the fleet (size of the array p)
+ * @return positive int describing the positions
+*/
+unsigned long shipArrayToLong(ShipPosition *p, int boardSize, int fleetSize){
+
+    // Use a number larger than the max ship could be at, to
+    // prevent the number from taking the space of other numbers
+    int maxShipValue = std::pow(boardSize, 2)*2;
+
+    // std::cout  << " maxShipValue: " << maxShipValue << " boardSize: " << boardSize << " fleetSize: " << fleetSize << std::endl;
+    unsigned long result = 0;
+    for(int arrayPosition = 0; arrayPosition < fleetSize; arrayPosition++){
+        int address = fleetSize-1-arrayPosition;
+
+        unsigned long power = std::pow(maxShipValue, address);
+        unsigned long encodedValue = shipPosToInt(p[arrayPosition], boardSize)*power;
+        result += encodedValue;
+
+        // print the data "arrayPosition: arrayPosition address: address power: power result: result"
+        // std::cout << arrayPosition << " address: " << address << " power: " << power << " sP: " <<  shipPosToInt(p[arrayPosition]) << " eValue: " << encodedValue << " result: " << result << std::endl;
+    }
+    return result;
+};
+
+/**
+* @brief Convert a number to a ShipPosition using default values for BOARD_SIZE and FLEET_SIZE
+* @param input the number detailing the position
+* @param p the ShipPosition array as a reference to be updated
+*/
+void longToShipArray(unsigned long input, ShipPosition *p){
+    return longToShipArray(input, p, BOARD_SIZE, FLEET_SIZE);
+};
+
+
+/**
+ * @brief Convert a number to an array of ShipPositions
+ * @param input the number detailing the position
+ * @param p the ShipPosition array as a reference to be updated
+ * @param boardSize size of the board
+ * @param fleetSize number of ships in the fleet (size of the array p)
+*/
+void longToShipArray(unsigned long input, ShipPosition *p, int boardSize, int fleetSize){
+    unsigned long maxShipValue = std::pow(boardSize, 2)*2;
+
+    // value is too big, set the array to the max value
+    if (input>=pow(maxShipValue, fleetSize)){
+        setEndArray(p);
+        return;
+    }
+
+    setStartArray(p); //Back to 0s, clears previous values
+    // if(verbose) std::cout << "boardSize: " << boardSize << " fleetSize: " << fleetSize << std::endl;
+    // if(verbose) std::cout << "ShipPositions " << p << std::endl << std::endl;
+
+    for(int arrayPosition = 0; arrayPosition < fleetSize; arrayPosition++){
+        int address = fleetSize-1-arrayPosition;
+        unsigned long power = std::pow(maxShipValue, address);
+
+        unsigned long divisor = floor(input/power); // the value of the ship
+        unsigned long remainder = input%power; // the value of remaining ships
+
+        p[arrayPosition] = intToShipPos(divisor, boardSize); // put the ship in the array
+
+
+        input=remainder;
+        // if(verbose) std::cout << arrayPosition << " address: " << address << " power: " << power << " divisor: " <<  divisor << " remainder: " << remainder << " input: " << input << std::endl;
+        // if(verbose) std::cout << "ShipPositions " << p << std::endl;
+    }
+
+    // if(verbose) std::cout << "ShipPositions " << p << std::endl << std::endl;
+};
+
+
+/**
  * @brief Determines if the board is valid (ie ship follows placement rules)
  * @param shipA the first ship in ship position format
  * @param shipB the second ship in ship position format
@@ -349,7 +489,7 @@ bool operator>(const struct ShipPosition &A, const struct ShipPosition &B){
 }
 
 /**
- * @brief Compares two shipPosition arrays and determines which is "greater".
+ * @brief Compares two shipPosition arrays and determines which is "greater" with the default fleet size
  * The "greatest" array is the one with a greater ship,
  * compared from left to right in the array
  *
@@ -358,7 +498,20 @@ bool operator>(const struct ShipPosition &A, const struct ShipPosition &B){
  * @return int comparing the sizes, ie -1 if pA>pB, 0 if pA=pB, 1 if pA<pB
  */
 int compareShipArray(ShipPosition *pA, ShipPosition *pB){
-    for (size_t i = 0; i < FLEET_SIZE; i++){
+    return compareShipArray(pA, pB, FLEET_SIZE);
+};
+
+/**
+ * @brief Compares two shipPosition arrays and determines which is "greater" for a given fleet size
+ * The "greatest" array is the one with a greater ship,
+ * compared from left to right in the array
+ *
+ * @param pA position A
+ * @param pB position B
+ * @return int comparing the sizes, ie -1 if pA>pB, 0 if pA=pB, 1 if pA<pB
+ */
+int compareShipArray(ShipPosition *pA, ShipPosition *pB, int fleetSize){
+    for (size_t i = 0; i < fleetSize; i++){
         if (pA[i] != pB[i]){
             // if pA>pB return -1, else return 1
             return (pA[i] > pB[i]) ? -1 : 1;
@@ -366,6 +519,7 @@ int compareShipArray(ShipPosition *pA, ShipPosition *pB){
     }
     return 0;
 };
+
 
 
 /**
@@ -420,11 +574,21 @@ void nextShipPosArray(ShipPosition* shipPosArray){
 
 
 /**
- * @brief set the given array to have a ship at (0,0)
+ * @brief set the given array to have all FLEET_SIZE ships at (0,0)
  * @param shipPosArray the array to be set to {length, 0, 0,0}
  */
 void setStartArray(ShipPosition * shipPosArray){
-    for (size_t i = 0; i < FLEET_SIZE; i++){
+    return setStartArray(shipPosArray, FLEET_SIZE);
+}
+
+
+/**
+ * @brief set the given array to have an array of ships at (0,0)
+ * @param shipPosArray the array to be set to {length, 0, 0,0}
+ * @param fleetSize number of elements in the array
+ */
+void setStartArray(ShipPosition * shipPosArray, int fleetSize){
+    for (size_t i = 0; i < fleetSize; i++){
         shipPosArray[i].length = FLEET[i];
         shipPosArray[i].x = 0;
         shipPosArray[i].y = 0;
@@ -440,6 +604,22 @@ void setStartArray(ShipPosition * shipPosArray){
  */
 void setEndArray(ShipPosition * shipPosArray){
     for (size_t i = 0; i < FLEET_SIZE; i++){
+        shipPosArray[i].length = FLEET[i];
+        shipPosArray[i].x = BOARD_SIZE - FLEET[i]; // No +1 because that is imbeded in the fact BOARD_SIZE is always one above x
+        shipPosArray[i].y = BOARD_SIZE - 1;
+        shipPosArray[i].direction = 1; // true (->) is the last value
+    }
+}
+
+
+/**
+ * @brief Sets every value of a ship position array to the end.
+ * The last value is the bottom right horizontal position
+ *
+ * @param shipPosArray a pointer to a ship posion array
+ */
+void setEndArray(ShipPosition * shipPosArray, int fleetSize){
+    for (size_t i = 0; i < fleetSize; i++){
         shipPosArray[i].length = FLEET[i];
         shipPosArray[i].x = BOARD_SIZE - FLEET[i]; // No +1 because that is imbeded in the fact BOARD_SIZE is always one above x
         shipPosArray[i].y = BOARD_SIZE - 1;

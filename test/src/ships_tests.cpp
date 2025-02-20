@@ -161,6 +161,94 @@ bool TEST_SHIPS_shipVectorToArray() {
     ENDTEST();
 }
 
+bool TEST_SHIPS_shipPosToInt(){
+    ASSERT(shipPosToInt({4, 3, 4, 1}, 10) == 134, "A 10-board with ship at x=3, y=4, dir=1 should be 134");
+    ASSERT(shipPosToInt({7, 3, 4, 1}, 10) == 134, "A 10-board with ship at x=3, y=4, dir=1 should be 134");
+    ASSERT(shipPosToInt({7, 5, 0, 0}, 10) == 50, "A 10-board with ship at x=5, y=0, dir=0 should be 50");
+
+    ASSERT(shipPosToInt({0, 3, 6, 1}, 7) == 76, "A 7-board with ship at x=5, y=6, dir=1 should be 76");
+    ASSERT(shipPosToInt({0, 3, 1, 0}, 4) == 13, "A 4-board with ship at x=3, y=1, dir=0 should be 13");
+
+    ENDTEST();
+}
+
+bool TEST_SHIPS_intToShipPos(){
+
+    ASSERT((intToShipPos(134, 10) == ShipPosition{4, 3, 4, 1}), "A 10-board with 134, should return {?, 3, 4, 1}");
+    ASSERT((intToShipPos(134, 10) == ShipPosition{7, 3, 4, 1}), "A 10-board with 134, should return {?, 3, 4, 1}");
+    ASSERT((intToShipPos(50, 10) == ShipPosition{7, 5, 0, 0}), "A 10-board with 50, should return {?, 5, 0, 0}");
+
+    ASSERT((intToShipPos(76, 7) == ShipPosition{0, 3, 6, 1}), "A 7-board with 76, should return {0, 3, 6, 1}");
+    ASSERT((intToShipPos(13, 4) == ShipPosition{0, 3, 1, 0}), "A 4-board with 13, should return {0, 3, 6, 1}");
+
+    ENDTEST();
+}
+
+bool TEST_SHIPS_shipArrayToLong(){
+
+    int boardSize = 10;
+    int fleetSize = 4;
+    ShipPosition fleetTenxBoard[fleetSize] = { // make an array of shipPositions with dummy data
+        {4, 6, 7, 1},
+        {2, 2, 3, 0},
+        {5, 4, 8, 0},
+        {3, 8, 0, 0}
+    };
+
+    unsigned long result = shipArrayToLong(fleetTenxBoard, boardSize, fleetSize);
+
+    ASSERT(1336929680 == result, "Expected 1336929680 fleets");
+
+    boardSize = 5;
+    fleetSize = 5;
+    ShipPosition fleetFivexBoard[fleetSize] = { // make an array of shipPositions with dummy data
+        {4, 4, 2, 0},
+        {2, 3, 0, 1},
+        {2, 0, 0, 0},
+        {5, 2, 1, 1},
+        {3, 0, 2, 0}
+    };
+
+    result = shipArrayToLong(fleetFivexBoard, boardSize, fleetSize);
+    ASSERT(142501802 == result, "Expected 142501802 fleets");
+
+    ENDTEST();
+}
+
+bool TEST_SHIPS_longToShipArray(){
+
+    int boardSize = 10;
+    int fleetSize = 4;
+    ShipPosition fleetOutputFour[fleetSize];
+
+    longToShipArray(1336929680, fleetOutputFour, boardSize, fleetSize);
+    ShipPosition fleetExpectedFour[fleetSize] = { // make an array of shipPositions with dummy data
+        {4, 6, 7, 1},
+        {2, 2, 3, 0},
+        {5, 4, 8, 0},
+        {3, 8, 0, 0},
+    };
+    ASSERT(compareShipArray(fleetExpectedFour, fleetOutputFour, fleetSize) == 0, "Expected a matching fleet");
+
+
+    boardSize = 5;
+    fleetSize = 5;
+    ShipPosition fleetOutputFive[fleetSize];
+    longToShipArray(142501802, fleetOutputFive, boardSize, fleetSize);
+
+    ShipPosition fleetExpectedFive[fleetSize] = { // make an array of shipPositions with dummy data
+        {4, 4, 2, 0},
+        {2, 3, 0, 1},
+        {2, 0, 0, 0},
+        {5, 2, 1, 1},
+        {3, 0, 2, 0},
+    };
+
+    ASSERT(compareShipArray(fleetExpectedFive, fleetOutputFive, fleetSize) == 0, "Expected a matching fleet");
+
+    ENDTEST();
+}
+
 bool TEST_SHIPS_doShipsCollide_shipPosition(){
     // Ship Position method
     ShipPosition shipZ = {5, 6, 5, 0};
@@ -358,19 +446,32 @@ bool TEST_SHIPS_compareShipArray() {
     }
 
     // pA == pB
-    int result = compareShipArray(pA, pB);
-    ASSERT(result == 0, "compareShipArray should return 0 when arrays are equal");
+    ASSERT(compareShipArray(pA, pB) == 0, "compareShipArray should return 0 when arrays are equal");
 
     // pA > pB
     pA[0] = {1, 1, 2, true}; // Make pA greater than pB
-    result = compareShipArray(pA, pB);
-    ASSERT(result == -1, "compareShipArray should return -1 when pA > pB");
+    ASSERT(compareShipArray(pA, pB) == -1, "compareShipArray should return -1 when pA > pB");
 
     // pA < pB
     pA[0] = {0, 0, 0, true}; // Reset pA
     pB[1] = {1, 1, 2, true}; // Make pB greater than pA
-    result = compareShipArray(pA, pB);
-    ASSERT(result == 1, "compareShipArray should return 1 when pA < pB");
+    ASSERT(compareShipArray(pA, pB) == 1, "compareShipArray should return 1 when pA < pB");
+
+    // make a dummy shipArray
+    ShipPosition dummyShipArray[FLEET_SIZE] = {
+        {4, 3, 4, 1},
+        {3, 2, 2, 0},
+        {2, 5, 5, 1}
+    };
+    ASSERT(compareShipArray(dummyShipArray, dummyShipArray, 3) == 0, "compareShipArray should return 0 when arrays are equal");
+
+    ShipPosition dummyShipArrayBefore[FLEET_SIZE] = {
+        {4, 3, 4, 1},
+        {3, 2, 2, 0},
+        {2, 5, 5, 0}
+    };
+    ASSERT(compareShipArray(dummyShipArray, dummyShipArrayBefore, 3) == -1, "compareShipArray should return -1 when the first array is bigger");
+
 
     ENDTEST();
 }

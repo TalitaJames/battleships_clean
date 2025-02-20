@@ -19,6 +19,11 @@ int main(){
         TEST_SHIPS_convertBoundingboxToShipPosition,
         TEST_SHIPS_shipVectorToArray,
 
+        TEST_SHIPS_shipPosToInt,
+        TEST_SHIPS_intToShipPos,
+        TEST_SHIPS_shipArrayToLong,
+        TEST_SHIPS_longToShipArray,
+
         TEST_SHIPS_doShipsCollide_shipPosition,
         TEST_SHIPS_doShipsCollide_shipBoundingBox,
         TEST_SHIPS_areShipsValid,
