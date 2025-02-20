@@ -104,6 +104,8 @@ bool TEST_CARTESIANPRODUCT_cartesianProduct_VectorsAndVector_filter(){
     std::vector<std::vector<int>> expectedTestAA = {
         {0, 0},
         {0, 1},
+        {1, 1},
+        {1, 1},
     };
 
     std::function<bool(std::vector<int>)> trueIfEvenFirst = [](std::vector<int> S){ return S[0] % 2 == 0; };

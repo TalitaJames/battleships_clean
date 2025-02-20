@@ -108,6 +108,13 @@ ShipPosition convertBoundingboxToShipPosition(ShipBoundingBox sBB){
     return shipPos;
 }
 
+/**
+ * @brief Convert a shipPosition vector to an array
+ *
+ * @param shipPosVector the vector of ship positions
+ * @param shipPos the array to be filled
+ * @param arraySize size of the array
+ */
 void shipVectorToArray(std::vector<ShipPosition> shipPosVector, ShipPosition* shipPos, int arraySize){
     for (size_t i = 0; i < arraySize; i++){
         shipPos[i] = shipPosVector[i];

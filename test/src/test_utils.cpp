@@ -9,7 +9,7 @@
  */
 bool TEST_ALL(const std::vector<TestFunction>& testFunctions, std::string name) {
     std::cout << "\e[0;1m==================================================\e[0m\n";
-    std::cout << "\e[0;1m\tTESTING " << name << " \e[0m\n\n";
+    std::cout << "\e[0;1m\tTESTING " << name << " \e[0m\n";
 
     int passedTests = 0;
     int failedTests = 0;
@@ -22,8 +22,8 @@ bool TEST_ALL(const std::vector<TestFunction>& testFunctions, std::string name) 
         }
     }
 
-    std::cout << "\e[0;1m\n\tDONE " << name << ": \e[32;1m" << passedTests << " PASSED \e[31;1m" << failedTests << " FAILED\e[0m\n";
-    std::cout << "\e[0;1m==================================================\e[0m\n\n\n";
+    std::cout << "\n\e[0;1m\tDONE " << name << ": \e[32;1m" << passedTests << " PASSED \e[31;1m" << failedTests << " FAILED\e[0m\n";
+    std::cout << "\e[0;1m==================================================\e[0m\n\n";
 
     return 0 == failedTests;
 }

@@ -7,6 +7,8 @@
 #include <iostream>
 #include <string>
 
+#define testVerbosity false
+
 /// @brief test a condition and print an appropriate message in the case of a failure
 #define ASSERT(cond, message) do { \
     if (!(cond)) { \
@@ -18,7 +20,7 @@
 
 /// @brief summarise a successfull test
 #define ENDTEST() do { \
-    printf("\t\e[32mPASSED\e[0m %s\n", __func__); \
+    if(testVerbosity) printf("\t\e[32mPASSED\e[0m %s\n", __func__); \
     return true; \
 } while (0)
 
