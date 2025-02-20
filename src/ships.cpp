@@ -403,6 +403,7 @@ std::ostream& operator<<(std::ostream& os,  const struct ShipPosition& shipPos){
  * @brief toString overload for an array of ship positions
  * @param os a stream
  * @param shipPos given ship position
+ * @bug known to print to FLEET_SIZE, so doesn't work with arrays of a different size
  * @return the stream with the array
  */
 std::ostream& operator<<(std::ostream& os,  const struct ShipPosition* shipArray){
@@ -553,6 +554,16 @@ void nextShipPosition(ShipPosition &shipPos){
 
 /**
  * @brief Generate the next ship position array, from the current position
+ * Using the default FLEET_SIZE
+ *
+ * @param shipPosArray a pointer to the ship position array
+ */
+void nextShipPosArray(ShipPosition* shipPosArray){
+    return nextShipPosArray(shipPosArray, FLEET_SIZE);
+};
+
+/**
+ * @brief Generate the next ship position array, from the current position
  * From the last ship (nth) ship to the position will itterate to the next,
  * then check if it has "overflowed" back to the starting position.
  * It continues reseting from right to left until either that position overflows to the start,
@@ -560,17 +571,16 @@ void nextShipPosition(ShipPosition &shipPos){
  *
  * @param shipPosArray a pointer to the ship position array
  */
-void nextShipPosArray(ShipPosition* shipPosArray){
+void nextShipPosArray(ShipPosition* shipPosArray, int fleetSize){
     ShipPosition startingShipPos = {0,0,0,0};
 
-    for (int i = FLEET_SIZE-1; i >= 0; i--){
+    for (int i = fleetSize-1; i >= 0; i--){
         nextShipPosition(shipPosArray[i]);
         if (shipPosArray[i] != startingShipPos){
             return;
         }
     }
 };
-
 
 
 /**

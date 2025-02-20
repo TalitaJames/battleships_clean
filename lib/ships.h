@@ -83,6 +83,7 @@ int compareShipArray(ShipPosition *pA, ShipPosition *pB, int fleetSize);
 // Iterating through ships
 void nextShipPosition(ShipPosition &);
 void nextShipPosArray(ShipPosition *);
+void nextShipPosArray(ShipPosition *, int);
 
 void setStartArray(ShipPosition *);
 void setStartArray(ShipPosition *, int);

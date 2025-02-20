@@ -67,7 +67,7 @@ bool TEST_HITMASK_howManyTurnsTaken() {
     Hitmask h = {};
     //TODO some kind of check to see that the hitmask is big enough for the test to be considered valid
     h.hitmask[2][3] = HIT;
-    h.hitmask[4][5] = MISS;
+    h.hitmask[1][0] = MISS;
 
     int turns = howManyTurnsTaken(h);
 

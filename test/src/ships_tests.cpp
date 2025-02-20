@@ -458,19 +458,20 @@ bool TEST_SHIPS_compareShipArray() {
     ASSERT(compareShipArray(pA, pB) == 1, "compareShipArray should return 1 when pA < pB");
 
     // make a dummy shipArray
-    ShipPosition dummyShipArray[FLEET_SIZE] = {
+    int fleetSize = 3;
+    ShipPosition dummyShipArray[fleetSize] = {
         {4, 3, 4, 1},
         {3, 2, 2, 0},
         {2, 5, 5, 1}
     };
-    ASSERT(compareShipArray(dummyShipArray, dummyShipArray, 3) == 0, "compareShipArray should return 0 when arrays are equal");
+    ASSERT(compareShipArray(dummyShipArray, dummyShipArray, fleetSize) == 0, "compareShipArray should return 0 when arrays are equal");
 
-    ShipPosition dummyShipArrayBefore[FLEET_SIZE] = {
+    ShipPosition dummyShipArrayBefore[fleetSize] = {
         {4, 3, 4, 1},
         {3, 2, 2, 0},
         {2, 5, 5, 0}
     };
-    ASSERT(compareShipArray(dummyShipArray, dummyShipArrayBefore, 3) == -1, "compareShipArray should return -1 when the first array is bigger");
+    ASSERT(compareShipArray(dummyShipArray, dummyShipArrayBefore, fleetSize) == -1, "compareShipArray should return -1 when the first array is bigger");
 
 
     ENDTEST();
@@ -511,20 +512,21 @@ bool TEST_SHIPS_nextShipPosition() {
 }
 
 bool TEST_SHIPS_nextShipPosArray() {
-    ShipPosition shipPosArray[FLEET_SIZE];
-    setStartArray(shipPosArray);
-    nextShipPosArray(shipPosArray);
-    ASSERT(shipPosArray[FLEET_SIZE-1].x == 0, "Expected x to be 0");
-    ASSERT(shipPosArray[FLEET_SIZE-1].y == 1, "Expected y to be 1");
-    ASSERT(shipPosArray[FLEET_SIZE-1].direction == 0, "Expected direction to be 0");
+    int fleetSize = 3;
+    ShipData fakeFleet[] = {4, 3, 2};
+
+    ShipPosition shipPosArray[fleetSize];
+    setStartArray(shipPosArray, fleetSize);
+    nextShipPosArray(shipPosArray, fleetSize);
+    ASSERT(shipPosArray[fleetSize-1].x == 0, "Expected x to be 0");
+    ASSERT(shipPosArray[fleetSize-1].y == 1, "Expected y to be 1");
+    ASSERT(shipPosArray[fleetSize-1].direction == 0, "Expected direction to be 0");
 
     //set the whole array to the end value
-    for (ShipData i = 0; i < FLEET_SIZE; i++) {
-        shipPosArray[i] = {FLEET[i], (ShipData)(BOARD_SIZE - FLEET[i] + 1), (ShipData)(BOARD_SIZE - 1), 1};
-    }
+    setEndArray(shipPosArray, fleetSize);
     nextShipPosArray(shipPosArray);
 
-    for (ShipData i = 0; i < FLEET_SIZE; i++) {
+    for (ShipData i = 0; i < fleetSize; i++) {
         ASSERT(shipPosArray[i].x == 0, "Expected x to be 0");
         ASSERT(shipPosArray[i].y == 0, "Expected y to be 0");
         ASSERT(shipPosArray[i].direction == 0, "Expected direction to be 0");
