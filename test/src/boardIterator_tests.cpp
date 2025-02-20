@@ -5,10 +5,20 @@ bool TEST_BOARDITERATOR_dividePositions(){
     int threadCount = 4;
     std::vector<Worker> workerVector;
 
-    for (int threadCount = 1; threadCount < 64; threadCount++) {
-        dividePositions(threadCount, workerVector);
-        ASSERT(workerVector.size() == threadCount, "Worker vector should be the same size as the threadCount");
+    dividePositions(threadCount, workerVector);
+    ASSERT(workerVector.size() == threadCount, "Worker vector should be the same size as the threadCount");
+
+    ShipPosition positionStart[FLEET_SIZE];
+    ShipPosition positionEnd[FLEET_SIZE];
+    setStartArray(positionStart);
+    setEndArray(positionEnd);
+
+
+    ASSERT(compareShipArray(workerVector[0].start, positionStart) == 0, "First worker should start at 0");
+    for(int i = 0; i < threadCount-1; i++){
+        ASSERT(compareShipArray(workerVector[i].end, workerVector[i+1].start) == 0, "Workers should be contiguous in start and end");
     }
+    ASSERT(compareShipArray(workerVector.back().end, positionEnd) == 0, "Last worker should end at the end");
 
     ENDTEST();
 }

@@ -75,7 +75,7 @@ int main(){
     if (!testResult) return 1;
 
     std::vector<TestFunction> testBoardIterator = {
-        // TEST_BOARDITERATOR_dividePositions,
+        TEST_BOARDITERATOR_dividePositions,
         TEST_BOARDITERATOR_appendWorkerToProbGrid,
         TEST_BOARDITERATOR_gatherProbabilityFromWorkers,
     };

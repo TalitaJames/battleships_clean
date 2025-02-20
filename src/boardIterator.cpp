@@ -5,8 +5,7 @@
  * @param threadCount the number of sections to create (must be a power of two)
  * @param workerVector vector of workers as a refference (they get updated)
 */
-void dividePositions(int threadCount,std::vector<Worker> &workerVector){
-    // TODO add capacity for many workers, with ryan's splitting things
+void dividePositions(int threadCount, std::vector<Worker> &workerVector){
     workerVector.clear();
     workerVector.reserve(threadCount);
 
@@ -15,10 +14,26 @@ void dividePositions(int threadCount,std::vector<Worker> &workerVector){
     setStartArray(positionStart);
     setEndArray(positionEnd);
 
-    Worker soloWorker;
-    std::copy(positionStart, positionStart+FLEET_SIZE, std::begin(soloWorker.start));
-    std::copy(positionEnd, positionEnd+FLEET_SIZE, std::begin(soloWorker.end));
-    workerVector.push_back(soloWorker);
+    unsigned long maxValue = shipArrayToLong(positionEnd); // the max value the boards must check until
+    unsigned long segmentSize = maxValue/threadCount;
+    unsigned long remain = maxValue%threadCount;
+
+    unsigned long startInt = 0;
+    unsigned long endInt = 0;
+
+    for (size_t i = 0; i < threadCount; i++){
+        endInt += (remain > 0) ? (segmentSize + !!(remain--)) : segmentSize;
+
+        longToShipArray(startInt, positionStart);
+        longToShipArray(endInt, positionEnd);
+
+        Worker newWorker;
+        std::copy(positionStart, positionStart+FLEET_SIZE, std::begin(newWorker.start));
+        std::copy(positionEnd, positionEnd+FLEET_SIZE, std::begin(newWorker.end));
+        workerVector.push_back(newWorker);
+
+        startInt = endInt;
+    }
 };
 
 /**
