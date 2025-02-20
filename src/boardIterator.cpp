@@ -58,7 +58,7 @@ void checkBoards(Worker &w, Hitmask hitM, int threadID){
         nextShipPosArray(positionArray);
     } while (compareShipArray(positionArray, w.end) == 1); // while the current position array is behind the end
 
-    if (verbose) std::cout << "CheckBoards " << threadID << " done" << std::endl;
+    // if (verbose) std::cout << "CheckBoards " << threadID << " done" << std::endl;
 };
 
 /**
@@ -77,7 +77,7 @@ void iterateBoardsToGenerateProbabilityGrid(Hitmask hitM, ProbabilityGrid &probG
 
     // Make and split a vector of Workers
     dividePositions(threadCount,sweatshop);
-    if (verbose) std::cout << sweatshop << std::endl;
+    // if (verbose) std::cout << sweatshop << std::endl;
 
     for (auto &w : sweatshop){ // Start all the threads
         std::thread threadedFunction(checkBoards, std::ref(w), hitM, threadID++);

@@ -18,14 +18,14 @@
 
 /// @brief Selection between the many types of choosing where to shoot
 enum CoordinateChooser{
-    USER_INPUT,
-    RND,
-    RND_W_PROB,
-    P_MAX,
-    P_RND,
-    INFOGAIN,
-    DIAGONAL,
-    FLEXI
+    USER_INPUT, // Asks the user for (x,y)
+    RND, // Chooses a position uniformly at random
+    RND_W_PROB, // Chooses randomly, weighted by probability of ship
+    P_MAX, // Chooses the position with the highest probability of a ship
+    P_RND, // Choses the position with the highest probability of a ship, with some randomness added
+    INFOGAIN, // Simulates all posible outcomes of each move, and picks the one that on average will reduce number of posible boards the most
+    DIAGONAL, // Shoots the diagonal (of size of unshot largest ship)
+    INFOGAIN_COMBINED, // uses the infogain calculation, until nothing is learnt then uses pMax
 };
 
 extern std::map<CoordinateChooser, std::string> coordinateChooserNames;

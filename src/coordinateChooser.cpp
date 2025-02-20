@@ -9,7 +9,7 @@ std::map<CoordinateChooser, std::string> coordinateChooserNames{
     {P_RND, "P-RND"},
     {INFOGAIN, "INFOGAIN"},
     {DIAGONAL, "DIAGONAL"},
-    {FLEXI, "FLEXI"}
+    {INFOGAIN_COMBINED, "INFOGAIN_COMBINED"}
 };
 
 /**

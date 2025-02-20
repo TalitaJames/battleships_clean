@@ -12,6 +12,7 @@
 */
 void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM, ProbabilityGrid &probGrid, int &x, int &y, Json::Value & gamePlayHistory){
     if(isHitmaskSolved(hitM)) return;
+
     // gather data
     if(playStyle != RND) iterateBoardsToGenerateProbabilityGrid(hitM, probGrid, THREAD_COUNT);
 
@@ -35,12 +36,11 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM, Probabili
         case DIAGONAL:
             coordinate_diagonal(x,y,probGrid,hitM);
             break;
-        case FLEXI:
+        case INFOGAIN_COMBINED:
             double totalIG;
             totalIG = coordinate_infoGain(x,y,probGrid,hitM);
-            if (totalIG < 0.00001){
-            // if (verbose) std::cout <<"pMax now!\n";
-            coordinate_pMax(x,y,probGrid,hitM);
+            if (totalIG < 0.001){ // if no information is gained, revert to pMax
+                coordinate_pMax(x,y,probGrid,hitM);
             }
             break;
         case USER_INPUT:
@@ -66,7 +66,7 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM, Probabili
     // gamePlayHistory["shotRecord"].append(currentCoords);
     // gamePlayHistory["probabilityGrid"].append(jsonArrayAdder(probGrid.shipGrid));
     // gamePlayHistory["infoGainGrid"].append(jsonArrayAdder(probGrid.infoGain));
-    // TODO add which shot style was used in array form (note the playGame method details the errors and reasons this is commented out)
+    // BUG (note the playGame method details the errors and reasons this is commented out)
 
     if (verbose){ // potentialy update user
         std::cout << "\nPROBABILITY GRID:\n" << probGrid << std::endl;
@@ -122,7 +122,7 @@ unsigned int playGame_fromHitmask(CoordinateChooser playStyle, Board board,  Hit
  * @return the number of turns the game takes to play
 */
 unsigned int playGame_fromHitmask(CoordinateChooser playStyle, Board board,  Hitmask hitmask, Json::Value &gamePlayHistory){
-    if(verbose) std::cout << "Playing game from hitmask " << board << hitmask << std::endl;
+    if(verbose) std::cout << "Playing game from hitmask\n" << board << hitmask << std::endl;
     hitmask = turnsToShotmask(board, hitmask); // converts any "turn"s into the outcome //TODO decide how 'turns' should work?
 
     // init JSON //BUG when these variables don't exist the json doesn't get updated,
@@ -185,10 +185,11 @@ unsigned int saveGame(CoordinateChooser playStyle, Board board){
     std::string filename; //= std::tmpnam(nullptr);
 
     filename = "./out/gamePlay/"+std::to_string(BOARD_SIZE)+"_"+std::to_string(FLEET_SIZE)+"_"
-                            // +std::to_string(board.shipPositionsInt)+"_" //FIXME need a hash of the board
+                            +std::to_string(shipArrayToLong(board.shipPos))+"_"
                             +coordinateChooserNames[playStyle]+"_"
-                            +CODE_VERSION+"_";
-                            // +filename.substr(9, filename.length())+".json"; //FIXME add back in
+                            +CODE_VERSION+"_"
+                            // +filename.substr(9, filename.length()) //FIXME add back in
+                            +".json";
 
     Json::Value gamePlayHistory; //FIXME this could be in its own method, but i think it only needs to happen once here
     gamePlayHistory["FLEET_SIZE"] = FLEET_SIZE;
