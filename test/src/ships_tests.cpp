@@ -517,7 +517,6 @@ bool TEST_SHIPS_nextShipPosition() {
 
 bool TEST_SHIPS_nextShipPosArray() {
     int fleetSize = 3;
-    ShipData fakeFleet[] = {4, 3, 2};
 
     ShipPosition shipPosArray[fleetSize];
     setStartArray(shipPosArray, fleetSize);
@@ -528,7 +527,7 @@ bool TEST_SHIPS_nextShipPosArray() {
 
     //set the whole array to the end value
     setEndArray(shipPosArray, fleetSize);
-    nextShipPosArray(shipPosArray);
+    nextShipPosArray(shipPosArray, fleetSize);
 
     for (ShipData i = 0; i < fleetSize; i++) {
         ASSERT(shipPosArray[i].x == 0, "Expected x to be 0");
