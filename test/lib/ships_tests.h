@@ -32,6 +32,7 @@ bool TEST_SHIPS_nextShipPosition();
 bool TEST_SHIPS_nextShipPosArray();
 bool TEST_SHIPS_setStartArray();
 bool TEST_SHIPS_setEndArray();
+bool TEST_SHIPS_setShipLengths();
 
 
 #endif //SHIPS_TESTS_H

@@ -26,6 +26,8 @@ void dividePositions(int threadCount, std::vector<Worker> &workerVector){
 
         longToShipArray(startInt, positionStart);
         longToShipArray(endInt, positionEnd);
+        setShipLengths(positionStart);
+        setShipLengths(positionEnd);
 
         Worker newWorker;
         std::copy(positionStart, positionStart+FLEET_SIZE, std::begin(newWorker.start));
@@ -142,7 +144,10 @@ void appendWorkerToProbGrid(ProbabilityGrid &p, Worker w){
  * @return the worker as represented in a stream
  */
 std::ostream& operator<<(std::ostream& os, Worker& worker){
-    os <<"Worker with " << worker.sub_probGrid.totalGoodBoards <<" good boards\n";
+    os <<"Worker with " << worker.sub_probGrid.totalGoodBoards <<" good boards";
+
+    os << " from " << shipArrayToLong(worker.start) << " to " << shipArrayToLong(worker.end);
+    os << " for a total of " << shipArrayToLong(worker.end) - shipArrayToLong(worker.start) << " boards\n";
 
     os << "\tStart: ";
     for (size_t j = 0; j < FLEET_SIZE; j++){

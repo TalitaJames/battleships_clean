@@ -431,6 +431,10 @@ bool TEST_SHIPS_operatorRelational(){
     ASSERT((shipA < shipF) == false, "Equal positioned ships with different lengths are still considered equal");
     ASSERT((shipA > shipF) == false, "Equal positioned ships with different lengths are still considered equal (2)");
 
+    ShipPosition shipG = {0, 4, 2, 0};
+    ShipPosition shipH = {0, 0, 3, 0};
+    ASSERT((shipG > shipH) == true, "A ship further accross should be greater than a ship further up");
+    ASSERT((shipG < shipH) == false, "A ship further accross should be greater than a ship further up (2)");
 
     ENDTEST();
 }
@@ -558,6 +562,17 @@ bool TEST_SHIPS_setEndArray() {
         ASSERT(shipPosArray[i].x == BOARD_SIZE - FLEET[i], "Expected x to match BOARD_SIZE - FLEET[i]");
         ASSERT(shipPosArray[i].y == BOARD_SIZE - 1, "Expected y to be BOARD_SIZE - 1");
         ASSERT(shipPosArray[i].direction == 1, "Expected direction to be 1");
+    }
+
+    ENDTEST();
+}
+
+bool TEST_SHIPS_setShipLengths(){
+    ShipPosition shipPosArray[FLEET_SIZE];
+    setShipLengths(shipPosArray);
+
+    for (size_t i = 0; i < FLEET_SIZE; i++) {
+        ASSERT(shipPosArray[i].length == FLEET[i], "Expected length to match FLEET");
     }
 
     ENDTEST();

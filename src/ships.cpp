@@ -466,13 +466,14 @@ bool operator<(const struct ShipPosition &A, const struct ShipPosition &B){
         return A.direction < B.direction; // horizontal (true) is greater
     }
 
+    if (A.x != B.x){
+        return A.x < B.x;
+    }
+
     if (A.y != B.y){
         return A.y < B.y;
     }
 
-    if (A.x != B.x){
-        return A.x < B.x;
-    }
 
     return false; // if all else fails, they are equal (thus not greater than)
 }
@@ -634,5 +635,25 @@ void setEndArray(ShipPosition * shipPosArray, int fleetSize){
         shipPosArray[i].x = BOARD_SIZE - FLEET[i]; // No +1 because that is imbeded in the fact BOARD_SIZE is always one above x
         shipPosArray[i].y = BOARD_SIZE - 1;
         shipPosArray[i].direction = 1; // true (->) is the last value
+    }
+}
+
+/**
+ * @brief Set each ship in the array to have the length of the ship in the fleet
+ *
+ * @param shipPosArray the array to be set
+ */
+void setShipLengths(ShipPosition *shipPosArray){
+    return setShipLengths(shipPosArray, FLEET_SIZE);
+}
+
+/**
+ * @brief Set each ship in the array to have the length of the ship in the fleet for a specified length
+ *
+ * @param shipPosArray the array to be set
+ */
+void setShipLengths(ShipPosition *shipPosArray, int fleetSize){
+    for (size_t i = 0; i < fleetSize; i++){
+        shipPosArray[i].length = FLEET[i];
     }
 }

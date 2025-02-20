@@ -89,6 +89,8 @@ void setStartArray(ShipPosition *);
 void setStartArray(ShipPosition *, int);
 void setEndArray(ShipPosition *);
 void setEndArray(ShipPosition *, int);
+void setShipLengths(ShipPosition *);
+void setShipLengths(ShipPosition *, int);
 
 
 

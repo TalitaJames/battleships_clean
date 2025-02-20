@@ -38,6 +38,7 @@ int main(){
         TEST_SHIPS_nextShipPosArray,
         TEST_SHIPS_setStartArray,
         TEST_SHIPS_setEndArray,
+        TEST_SHIPS_setShipLengths,
     };
     testResult = TEST_ALL(testShips, "Ships");
     if (!testResult) return 1;
