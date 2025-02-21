@@ -27,6 +27,6 @@ unsigned int playGame_fromHitmask(CoordinateChooser playStyle, Board board, Hitm
 unsigned int playGame_fromHitmask(CoordinateChooser playStyle, Board board, Hitmask hitmask, Json::Value &gamePlayHistory);
 
 unsigned int saveGame(CoordinateChooser playStyle, Board board);
-void repeatGames(CoordinateChooser, unsigned int);
+void repeatGames(std::vector<CoordinateChooser>, unsigned int);
 
 #endif //PLAYGAME_H

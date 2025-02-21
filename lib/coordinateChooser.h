@@ -24,8 +24,8 @@ enum CoordinateChooser{
     P_MAX, // Chooses the position with the highest probability of a ship
     P_RND, // Choses the position with the highest probability of a ship, with some randomness added
     INFOGAIN, // Simulates all posible outcomes of each move, and picks the one that on average will reduce number of posible boards the most
-    DIAGONAL, // Shoots the diagonal (of size of unshot largest ship)
     INFOGAIN_COMBINED, // uses the infogain calculation, until nothing is learnt then uses pMax
+    DIAGONAL, // Shoots the diagonal (of size of unshot largest ship)
 };
 
 extern std::map<CoordinateChooser, std::string> coordinateChooserNames;

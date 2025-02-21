@@ -29,8 +29,16 @@ void describeState(){
 int main(int argc, char* args[]) {
     describeState();
 
-    makeProbGridFromCartesianProductOfAllShipPositions(1);
-
+    std::vector<CoordinateChooser> playStyles = {
+        CoordinateChooser::RND,
+        CoordinateChooser::RND_W_PROB,
+        CoordinateChooser::P_MAX,
+        CoordinateChooser::P_RND,
+        CoordinateChooser::INFOGAIN,
+        CoordinateChooser::INFOGAIN_COMBINED,
+        CoordinateChooser::DIAGONAL,
+    };
+    repeatGames(playStyles, 100);
 
     printf("CODE DONE\n");
 

@@ -210,13 +210,15 @@ unsigned int saveGame(CoordinateChooser playStyle, Board board){
 
 /**
  * @brief Plays a number of games repeatedly
- * @param playStyles which coordinate choosing methods should be chosen
+ * @param allPlayStyles a vector of which coordinate choosing methods should be chosen
  * @param repeats how many times it should repeat
 */
-void repeatGames(CoordinateChooser playStyle, unsigned int repeats){
+void repeatGames(std::vector<CoordinateChooser> allPlayStyles, unsigned int repeats){
     Board board;
     for (size_t i = 0; i < repeats; i++){
         board = rndBoard();
-        saveGame(playStyle, board);
+        for(auto &playStyle : allPlayStyles){
+            saveGame(playStyle, board);
+        }
     }
 };
