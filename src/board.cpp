@@ -31,6 +31,20 @@ void wipeBoard(Board &b){
 }
 
 /**
+ * @brief Draws a vector of ship positions onto a board
+ *
+ * @param board the referenced board
+ * @param shipPosVector the ship positions to draw
+ */
+void drawBoard(Board &board, std::vector<ShipPosition> shipPosVector){
+    ShipPosition shipPosArray[shipPosVector.size()];
+    shipVectorToArray(shipPosVector, shipPosArray, shipPosVector.size());
+
+    return drawBoard(board, shipPosArray, FLEET_SIZE);
+}
+
+
+/**
  * @brief Draws a list of ship positions onto a board
  * @param board the referenced board
  * @param shipPos a pointer to an array of ship Positions
