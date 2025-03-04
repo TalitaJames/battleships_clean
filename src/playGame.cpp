@@ -11,10 +11,43 @@
  * @param y coordinate to shoot
 */
 void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM, ProbabilityGrid &probGrid, int &x, int &y, Json::Value & gamePlayHistory){
+    std::vector<Board> emptyBoards;
+    return takeTurn(playStyle, board, hitM, probGrid, x, y, gamePlayHistory, emptyBoards);
+}
+
+/**
+ * @brief Given a method, shoot a hitmask, then gather related data
+ * @param playStyle which method is used to pick the next shot
+ * @param b game board with positions of all games
+ * @param hitM hitmask of current game, to be used as reference when picking shot and updated after shot
+ * @param probGrid grid that holds the game probabilities
+ * @param x coordinate to shoot
+ * @param y coordinate to shoot
+ * @param rememberedBoards the list of all possible boards to check through(if non zero)
+*/
+void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM,
+    ProbabilityGrid &probGrid, int &x, int &y, Json::Value & gamePlayHistory, std::vector<Board> & rememberedBoards){
+
     if(isHitmaskSolved(hitM)) return;
 
-    // gather data
-    if(playStyle != RND) iterateBoardsToGenerateProbabilityGrid(hitM, probGrid, THREAD_COUNT);
+    // gather data using the best method avalible
+    if(probGrid.totalGoodBoards == 0 || probGrid.totalGoodBoards > MAX_REMEMBERED_BOARDS){
+        // If there are lots of boards (or probGrid hasn't got data yet)
+        // use the bulk thread method.
+        // High threading, low memory, okay time
+        iterateBoardsToGenerateProbabilityGrid(hitM, probGrid, THREAD_COUNT);
+    }
+    else if((probGrid.totalGoodBoards <= MAX_REMEMBERED_BOARDS) && (rememberedBoards.size() == 0)) {
+        // if there aren't too many boards (under a fixed number)
+        // and it hasn't yet saved the boards, iterate and save them all.
+        // No threading, high memory, high time
+        iterateBoardsToVector(hitM, probGrid, rememberedBoards);
+    }
+    else{
+        // Iterate through the board vector, update the
+        // No threading, high memory, fast time
+        checkThenUpdateVectorOfBoards(rememberedBoards, probGrid, hitM, true);
+    }
 
     do{ // decide where to shoot
         switch(playStyle){
@@ -135,12 +168,13 @@ unsigned int playGame_fromHitmask(CoordinateChooser playStyle, Board board,  Hit
     auto startTime = std::chrono::high_resolution_clock::now(); //start timing
     ProbabilityGrid probGrid;
     unsigned int turns = 0;
+    std::vector<Board> boardsRemembered;
 
     while (!isHitmaskSolved(hitmask)){
         int x = 0;
         int y = 0;
 
-        takeTurn(playStyle, board, hitmask, probGrid, x,y, gamePlayHistory);
+        takeTurn(playStyle, board, hitmask, probGrid, x,y, gamePlayHistory, boardsRemembered);
         turns++;
 
         // Update gameJSON (//FIXME without these updating like this, they return as null at the end)

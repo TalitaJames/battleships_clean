@@ -33,6 +33,7 @@ struct Worker{
 void dividePositions(int, std::vector<Worker>&);
 void checkBoards(Worker &, Hitmask, int);
 void iterateBoardsToGenerateProbabilityGrid(Hitmask, ProbabilityGrid &, unsigned int);
+void iterateBoardsToVector(Hitmask, ProbabilityGrid &, std::vector<Board> &);
 
 void gatherProbabilityFromWorkers(ProbabilityGrid &, std::vector<Worker>);
 void appendWorkerToProbGrid(ProbabilityGrid &, Worker);
