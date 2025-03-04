@@ -11,12 +11,8 @@ void makeProbGridFromVectorOfShipPositions(ProbabilityGrid &probGrid, std::vecto
     Board board = initBlankBoard();
 
     for (std::vector<ShipPosition> shipPosVector : shipPositions){
-        ShipPosition shipPosArray[shipPosVector.size()];
-        shipVectorToArray(shipPosVector, shipPosArray, shipPosVector.size());
-
-        drawBoard(board, shipPosArray, shipPosVector.size());
-        if(!board.isValid) std::cout << "ERROR BOARD INVALID" << std::endl;
-
+        drawBoard(board, shipPosVector);
+        if(!board.isValid)std::cout << "ERROR BOARD INVALID" << std::endl;
         flattenBoardToProbabilityGrid(board, probGrid);
     }
 }

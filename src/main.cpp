@@ -11,8 +11,9 @@
 #include "boardIterator.h"
 #include "playGame.h"
 #include "cartesianProduct.h"
-#include "cartesianProduct_board.h"
+#include "cartesianProductShipPositions.h"
 #include "vector_utils.h"
+#include "symmetries.h"
 
 void describeState(){
     std::cout << "BOARD_SIZE: " << BOARD_SIZE << "\t";
