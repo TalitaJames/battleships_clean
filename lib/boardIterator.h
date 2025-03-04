@@ -37,6 +37,11 @@ void iterateBoardsToGenerateProbabilityGrid(Hitmask, ProbabilityGrid &, unsigned
 void gatherProbabilityFromWorkers(ProbabilityGrid &, std::vector<Worker>);
 void appendWorkerToProbGrid(ProbabilityGrid &, Worker);
 
+// -- Iterating, storing boards in memory
+void checkThenUpdateVectorOfBoards(std::vector<Board>&, ProbabilityGrid&);
+void checkThenUpdateVectorOfBoards(std::vector<Board>&, ProbabilityGrid&, Hitmask);
+void checkThenUpdateVectorOfBoards(std::vector<Board>&, ProbabilityGrid&, Hitmask, bool);
+
 std::ostream& operator<<(std::ostream&, Worker&);
 std::ostream& operator<<(std::ostream&, std::vector<Worker>&);
 

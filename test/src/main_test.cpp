@@ -79,6 +79,7 @@ int main(){
         TEST_BOARDITERATOR_dividePositions,
         TEST_BOARDITERATOR_appendWorkerToProbGrid,
         TEST_BOARDITERATOR_gatherProbabilityFromWorkers,
+        TEST_BOARDITERATOR_checkThenUpdateVectorOfBoards,
     };
     testResult = TEST_ALL(testBoardIterator, "BoardIterator");
     if (!testResult) return 1;

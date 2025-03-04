@@ -134,6 +134,55 @@ void appendWorkerToProbGrid(ProbabilityGrid &p, Worker w){
     }
 };
 
+/**
+ * @brief Iterates through a vector of boards, to update probability grid.
+ *
+ * @param boardVector vector of boards
+ * @param probGrid probability grid to be updated
+ */
+void checkThenUpdateVectorOfBoards(std::vector<Board>& boardVector, ProbabilityGrid& probGrid){
+    Hitmask emptyHitmask;
+    return checkThenUpdateVectorOfBoards(boardVector, probGrid, emptyHitmask);
+}
+
+/**
+ * @brief Iterates through a vector of boards,
+ * to update probability grid with those matching the hitmask
+ *
+ * @param boardVector vector of boards
+ * @param probGrid probability grid to be updated
+ * @param hitM hitmask to check boards against
+ */
+void checkThenUpdateVectorOfBoards(std::vector<Board>& boardVector, ProbabilityGrid& probGrid, Hitmask hitM){
+    return checkThenUpdateVectorOfBoards(boardVector, probGrid, hitM, false);
+}
+
+/**
+ * @brief Iterates through a vector of boards, to update probability grid,
+ * whilst optionally removes those not compatible with the hitmask
+ *
+ * @param boardVector vector of boards
+ * @param probGrid probability grid to be updated
+ * @param hitM hitmask to check boards against
+ * @param updateVector boolean to remove boards that are not compatible with the hitmask
+ */
+void checkThenUpdateVectorOfBoards(std::vector<Board>& boardVector, ProbabilityGrid& probGrid, Hitmask hitM, bool updateVector){
+    clearProbabilityGrid(probGrid);
+
+    for(auto board : boardVector){
+        if (board.isValid && checkCompatible(board, hitM)){ // if the board is a good board
+            flattenBoardToProbabilityGrid(board, probGrid);
+        }
+    }
+
+    // remove bad boards with validity and hitmask checkCompatible
+    if(updateVector){
+        auto removeInvalidBoards = std::remove_if(boardVector.begin(), boardVector.end(),
+        [hitM](Board b){return !b.isValid || !checkCompatible(b, hitM);});
+
+        boardVector.erase(removeInvalidBoards, boardVector.end());
+    }
+}
 
 
 /**

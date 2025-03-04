@@ -62,3 +62,37 @@ bool TEST_BOARDITERATOR_gatherProbabilityFromWorkers() {
 
     ENDTEST();
 }
+
+bool TEST_BOARDITERATOR_checkThenUpdateVectorOfBoards(){
+    std::vector<Board> boardVector;
+    int randomBoardCount = 10;
+    for (int i = 0; i < randomBoardCount; i++){
+        Board b = rndBoard();
+        b.board[0][0] = BOARD_DEFAULT;
+        boardVector.push_back(b);
+    }
+
+    ProbabilityGrid probGrid;
+
+    checkThenUpdateVectorOfBoards(boardVector, probGrid);
+    ASSERT(boardVector.size() == randomBoardCount, "checkThenUpdateVectorOfBoards should not remove any boards");
+    ASSERT(probGrid.totalGoodBoards == randomBoardCount, "checkThenUpdateVectorOfBoards should have counted all good boards");
+
+    boardVector[0].board[0][0] = 1;
+    boardVector[1].board[0][0] = 1;
+    boardVector[2].board[0][0] = 1;
+    boardVector[3].board[0][0] = 1;
+
+    Hitmask hitM;
+    hitM.hitmask[0][0] = cellStatus::HIT;
+
+    checkThenUpdateVectorOfBoards(boardVector, probGrid, hitM);
+    ASSERT(boardVector.size() == randomBoardCount, "checkThenUpdateVectorOfBoards should not remove any boards");
+    ASSERT(probGrid.totalGoodBoards == 4, "checkThenUpdateVectorOfBoards should have counted all good boards");
+
+    checkThenUpdateVectorOfBoards(boardVector, probGrid, hitM, true);
+    ASSERT(boardVector.size() == 4, "checkThenUpdateVectorOfBoards should remove bad boards");
+    ASSERT(probGrid.totalGoodBoards == 4, "checkThenUpdateVectorOfBoards should have counted all good boards");
+
+    ENDTEST();
+}
