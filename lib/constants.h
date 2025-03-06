@@ -10,6 +10,8 @@
 #define BOARD_SIZE 10
 #define BOARD_DEFAULT -1
 
+#define MAX_REMEMBERED_BOARDS 1000000
+
 typedef unsigned char ShipData;
 const ShipData FLEET[] = {2, 3, 3, 4, 5};
 const short FLEET_SIZE = sizeof(FLEET)/sizeof(FLEET[0]);
