@@ -64,7 +64,7 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM,
             coordinate_pRnd(x,y,probGrid,hitM);
             break;
         case INFOGAIN:
-            coordinate_infoGain(x,y,probGrid,hitM);
+            coordinate_infoGain(x,y,probGrid,hitM, rememberedBoards);
             break;
         case DIAGONAL:
             coordinate_diagonal(x,y,probGrid,hitM);
