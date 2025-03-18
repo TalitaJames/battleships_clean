@@ -2,6 +2,7 @@
 # Made by Talita James, on 2024-07-2
 
 import os
+import socket
 import argparse
 import time
 import json
@@ -96,7 +97,7 @@ if __name__ == "__main__":
 
     # run the game
     timestamp = time.strftime("%Y%m%d-%H%M%S",time.localtime())
-    logFilename = f"./out/logs/{timestamp}_{defaultSettings['computerName']}.log" #creates a log file named "YYYMMDD-HHMMSS_computername.log"
+    logFilename = f"./out/logs/{timestamp}_{socket.gethostname()}.log" #creates a log file named "YYYMMDD-HHMMSS_computername.log"
     returnVal = os.system(f"./build/src/runner 2>&1 | tee {logFilename}")
 
     if (returnVal != 0):

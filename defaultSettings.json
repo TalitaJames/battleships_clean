@@ -2,6 +2,5 @@
     "boardSize": 10,
     "threadCount": 8,
     "fleet": "2,3,3,4,5",
-    "maxRememberedBoards": 100000000,
-    "computerName": "talita_thinkmachine"
+    "maxRememberedBoards": 100000000
 }
