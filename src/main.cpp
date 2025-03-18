@@ -19,8 +19,10 @@ void describeState(){
     std::cout << "BOARD_SIZE: " << BOARD_SIZE << "\t";
     std::cout << "FLEET_SIZE: " << FLEET_SIZE << "\t";
     std::cout << "THREAD_COUNT: " << THREAD_COUNT << std::endl;
+
     std::cout << "verbosity: " << verbose << "\t";
     std::cout << "CODE_VERSION: " << CODE_VERSION << "\t";
+    std::cout << "MAX_REMEMBERED_BOARDS: " << MAX_REMEMBERED_BOARDS << "\t";
     std::cout << "FLEET: {";
     for (size_t i = 0; i < FLEET_SIZE; i++)
         std::cout << (int) FLEET[i] << ", " ;
@@ -34,7 +36,7 @@ int main(int argc, char* args[]) {
         CoordinateChooser::RND,
         CoordinateChooser::RND_W_PROB,
         CoordinateChooser::P_MAX,
-        CoordinateChooser::P_RND,
+        // CoordinateChooser::P_RND,
         CoordinateChooser::INFOGAIN,
         CoordinateChooser::INFOGAIN_COMBINED,
         CoordinateChooser::DIAGONAL,

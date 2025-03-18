@@ -95,7 +95,51 @@ void iterateBoardsToGenerateProbabilityGrid(Hitmask hitM, ProbabilityGrid &probG
     auto endTime = std::chrono::high_resolution_clock::now();
     auto runTime = std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime);
 
-    if (verbose) std::cout << probGrid.totalGoodBoards << " boards found in " << runTime.count() <<" seconds\n" ;
+    if (verbose) std::cout << probGrid.totalGoodBoards << " boards iteratively found in " << runTime.count() <<" seconds\n" ;
+}
+
+/**
+ * @brief Iterate through all boards to store them in a vector
+ *
+ * @param hitM
+ * @param probGrid
+ * @param boardsToRemember
+ */
+void iterateBoardsToVector(Hitmask hitM, ProbabilityGrid &probGrid, std::vector<Board> &boardsToRemember){
+    auto startTime = std::chrono::high_resolution_clock::now();
+
+    clearProbabilityGrid(probGrid);
+    boardsToRemember.clear();
+
+    Worker singleWorker;
+    setStartArray(singleWorker.start);
+    setEndArray(singleWorker.end);
+
+    // Do the same thing as `checkBoards` but record the boards into a vector
+    Board board = initBlankBoard();
+
+    ShipPosition positionArray[FLEET_SIZE]; // position array
+    std::copy(singleWorker.start, singleWorker.start+FLEET_SIZE, std::begin(positionArray));
+
+    do{ // check all the boards from a workers start to end
+        drawBoard(board,positionArray);
+        // if(verbose) std::cout << board << std::endl;
+        if (board.isValid && checkCompatible(board, hitM)){ // if the board is a good board
+            flattenBoardToProbabilityGrid(board, probGrid);
+            boardsToRemember.push_back(board);
+        }
+        nextShipPosArray(positionArray);
+
+        // if(verbose) std::cout << board << std::endl;
+    } while (compareShipArray(positionArray, singleWorker.end) == 1);
+
+
+    // Sum it up and get time
+
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto runTime = std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime);
+
+    if (verbose) std::cout << probGrid.totalGoodBoards << ", stored " << boardsToRemember.size() <<" boards recorded in " << runTime.count() <<" seconds\n" ;
 }
 
 
@@ -167,6 +211,7 @@ void checkThenUpdateVectorOfBoards(std::vector<Board>& boardVector, ProbabilityG
  * @param updateVector boolean to remove boards that are not compatible with the hitmask
  */
 void checkThenUpdateVectorOfBoards(std::vector<Board>& boardVector, ProbabilityGrid& probGrid, Hitmask hitM, bool updateVector){
+    auto startTime = std::chrono::high_resolution_clock::now();
     clearProbabilityGrid(probGrid);
 
     for(auto board : boardVector){
@@ -182,6 +227,10 @@ void checkThenUpdateVectorOfBoards(std::vector<Board>& boardVector, ProbabilityG
 
         boardVector.erase(removeInvalidBoards, boardVector.end());
     }
+
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto runTime = std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime);
+    if (verbose) std::cout << probGrid.totalGoodBoards << " boards found in memory " << runTime.count() <<" seconds\n" ;
 }
 
 

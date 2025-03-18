@@ -153,13 +153,32 @@ void coordinate_pRnd(int &xReturn, int &yReturn, ProbabilityGrid pG, Hitmask hit
  * @param hitM hitmask to ensure shot hasn't been taken yet
 */
 double coordinate_infoGain(int &xReturn, int &yReturn, ProbabilityGrid &pG, Hitmask hitM){
+    std::vector<Board> emptyVector;
+    return coordinate_infoGain(xReturn, yReturn, pG, hitM, emptyVector);
+}
+
+/**
+ * @brief Find the position that maximises the information gain.
+ * For every unknown cell in the hitmask, simulate each possible outcome
+ * (miss, hit and sink (for each possible boat)).
+ *
+ * The information gain for that cell is equal to the sum
+ * (num of boards matching option * probability of option) for each outcome
+ *
+ * @param xReturn coordinate for shot
+ * @param yReturn cordinate for shot
+ * @param pG probability grid to record infoGain data
+ * @param hitM hitmask to ensure shot hasn't been taken yet
+ * @param rememberedBoards a potentially empty vector of boards to speed up checking//TODO spelling
+*/
+double coordinate_infoGain(int &xReturn, int &yReturn, ProbabilityGrid &pG, Hitmask hitM, std::vector<Board> rememberedBoards){
     double max = 0;
     int maxX = 0;
     int maxY = 0;
     double infoGainSum = 0; // the total information gained by shooting at this board (indicates if there are things still to learn about the game)
 
     std::vector<cellStatus> options = {MISS, HIT, SUNK};
-    if(verbose) std::cout << "Starting Infogain!" << std::endl;
+    if(verbose) std::cout << "Starting Infogain! Rememembered " << rememberedBoards.size() << " num of boards" << std::endl;
 
     for (int y = 0; y < BOARD_SIZE; y++){
         for (int x = 0; x < BOARD_SIZE; x++){ // for each cell
@@ -194,7 +213,14 @@ double coordinate_infoGain(int &xReturn, int &yReturn, ProbabilityGrid &pG, Hitm
                             infoHitmask.shipSunk[i]=1;
                         }
 
-                        iterateBoardsToGenerateProbabilityGrid(infoHitmask, infoPG, THREAD_COUNT);
+
+			            // Check the probability grid here, using one of two methods
+                        if(rememberedBoards.size() > 0){
+                            checkThenUpdateVectorOfBoards(rememberedBoards, infoPG, infoHitmask);
+                        } else{
+                            iterateBoardsToGenerateProbabilityGrid(infoHitmask, infoPG, THREAD_COUNT);
+                        }
+
                         double probOptionIsTrue = ((double) infoPG.totalGoodBoards)/((double) pG.totalGoodBoards);
                         infoGainPart += (1 - probOptionIsTrue) * probOptionIsTrue;
 

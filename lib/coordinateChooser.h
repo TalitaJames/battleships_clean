@@ -37,6 +37,7 @@ void coordinate_rndWProb(int &, int &, ProbabilityGrid, Hitmask); // random, but
 void coordinate_pMax(int &, int &, ProbabilityGrid, Hitmask);
 void coordinate_pRnd(int &, int &, ProbabilityGrid, Hitmask);
 double coordinate_infoGain(int &, int &, ProbabilityGrid &, Hitmask);
+double coordinate_infoGain(int &, int &, ProbabilityGrid &, Hitmask, std::vector<Board>);
 void coordinate_diagonal(int &, int &, ProbabilityGrid, Hitmask);
 
 
