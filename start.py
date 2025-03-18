@@ -20,13 +20,13 @@ def updateGameSettings(boardSize: int, fleet: list, memory: int, threadCount: in
 
     # Change the header file to the new input args
     os.system(f'sed -r -i -E  "s/^\#define BOARD_SIZE .*$/\#define BOARD_SIZE {boardSize}/" {filename}')
-    os.system(f'sed -r -i  "s/^const ship FLEET\[\] =.*;/const ship FLEET[] = {fleetString};/" {filename}')
+    os.system(f'sed -r -i  "s/^const ShipData FLEET\[\] =.*;/const ShipData FLEET[] = {fleetString};/" {filename}')
     os.system(f'sed -r -i  "s/^#define THREAD_COUNT .*/#define THREAD_COUNT {threadCount}/" {filename}')
     os.system(f'sed -r -i  "s/^#define MAX_REMEMBERED_BOARDS .*/#define MAX_REMEMBERED_BOARDS {memoryStr}/" {filename}')
 
     # Note: the python version on the iHPCs can't support {variable=} in f-strings
     print(f"Game with boardSize={boardSize} and fleet={fleet}, running "+\
-          "threadCount={threadCount}, memory={memory}\n-----------")
+          f"threadCount={threadCount}, memory={memory}\n-----------")
 
 
 def convertToCArray(listInput: list) -> str:
