@@ -23,7 +23,10 @@ def updateGameSettings(boardSize: int, fleet: list, memory: int, threadCount: in
     os.system(f'sed -r -i  "s/^const ship FLEET\[\] =.*;/const ship FLEET[] = {fleetString};/" {filename}')
     os.system(f'sed -r -i  "s/^#define THREAD_COUNT .*/#define THREAD_COUNT {threadCount}/" {filename}')
     os.system(f'sed -r -i  "s/^#define MAX_REMEMBERED_BOARDS .*/#define MAX_REMEMBERED_BOARDS {memoryStr}/" {filename}')
-    print(f"Game with {boardSize=} and {fleet=}, running {threadCount=}, {memory=}\n-----------")
+
+    # Note: the python version on the iHPCs can't support {variable=} in f-strings
+    print(f"Game with boardSize={boardSize} and fleet={fleet}, running "+\
+          "threadCount={threadCount}, memory={memory}\n-----------")
 
 
 def convertToCArray(listInput: list) -> str:
