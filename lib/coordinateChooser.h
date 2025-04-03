@@ -11,6 +11,7 @@
 #include <cstring>
 #include <map>
 
+#include "battleship_utils.h"
 #include "hitmask.h"
 #include "probabilityGrid.h"
 #include "boardIterator.h"

@@ -178,7 +178,9 @@ double coordinate_infoGain(int &xReturn, int &yReturn, ProbabilityGrid &pG, Hitm
     double infoGainSum = 0; // the total information gained by shooting at this board (indicates if there are things still to learn about the game)
 
     std::vector<cellStatus> options = {MISS, HIT, SUNK};
-    if(verbose) std::cout << "Starting Infogain! Rememembered " << rememberedBoards.size() << " num of boards" << std::endl;
+
+    if(verbose) std::cout << "Starting Infogain at "<< return_current_time_and_date() <<
+        "! Rememembered " << rememberedBoards.size() << " num of boards" << std::endl;
 
     for (int y = 0; y < BOARD_SIZE; y++){
         for (int x = 0; x < BOARD_SIZE; x++){ // for each cell
