@@ -14,6 +14,7 @@
 #include "cartesianProductShipPositions.h"
 #include "vector_utils.h"
 #include "symmetries.h"
+#include "logger.h"
 
 void describeState(){
     std::cout << "BOARD_SIZE: " << BOARD_SIZE << "\t";
@@ -21,6 +22,7 @@ void describeState(){
     std::cout << "THREAD_COUNT: " << THREAD_COUNT << std::endl;
 
     std::cout << "verbosity: " << verbose << "\t";
+    std::cout << "logging level: " << logLvl << "\t";
     std::cout << "CODE_VERSION: " << CODE_VERSION << "\t";
     std::cout << "MAX_REMEMBERED_BOARDS: " << MAX_REMEMBERED_BOARDS << "\t";
     std::cout << "FLEET: {";

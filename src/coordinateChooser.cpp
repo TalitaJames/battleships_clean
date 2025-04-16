@@ -1,4 +1,5 @@
 #include "coordinateChooser.h"
+#include "logger.h"
 
 /// @brief global variable that translates coordinate chooser enum into human readable string
 std::map<CoordinateChooser, std::string> coordinateChooserNames{
@@ -179,8 +180,9 @@ double coordinate_infoGain(int &xReturn, int &yReturn, ProbabilityGrid &pG, Hitm
 
     std::vector<cellStatus> options = {MISS, HIT, SUNK};
 
-    if(verbose) std::cout << "Starting Infogain at "<< return_current_time_and_date() <<
-        "! Rememembered " << rememberedBoards.size() << " num of boards" << std::endl;
+    std::string logMessage = "Starting Infogain at "+ return_current_time_and_date() +
+        "! Rememembered " + std::to_string(rememberedBoards.size()) + " num of boards";
+    LOG_INFO(logLvl, logMessage);
 
     for (int y = 0; y < BOARD_SIZE; y++){
         for (int x = 0; x < BOARD_SIZE; x++){ // for each cell
@@ -281,7 +283,7 @@ void coordinate_diagonal(int &xReturn, int &yReturn, ProbabilityGrid pG, Hitmask
                 for (int i = 0; i < largestShip; i++){
                     xReturn = i + x*largestShip;
                     yReturn = i + y*largestShip;
-                    // if (verbose) std::cout << "(" << x << ", " << y << ") " << i << " " << isHit(hitM,i,i) << "-> " << "(" << xReturn << ", " << yReturn << ") \n";
+
                     if (!isHit(hitM, xReturn, yReturn)) return;
                 }
             }

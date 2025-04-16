@@ -1,4 +1,5 @@
 #include "playGame.h"
+#include "logger.h"
 
 
 /**
@@ -51,41 +52,50 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM,
 
     do{ // decide where to shoot
         switch(playStyle){
-        case RND:
-            coordinate_rnd(x,y,hitM);
-            break;
-        case RND_W_PROB:
-            coordinate_rndWProb(x,y,probGrid,hitM);
-            break;
-        case P_MAX:
-            coordinate_pMax(x,y,probGrid,hitM);
-            break;
-        case P_RND:
-            coordinate_pRnd(x,y,probGrid,hitM);
-            break;
-        case INFOGAIN:
-            coordinate_infoGain(x,y,probGrid,hitM, rememberedBoards);
-            break;
-        case DIAGONAL:
-            coordinate_diagonal(x,y,probGrid,hitM);
-            break;
-        case INFOGAIN_COMBINED:
-            double totalIG;
-            totalIG = coordinate_infoGain(x,y,probGrid,hitM);
-            if (totalIG < 0.001){ // if no information is gained, revert to pMax
+            case RND:
+                coordinate_rnd(x,y,hitM);
+                break;
+            case RND_W_PROB:
+                coordinate_rndWProb(x,y,probGrid,hitM);
+                break;
+            case P_MAX:
                 coordinate_pMax(x,y,probGrid,hitM);
-            }
-            break;
-        case USER_INPUT:
-        default:
-            coordinate_userInput(x,y);
+                break;
+            case P_RND:
+                coordinate_pRnd(x,y,probGrid,hitM);
+                break;
+            case INFOGAIN:
+                coordinate_infoGain(x,y,probGrid,hitM, rememberedBoards);
+                break;
+            case DIAGONAL:
+                coordinate_diagonal(x,y,probGrid,hitM);
+                break;
+            case INFOGAIN_COMBINED:
+                double totalIG;
+                totalIG = coordinate_infoGain(x,y,probGrid,hitM, rememberedBoards);
+                if (totalIG < 0.001){ // if no information is gained, revert to pMax
+                    coordinate_pMax(x,y,probGrid,hitM);
+                }
+                break;
+            case USER_INPUT:
+            default:
+                coordinate_userInput(x,y);
 
         }
 
         if (isHit(hitM, x, y)){
-            if(verbose) std::cout << "You already hit (" << x << ", " << y << ")\n";
+            LOG_WARN(logLvl, "You already hit (" + std::to_string(x) + ", " + std::to_string(y) + ")");
         }
-        if (verbose) std::cout << "You entered (" << x << ", " << y << ") using " << coordinateChooserNames[playStyle] << std::endl;
+
+        auto startTime = std::chrono::high_resolution_clock::now();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        auto runTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+
+        std::string turnMsg = "You entered (" + std::to_string(x) + ", " +
+            std::to_string(y) + ") using " + coordinateChooserNames[playStyle] +
+            " in " + std::to_string(runTime.count()) + " milliseconds";
+        LOG_INFO(logLvl, turnMsg);
+
         std::cout << std::flush;
     } while (isHit(hitM, x, y)); // repeat until the hit is valid (ie cell isn't yet hit)
 
@@ -101,10 +111,10 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM,
     // gamePlayHistory["infoGainGrid"].append(jsonArrayAdder(probGrid.infoGain));
     // BUG (note the playGame method details the errors and reasons this is commented out)
 
-    if (verbose){ // potentialy update user
-        std::cout << "\nPROBABILITY GRID:\n" << probGrid << std::endl;
-        std::cout << "\nHITMASK:\n" << hitM << std::endl;
-    }
+    std::ostringstream gridMsgStream;
+    gridMsgStream << "\nPROBABILITY GRID:\n" << probGrid << "\n\nHITMASK:\n" << hitM;
+    std::string gridMsg = gridMsgStream.str();
+    LOG_INFO(logLvl, gridMsg);
 };
 
 
@@ -155,7 +165,11 @@ unsigned int playGame_fromHitmask(CoordinateChooser playStyle, Board board,  Hit
  * @return the number of turns the game takes to play
 */
 unsigned int playGame_fromHitmask(CoordinateChooser playStyle, Board board,  Hitmask hitmask, Json::Value &gamePlayHistory){
-    if(verbose) std::cout << "Playing game from hitmask\n" << board << hitmask << std::endl;
+    std::ostringstream gameStartStream;
+    gameStartStream << "Playing game from hitmask\n" << board << hitmask;
+    std::string gameStartMsg = gameStartStream.str();
+    LOG_INFO(logLvl, gameStartMsg);
+
     hitmask = turnsToShotmask(board, hitmask); // converts any "turn"s into the outcome //TODO decide how 'turns' should work?
 
     // init JSON //BUG when these variables don't exist the json doesn't get updated,

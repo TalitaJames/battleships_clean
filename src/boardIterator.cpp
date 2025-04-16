@@ -1,4 +1,5 @@
 #include "boardIterator.h"
+#include "logger.h"
 
 /**
  * @brief Splits the board sections into a threadCount sized vector of workers
@@ -58,7 +59,7 @@ void checkBoards(Worker &w, Hitmask hitM, int threadID){
         nextShipPosArray(positionArray);
     } while (compareShipArray(positionArray, w.end) == 1); // while the current position array is behind the end
 
-    // if (verbose) std::cout << "CheckBoards " << threadID << " done" << std::endl;
+    LOG_DEBUG(logLvl, "CheckBoards " + std::to_string(threadID) + " done");
 };
 
 /**
@@ -93,9 +94,12 @@ void iterateBoardsToGenerateProbabilityGrid(Hitmask hitM, ProbabilityGrid &probG
     gatherProbabilityFromWorkers(probGrid, sweatshop);
 
     auto endTime = std::chrono::high_resolution_clock::now();
-    auto runTime = std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime);
+    auto runTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
-    if (verbose) std::cout << probGrid.totalGoodBoards << " boards iteratively found in " << runTime.count() <<" seconds\n" ;
+    std::string logMsg =  std::to_string(probGrid.totalGoodBoards) +
+        " boards iteratively found in " + std::to_string(runTime.count()) + " milliseconds";
+    LOG_INFO(logLvl, logMsg);
+
 }
 
 /**
@@ -123,14 +127,12 @@ void iterateBoardsToVector(Hitmask hitM, ProbabilityGrid &probGrid, std::vector<
 
     do{ // check all the boards from a workers start to end
         drawBoard(board,positionArray);
-        // if(verbose) std::cout << board << std::endl;
         if (board.isValid && checkCompatible(board, hitM)){ // if the board is a good board
             flattenBoardToProbabilityGrid(board, probGrid);
             boardsToRemember.push_back(board);
         }
         nextShipPosArray(positionArray);
 
-        // if(verbose) std::cout << board << std::endl;
     } while (compareShipArray(positionArray, singleWorker.end) == 1);
 
 
@@ -139,7 +141,8 @@ void iterateBoardsToVector(Hitmask hitM, ProbabilityGrid &probGrid, std::vector<
     auto endTime = std::chrono::high_resolution_clock::now();
     auto runTime = std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime);
 
-    if (verbose) std::cout << probGrid.totalGoodBoards << ", stored " << boardsToRemember.size() <<" boards recorded in " << runTime.count() <<" seconds\n" ;
+    std::string boardMsg = probGrid.totalGoodBoards + ", stored " + std::to_string(boardsToRemember.size()) +" boards recorded in " + std::to_string(runTime.count()) +" seconds\n" ;
+    LOG_INFO(logLvl, boardMsg);
 }
 
 
@@ -229,8 +232,10 @@ void checkThenUpdateVectorOfBoards(std::vector<Board>& boardVector, ProbabilityG
     }
 
     auto endTime = std::chrono::high_resolution_clock::now();
-    auto runTime = std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime);
-    if (verbose) std::cout << probGrid.totalGoodBoards << " boards found in memory " << runTime.count() <<" seconds\n" ;
+    auto runTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+
+    std::string boardsMsg = probGrid.totalGoodBoards + " boards found in memory " + std::to_string(runTime.count()) + " milliseconds\n" ;
+    LOG_INFO(logLvl, boardsMsg);
 }
 
 
