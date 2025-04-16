@@ -33,6 +33,7 @@ void describeState(){
 
 int main(int argc, char* args[]) {
     describeState();
+    logLvl = LOG::INFO;
 
     std::vector<CoordinateChooser> playStyles = {
         CoordinateChooser::RND,

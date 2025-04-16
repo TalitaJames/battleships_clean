@@ -36,7 +36,7 @@ void LOGGER(LOG outLvl, LOG messageLvl, std::string message) {
  */
 void LOG_ERROR(LOG outLvl, std::string message) {
     if (LOG::ERROR <= outLvl) {
-        std::cout << "\e[1;31mE: " << message << "\e[0m" << std::endl;
+        std::cout << "E: " << message << std::endl;
     }
 }
 
@@ -47,7 +47,7 @@ void LOG_ERROR(LOG outLvl, std::string message) {
  */
 void LOG_WARN(LOG outLvl, std::string message) {
     if (LOG::WARN <= outLvl) {
-        std::cout << "\e[1;33mW: " << message << "\e[0m" << std::endl;
+        std::cout << "W: " << message << std::endl;
     }
 }
 
@@ -58,7 +58,7 @@ void LOG_WARN(LOG outLvl, std::string message) {
  */
 void LOG_INFO(LOG outLvl, std::string message) {
     if (LOG::INFO <= outLvl) {
-        std::cout << "I: " << message << "\e[0m" << std::endl;
+        std::cout << "I: " << message << std::endl;
     }
 }
 

@@ -30,23 +30,28 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM,
     ProbabilityGrid &probGrid, int &x, int &y, Json::Value & gamePlayHistory, std::vector<Board> & rememberedBoards){
 
     if(isHitmaskSolved(hitM)) return;
+    LOG_DEBUG(logLvl, "Starting a new turn "+ std::to_string(probGrid.totalGoodBoards) +" remembered: " + std::to_string(rememberedBoards.size()) );
 
     // gather data using the best method avalible
     if(probGrid.totalGoodBoards == 0 || probGrid.totalGoodBoards > MAX_REMEMBERED_BOARDS){
         // If there are lots of boards (or probGrid hasn't got data yet)
         // use the bulk thread method.
         // High threading, low memory, okay time
+	LOG_DEBUG(logLvl, "Itterating boards to get PG");
         iterateBoardsToGenerateProbabilityGrid(hitM, probGrid, THREAD_COUNT);
     }
     else if((probGrid.totalGoodBoards <= MAX_REMEMBERED_BOARDS) && (rememberedBoards.size() == 0)) {
         // if there aren't too many boards (under a fixed number)
         // and it hasn't yet saved the boards, iterate and save them all.
         // No threading, high memory, high time
+	LOG_DEBUG(logLvl, "Saving boards to vector (and get PG)");
         iterateBoardsToVector(hitM, probGrid, rememberedBoards);
+	LOG_DEBUG(logLvl, "done saving boards to vector");
     }
     else{
         // Iterate through the board vector, update the
         // No threading, high memory, fast time
+	LOG_DEBUG(logLvl, "Checking vector to make PG");
         checkThenUpdateVectorOfBoards(rememberedBoards, probGrid, hitM, true);
     }
 
