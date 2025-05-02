@@ -29,6 +29,8 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM, Probabili
 void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM,
     ProbabilityGrid &probGrid, int &x, int &y, Json::Value & gamePlayHistory, std::vector<Board> & rememberedBoards){
 
+    auto startTime = std::chrono::high_resolution_clock::now();
+
     if(isHitmaskSolved(hitM)) return;
     LOG_DEBUG(logLvl, "Starting a new turn "+ std::to_string(probGrid.totalGoodBoards) +" remembered: " + std::to_string(rememberedBoards.size()) );
 
@@ -92,13 +94,12 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM,
             LOG_WARN(logLvl, "You already hit (" + std::to_string(x) + ", " + std::to_string(y) + ")");
         }
 
-        auto startTime = std::chrono::high_resolution_clock::now();
         auto endTime = std::chrono::high_resolution_clock::now();
-        auto runTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+        auto runTime = std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime);
 
         std::string turnMsg = "You entered (" + std::to_string(x) + ", " +
             std::to_string(y) + ") using " + coordinateChooserNames[playStyle] +
-            " in " + std::to_string(runTime.count()) + " milliseconds";
+            " in " + std::to_string(runTime.count()) + " seconds";
         LOG_INFO(logLvl, turnMsg);
 
         std::cout << std::flush;
