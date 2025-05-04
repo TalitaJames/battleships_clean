@@ -18,8 +18,10 @@
 #include "json/json_utils.h"
 
 //TODO add testcases
-void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitmask, ProbabilityGrid &, int &, int &, Json::Value &);
-void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitmask, ProbabilityGrid &, int &, int &, Json::Value &, std::vector<Board> &);
+void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitmask, ProbabilityGrid &,
+    int &, int &, Json::Value &, double&);
+void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitmask, ProbabilityGrid &,
+    int &, int &, Json::Value &, std::vector<Board> &, double&);
 
 unsigned int playGame_fromStart(CoordinateChooser playStyle, Board board);
 unsigned int playGame_fromStart(CoordinateChooser playStyle, Board board, Json::Value &gamePlayHistory);

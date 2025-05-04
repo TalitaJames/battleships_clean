@@ -60,7 +60,7 @@ void checkBoards(Worker &w, Hitmask hitM, int threadID){
         nextShipPosArray(positionArray);
     } while (compareShipArray(positionArray, w.end) == 1); // while the current position array is behind the end
 
-    LOG_DEBUG(logLvl, "CheckBoards " + std::to_string(threadID) + " done");
+    // LOG_DEBUG(logLvl, "CheckBoards " + std::to_string(threadID) + " done");
 };
 
 /**
@@ -238,7 +238,7 @@ void checkThenUpdateVectorOfBoards(std::vector<Board>& boardVector, ProbabilityG
     auto endTime = std::chrono::high_resolution_clock::now();
     auto runTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
-    std::string boardsMsg = std::to_string(probGrid.totalGoodBoards) + " boards found in memory " + std::to_string(runTime.count()) + " milliseconds\n" ;
+    std::string boardsMsg = std::to_string(probGrid.totalGoodBoards) + " boards found in memory " + std::to_string(runTime.count()) + " milliseconds" ;
     LOG_INFO(logLvl, boardsMsg);
 }
 

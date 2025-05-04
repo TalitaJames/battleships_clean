@@ -10,10 +10,15 @@
  * @param probGrid grid that holds the game probabilities
  * @param x coordinate to shoot
  * @param y coordinate to shoot
+ * @param gamePlayHistory json history of the game
+ * @param totalIG infogain exploration constant, used to prevent superfluous IG checking (no info to be gained)
 */
-void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM, ProbabilityGrid &probGrid, int &x, int &y, Json::Value & gamePlayHistory){
+void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM, ProbabilityGrid &probGrid,
+        int &x, int &y, Json::Value & gamePlayHistory, double &totalIG){
+
     std::vector<Board> emptyBoards;
-    return takeTurn(playStyle, board, hitM, probGrid, x, y, gamePlayHistory, emptyBoards);
+    return takeTurn(playStyle, board, hitM, probGrid, x, y, gamePlayHistory,
+         emptyBoards, totalIG);
 }
 
 /**
@@ -25,35 +30,39 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM, Probabili
  * @param x coordinate to shoot
  * @param y coordinate to shoot
  * @param rememberedBoards the list of all possible boards to check through(if non zero)
+ * @param gamePlayHistory json history of the game
+ * @param totalIG infogain exploration constant, used to prevent superfluous IG checking (no info to be gained)
 */
 void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM,
-    ProbabilityGrid &probGrid, int &x, int &y, Json::Value & gamePlayHistory, std::vector<Board> & rememberedBoards){
+    ProbabilityGrid &probGrid, int &x, int &y, Json::Value & gamePlayHistory,
+    std::vector<Board> & rememberedBoards, double &totalIG){
 
     auto startTime = std::chrono::high_resolution_clock::now();
 
     if(isHitmaskSolved(hitM)) return;
-    LOG_DEBUG(logLvl, "Starting a new turn "+ std::to_string(probGrid.totalGoodBoards) +" remembered: " + std::to_string(rememberedBoards.size()) );
+    LOG_DEBUG(logLvl, "Starting a new turn "+ std::to_string(probGrid.totalGoodBoards)
+        +" remembered: " + std::to_string(rememberedBoards.size()) );
 
     // gather data using the best method avalible
     if(probGrid.totalGoodBoards == 0 || probGrid.totalGoodBoards > MAX_REMEMBERED_BOARDS){
         // If there are lots of boards (or probGrid hasn't got data yet)
         // use the bulk thread method.
         // High threading, low memory, okay time
-	LOG_DEBUG(logLvl, "Itterating boards to get PG");
+	    LOG_DEBUG(logLvl, "Itterating boards to get PG");
         iterateBoardsToGenerateProbabilityGrid(hitM, probGrid, THREAD_COUNT);
     }
     else if((probGrid.totalGoodBoards <= MAX_REMEMBERED_BOARDS) && (rememberedBoards.size() == 0)) {
         // if there aren't too many boards (under a fixed number)
         // and it hasn't yet saved the boards, iterate and save them all.
         // No threading, high memory, high time
-	LOG_DEBUG(logLvl, "Saving boards to vector (and get PG)");
+	    LOG_DEBUG(logLvl, "Saving boards to vector (and get PG)");
         iterateBoardsToVector(hitM, probGrid, rememberedBoards);
-	LOG_DEBUG(logLvl, "done saving boards to vector");
+	    LOG_DEBUG(logLvl, "done saving boards to vector");
     }
     else{
         // Iterate through the board vector, update the
         // No threading, high memory, fast time
-	LOG_DEBUG(logLvl, "Checking vector to make PG");
+	    LOG_DEBUG(logLvl, "Checking vector to make PG");
         checkThenUpdateVectorOfBoards(rememberedBoards, probGrid, hitM, true);
     }
 
@@ -78,10 +87,12 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM,
                 coordinate_diagonal(x,y,probGrid,hitM);
                 break;
             case INFOGAIN_COMBINED:
-                double totalIG;
-                totalIG = coordinate_infoGain(x,y,probGrid,hitM, rememberedBoards);
-                if (totalIG < 0.001){ // if no information is gained, revert to pMax
+            LOG_DEBUG(logLvl, "INFOGAIN-COMBINED has IG previosly of " + std::to_string(totalIG));
+                if (totalIG < 0.01){ // if no information is gained, revert to pMax
                     coordinate_pMax(x,y,probGrid,hitM);
+                }
+                else{
+                    totalIG = coordinate_infoGain(x,y,probGrid,hitM, rememberedBoards);
                 }
                 break;
             case USER_INPUT:
@@ -118,7 +129,7 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM,
     // BUG (note the playGame method details the errors and reasons this is commented out)
 
     std::ostringstream gridMsgStream;
-    gridMsgStream << "\nPROBABILITY GRID:\n" << probGrid << "\n\nHITMASK:\n" << hitM;
+    gridMsgStream << "PROBABILITY GRID:\n" << probGrid << "\n\nHITMASK:\n" << hitM;
     std::string gridMsg = gridMsgStream.str();
     LOG_INFO(logLvl, gridMsg);
 };
@@ -189,12 +200,14 @@ unsigned int playGame_fromHitmask(CoordinateChooser playStyle, Board board,  Hit
     ProbabilityGrid probGrid;
     unsigned int turns = 0;
     std::vector<Board> boardsRemembered;
+    double totalIG = 1;
 
     while (!isHitmaskSolved(hitmask)){
         int x = 0;
         int y = 0;
 
-        takeTurn(playStyle, board, hitmask, probGrid, x,y, gamePlayHistory, boardsRemembered);
+        takeTurn(playStyle, board, hitmask, probGrid, x,y, gamePlayHistory,
+            boardsRemembered, totalIG);
         turns++;
 
         // Update gameJSON (//FIXME without these updating like this, they return as null at the end)

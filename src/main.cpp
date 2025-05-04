@@ -21,7 +21,6 @@ void describeState(){
     std::cout << "FLEET_SIZE: " << FLEET_SIZE << "\t";
     std::cout << "THREAD_COUNT: " << THREAD_COUNT << std::endl;
 
-    std::cout << "verbosity: " << verbose << "\t";
     std::cout << "logging level: " << logLvl << "\t";
     std::cout << "CODE_VERSION: " << CODE_VERSION << "\t";
     std::cout << "MAX_REMEMBERED_BOARDS: " << MAX_REMEMBERED_BOARDS << "\t";
