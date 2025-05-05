@@ -30,6 +30,7 @@ unsigned int playGame_fromHitmask(CoordinateChooser playStyle, Board board, Hitm
 unsigned int playGame_fromHitmask(CoordinateChooser playStyle, Board board, Hitmask hitmask, Json::Value &gamePlayHistory);
 
 unsigned int saveGame(CoordinateChooser playStyle, Board board);
-void repeatGames(std::vector<CoordinateChooser>, unsigned int);
+void repeatRandomGames(std::vector<CoordinateChooser>, unsigned int);
+void repeatKnownGames(CoordinateChooser playStyle, std::vector<long> boardIDs);
 
 #endif //PLAYGAME_H

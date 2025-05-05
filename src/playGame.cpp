@@ -280,7 +280,7 @@ unsigned int saveGame(CoordinateChooser playStyle, Board board){
  * @param allPlayStyles a vector of which coordinate choosing methods should be chosen
  * @param repeats how many times it should repeat
 */
-void repeatGames(std::vector<CoordinateChooser> allPlayStyles, unsigned int repeats){
+void repeatRandomGames(std::vector<CoordinateChooser> allPlayStyles, unsigned int repeats){
     Board board;
     for (size_t i = 0; i < repeats; i++){
         board = rndBoard();
@@ -289,3 +289,24 @@ void repeatGames(std::vector<CoordinateChooser> allPlayStyles, unsigned int repe
         }
     }
 };
+
+
+/**
+ * @brief Given a vector of game IDs,
+ * convert those to boards then play those games
+ *
+ * @param playStyle specified rule for playing the game
+ * @param boardIDs vector of games to be played
+ */
+void repeatKnownGames(CoordinateChooser playStyle, std::vector<long> boardIDs){
+    Board board = initBlankBoard();
+    ShipPosition fleetPosition[FLEET_SIZE];
+
+    for(auto boardID : boardIDs){
+        longToShipArray(boardID, fleetPosition);
+        setShipLengths(fleetPosition);
+        drawBoard(board, fleetPosition);
+
+        saveGame(playStyle, board);
+    }
+}
