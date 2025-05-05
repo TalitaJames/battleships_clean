@@ -19,6 +19,5 @@ const short FLEET_SIZE = sizeof(FLEET)/sizeof(FLEET[0]);
 #define THREAD_COUNT 8
 #define CODE_VERSION "V6c"
 
-#define verbose true
 
 #endif //CONSTANTS_H

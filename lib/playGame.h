@@ -18,8 +18,10 @@
 #include "json/json_utils.h"
 
 //TODO add testcases
-void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitmask, ProbabilityGrid &, int &, int &, Json::Value &);
-void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitmask, ProbabilityGrid &, int &, int &, Json::Value &, std::vector<Board> &);
+void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitmask, ProbabilityGrid &,
+    int &, int &, Json::Value &, double&);
+void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitmask, ProbabilityGrid &,
+    int &, int &, Json::Value &, std::vector<Board> &, double&);
 
 unsigned int playGame_fromStart(CoordinateChooser playStyle, Board board);
 unsigned int playGame_fromStart(CoordinateChooser playStyle, Board board, Json::Value &gamePlayHistory);
@@ -28,6 +30,7 @@ unsigned int playGame_fromHitmask(CoordinateChooser playStyle, Board board, Hitm
 unsigned int playGame_fromHitmask(CoordinateChooser playStyle, Board board, Hitmask hitmask, Json::Value &gamePlayHistory);
 
 unsigned int saveGame(CoordinateChooser playStyle, Board board);
-void repeatGames(std::vector<CoordinateChooser>, unsigned int);
+void repeatRandomGames(std::vector<CoordinateChooser>, unsigned int);
+void repeatKnownGames(CoordinateChooser playStyle, std::vector<long> boardIDs);
 
 #endif //PLAYGAME_H

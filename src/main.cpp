@@ -21,7 +21,6 @@ void describeState(){
     std::cout << "FLEET_SIZE: " << FLEET_SIZE << "\t";
     std::cout << "THREAD_COUNT: " << THREAD_COUNT << std::endl;
 
-    std::cout << "verbosity: " << verbose << "\t";
     std::cout << "logging level: " << logLvl << "\t";
     std::cout << "CODE_VERSION: " << CODE_VERSION << "\t";
     std::cout << "MAX_REMEMBERED_BOARDS: " << MAX_REMEMBERED_BOARDS << "\t";
@@ -33,6 +32,7 @@ void describeState(){
 
 int main(int argc, char* args[]) {
     describeState();
+    logLvl = LOG::INFO;
 
     std::vector<CoordinateChooser> playStyles = {
         CoordinateChooser::RND,
@@ -43,7 +43,7 @@ int main(int argc, char* args[]) {
         CoordinateChooser::INFOGAIN_COMBINED,
         CoordinateChooser::DIAGONAL,
     };
-    repeatGames(playStyles, 100);
+    repeatRandomGames(playStyles, 100);
 
     printf("CODE DONE\n");
 
