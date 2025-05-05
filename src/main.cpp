@@ -43,7 +43,7 @@ int main(int argc, char* args[]) {
         CoordinateChooser::INFOGAIN_COMBINED,
         CoordinateChooser::DIAGONAL,
     };
-    repeatGames(playStyles, 100);
+    repeatRandomGames(playStyles, 100);
 
     printf("CODE DONE\n");
 
