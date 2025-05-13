@@ -103,6 +103,25 @@ void iterateBoardsToGenerateProbabilityGrid(Hitmask hitM, ProbabilityGrid &probG
 
 }
 
+
+void checkAndRememberBoards(Worker &w, Hitmask hitM, std::vector<Board> &boardsToRemember, std::mutex &mutex) {
+    Board b = initBlankBoard();
+    ShipPosition positionArray[FLEET_SIZE];
+    std::copy(w.start, w.start + FLEET_SIZE, std::begin(positionArray));
+
+    do {
+        drawBoard(b, positionArray);
+        if (b.isValid && checkCompatible(b, hitM)) {
+            flattenBoardToProbabilityGrid(b, w.sub_probGrid);
+
+            // Lock the mutex to safely add to the shared vector
+            std::lock_guard<std::mutex> lock(mutex);
+            boardsToRemember.push_back(b);
+        }
+        nextShipPosArray(positionArray);
+    } while (compareShipArray(positionArray, w.end) == 1);
+}
+
 /**
  * @brief Iterate through all boards to store them in a vector
  *
@@ -110,42 +129,39 @@ void iterateBoardsToGenerateProbabilityGrid(Hitmask hitM, ProbabilityGrid &probG
  * @param probGrid
  * @param boardsToRemember
  */
-void iterateBoardsToVector(Hitmask hitM, ProbabilityGrid &probGrid, std::vector<Board> &boardsToRemember){
+void iterateBoardsToVector(Hitmask hitM, ProbabilityGrid &probGrid, std::vector<Board> &boardsToRemember, unsigned int threadCount) {
     auto startTime = std::chrono::high_resolution_clock::now();
 
     LOG_INFO(logLvl, "Starting vector accruing at " + return_current_time_and_date());
     clearProbabilityGrid(probGrid);
     boardsToRemember.clear();
 
-    Worker singleWorker;
-    setStartArray(singleWorker.start);
-    setEndArray(singleWorker.end);
+    std::vector<Worker> sweatshop;
+    std::vector<std::thread> sweatshopThreads;
+    std::mutex mutex; // Mutex to protect shared access to boardsToRemember
 
-    // Do the same thing as `checkBoards` but record the boards into a vector
-    Board board = initBlankBoard();
+    // Divide positions among workers
+    dividePositions(threadCount, sweatshop);
 
-    ShipPosition positionArray[FLEET_SIZE]; // position array
-    std::copy(singleWorker.start, singleWorker.start+FLEET_SIZE, std::begin(positionArray));
+    // Launch threads
+    for (auto &w : sweatshop) {
+        sweatshopThreads.emplace_back(checkAndRememberBoards, std::ref(w), hitM, std::ref(boardsToRemember), std::ref(mutex));
+    }
 
-    do{ // check all the boards from a workers start to end
-        drawBoard(board,positionArray);
-        if (board.isValid && checkCompatible(board, hitM)){ // if the board is a good board
-            flattenBoardToProbabilityGrid(board, probGrid);
-            boardsToRemember.push_back(board);
-        }
-        nextShipPosArray(positionArray);
+    // Join threads
+    for (std::thread &th : sweatshopThreads) {
+        if (th.joinable())
+            th.join();
+    }
 
-	if (boardsToRemember.size() % 100'000 == 0 && boardsToRemember.size() > 0){
-	    LOG_DEBUG(logLvl, "have a total of " + std::to_string(boardsToRemember.size()));
-	}
-    } while (compareShipArray(positionArray, singleWorker.end) == 1);
-
-    // Sum it up and get time
+    // Sum up probabilities from all workers
+    gatherProbabilityFromWorkers(probGrid, sweatshop);
 
     auto endTime = std::chrono::high_resolution_clock::now();
     auto runTime = std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime);
 
-    std::string boardMsg = std::to_string(probGrid.totalGoodBoards) + ", stored " + std::to_string(boardsToRemember.size()) +" boards recorded in " + std::to_string(runTime.count()) +" seconds\n" ;
+    std::string boardMsg = std::to_string(probGrid.totalGoodBoards) + ", stored " + std::to_string(boardsToRemember.size()) +
+                           " boards recorded in " + std::to_string(runTime.count()) + " seconds\n";
     LOG_INFO(logLvl, boardMsg);
 }
 

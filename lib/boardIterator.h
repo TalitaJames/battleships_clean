@@ -14,6 +14,7 @@
 #include <chrono>
 #include <vector>
 #include <thread>
+#include <mutex>
 
 #include "hitmask.h"
 #include "probabilityGrid.h"
@@ -33,7 +34,9 @@ struct Worker{
 void dividePositions(int, std::vector<Worker>&);
 void checkBoards(Worker &, Hitmask, int);
 void iterateBoardsToGenerateProbabilityGrid(Hitmask, ProbabilityGrid &, unsigned int);
-void iterateBoardsToVector(Hitmask, ProbabilityGrid &, std::vector<Board> &);
+
+void checkAndRememberBoards(Worker &w, Hitmask hitM, std::vector<Board> &boardsToRemember, std::mutex &mutex);
+void iterateBoardsToVector(Hitmask, ProbabilityGrid &, std::vector<Board> &, unsigned int);
 
 void gatherProbabilityFromWorkers(ProbabilityGrid &, std::vector<Worker>);
 void appendWorkerToProbGrid(ProbabilityGrid &, Worker);

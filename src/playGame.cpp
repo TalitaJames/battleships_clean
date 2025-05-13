@@ -56,7 +56,7 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM,
         // and it hasn't yet saved the boards, iterate and save them all.
         // No threading, high memory, high time
 	    LOG_DEBUG(logLvl, "Saving boards to vector (and get PG)");
-        iterateBoardsToVector(hitM, probGrid, rememberedBoards);
+        iterateBoardsToVector(hitM, probGrid, rememberedBoards, THREAD_COUNT);
 	    LOG_DEBUG(logLvl, "done saving boards to vector");
     }
     else{
