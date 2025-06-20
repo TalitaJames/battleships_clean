@@ -6,7 +6,7 @@ std::ostream& operator<<(std::ostream& os, ProbabilityGrid& p){
     for (int y = 0; y < BOARD_SIZE; y++){
         os << "[";
         for (int x = 0; x < BOARD_SIZE; x++){
-        os << p.shipGrid[x][y] << ", ";
+            os << p.shipGrid[x][y] << "(" << p.infoGain[x][y] <<  "), ";
         }
         os << "]\n";
     }
@@ -32,7 +32,6 @@ void calcProbabilityGrid(ProbabilityGrid &p){
         }
     }
 };
-
 
 /**
  * @brief Given a board, if there is a ship in each cell, update the corresponding probability data
