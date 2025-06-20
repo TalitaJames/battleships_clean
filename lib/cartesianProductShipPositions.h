@@ -26,9 +26,9 @@ ProbabilityGrid makeProbGridFromCartesianProductOfAllShipPositions(int memoryDiv
 ProbabilityGrid makeProbGridFromCartesianProductOfAllShipPositions(int boardSize, const ShipData fleet[], const int fleetSize);
 ProbabilityGrid makeProbGridFromCartesianProductOfAllShipPositions(int boardSize, const ShipData fleet[], const int fleetSize, int memoryDivisions);
 
-
-// The "Karl method" of having all
-void todoKarlMethod(std::vector<std::vector<ShipPosition>>);
+// Mixed iterator menthods
+void nextBoardGivenIndex(std::vector<int> & index, std::vector<int> radix);
+void mixedRadixIterator(std::vector<std::vector<ShipPosition>>);
 
 
 #endif //CARTESIANPRODUCTSHIPPOSITIONS_H

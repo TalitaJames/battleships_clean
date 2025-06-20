@@ -119,3 +119,69 @@ ProbabilityGrid makeProbGridFromCartesianProductOfAllShipPositions(int boardSize
 
     return returnedProbGrid;
 }
+
+
+/**
+ * @brief given an index, and a radix, itterate the index by one
+ * following the base specified in radix
+ *
+ * @param index the current position
+ * @param radix the radix to iterate the index by
+ */
+void nextBoardGivenIndex(std::vector<int> & index, std::vector<int> radix){
+
+    for (int i = index.size(); i >= 0; --i){
+        index[i]++;
+
+        if (index[i] < radix[i])
+            return; // no carry, ie done
+        else
+            index[i] = 0; // value is zero, then loop to coninue the iteration
+    }
+}
+
+
+/**
+ * @brief Using a mixed iterator (similar to the concept of a cartesian product,
+ * in iterator form)
+ *
+ * @param validShipPos a vector of each ship, then each valid position
+ * for that ship (in an empty board)
+ */
+void mixedRadixIterator(std::vector<std::vector<ShipPosition>> validShipPos){
+    std::vector<int> radix; // Radix (aka number of positions)
+    std::vector<int> index; // current board
+    std::vector<int> start; // first board
+
+    for (size_t i = 0; i < validShipPos.size(); i++){
+        radix.push_back(validShipPos[i].size());
+        index.push_back(0);
+        start.push_back(0);
+    }
+
+    Board board = initBlankBoard();
+    ProbabilityGrid probGrid;
+    std::vector<ShipPosition> fleet(index.size());
+
+    do{
+        nextBoardGivenIndex(index, radix);
+
+        // update the fleet to the current index
+        for (size_t i = 0; i < index.size(); i++){
+            fleet[i] = validShipPos[i][index[i]];
+        }
+
+        drawBoard(board, fleet);
+
+        if(board.isValid){
+            // std::cout<<index <<"\t" << board <<std::endl;
+            flattenBoardToProbabilityGrid(board, probGrid);
+        }
+
+        if(probGrid.totalGoodBoards + 1 % 100'000'000 == 0){
+            std::cout << probGrid.totalGoodBoards << std::endl;
+        }
+    }while(index != start);
+
+    std::cout << probGrid << std::endl;
+}
