@@ -56,6 +56,18 @@ void LOG_WARN(LOG outLvl, std::string message) {
  * @param outLvl The level of the output
  * @param message The message to log.
  */
+void LOG_KEYINFO(LOG outLvl, std::string message) {
+    if (LOG::KEYINFO <= outLvl) {
+        std::cout << "K: " << message << std::endl;
+    }
+}
+
+
+/**
+ * @brief Logs an informational message.
+ * @param outLvl The level of the output
+ * @param message The message to log.
+ */
 void LOG_INFO(LOG outLvl, std::string message) {
     if (LOG::INFO <= outLvl) {
         std::cout << "I: " << message << std::endl;

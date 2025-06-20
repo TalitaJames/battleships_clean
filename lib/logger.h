@@ -14,6 +14,7 @@ enum LOG{
     QUIET,
     ERROR,
     WARN,
+    KEYINFO,
     INFO,
     DEBUG,
 };
@@ -24,6 +25,7 @@ void LOGGER(LOG outLvl, LOG messageLvl, std::string);
 
 void LOG_ERROR(LOG outLvl, std::string);
 void LOG_WARN(LOG outLvl, std::string);
+void LOG_KEYINFO(LOG outLvl, std::string);
 void LOG_INFO(LOG outLvl, std::string);
 void LOG_DEBUG(LOG outLvl, std::string);
 
