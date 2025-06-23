@@ -111,7 +111,7 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM,
         std::string turnMsg = "You entered (" + std::to_string(x) + ", " +
             std::to_string(y) + ") using " + coordinateChooserNames[playStyle] +
             " in " + std::to_string(runTime.count()) + " seconds";
-        LOG_INFO(logLvl, turnMsg);
+        LOG_KEYINFO(logLvl, turnMsg);
 
         std::cout << std::flush;
     } while (isHit(hitM, x, y)); // repeat until the hit is valid (ie cell isn't yet hit)
@@ -131,7 +131,7 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM,
     std::ostringstream gridMsgStream;
     gridMsgStream << "PROBABILITY GRID:\n" << probGrid << "\n\nHITMASK:\n" << hitM;
     std::string gridMsg = gridMsgStream.str();
-    LOG_INFO(logLvl, gridMsg);
+    LOG_KEYINFO(logLvl, gridMsg);
 };
 
 
@@ -185,7 +185,7 @@ unsigned int playGame_fromHitmask(CoordinateChooser playStyle, Board board,  Hit
     std::ostringstream gameStartStream;
     gameStartStream << "Playing game from hitmask\n" << board << hitmask;
     std::string gameStartMsg = gameStartStream.str();
-    LOG_INFO(logLvl, gameStartMsg);
+    LOG_KEYINFO(logLvl, gameStartMsg);
 
     hitmask = turnsToShotmask(board, hitmask); // converts any "turn"s into the outcome //TODO decide how 'turns' should work?
 
