@@ -44,6 +44,7 @@ void appendWorkerToProbGrid(ProbabilityGrid &, Worker);
 // -- Iterating, storing boards in memory
 void checkThenUpdateVectorOfBoards(std::vector<Board>&, ProbabilityGrid&);
 void checkThenUpdateVectorOfBoards(std::vector<Board>&, ProbabilityGrid&, Hitmask);
+void checkThenUpdateVectorOfBoards_IG(std::vector<Board>&, ProbabilityGrid&, Hitmask);
 void checkThenUpdateVectorOfBoards(std::vector<Board>&, ProbabilityGrid&, Hitmask, bool);
 
 std::ostream& operator<<(std::ostream&, Worker&);

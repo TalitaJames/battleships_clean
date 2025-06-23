@@ -225,6 +225,15 @@ void checkThenUpdateVectorOfBoards(std::vector<Board>& boardVector, ProbabilityG
 }
 
 /**
+ * @brief The same as "checkThenUpdateVectorOfBoards", but std::thread
+ * requires the function to not be overloaded.
+ * Thus this one has an infogain specific name
+ */
+void checkThenUpdateVectorOfBoards_IG(std::vector<Board>& boardVector, ProbabilityGrid& probGrid, Hitmask hitM){
+    return checkThenUpdateVectorOfBoards(boardVector, probGrid, hitM, false);
+}
+
+/**
  * @brief Iterates through a vector of boards, to update probability grid,
  * whilst optionally removes those not compatible with the hitmask
  *

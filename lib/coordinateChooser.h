@@ -29,6 +29,14 @@ enum CoordinateChooser{
     DIAGONAL, // Shoots the diagonal (of size of unshot largest ship)
 };
 
+/// @brief A segment to be done for an infogain gathering algorithm
+struct InfogainTask{
+    Hitmask hitmask;
+    ProbabilityGrid probGrid;
+    int x;
+    int y;
+};
+
 extern std::map<CoordinateChooser, std::string> coordinateChooserNames;
 
 // -- Coordinate choosing

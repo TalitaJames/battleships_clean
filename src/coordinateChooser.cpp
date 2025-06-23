@@ -1,5 +1,6 @@
 #include "coordinateChooser.h"
 #include "logger.h"
+#include <sstream>
 
 /// @brief global variable that translates coordinate chooser enum into human readable string
 std::map<CoordinateChooser, std::string> coordinateChooserNames{
@@ -141,52 +142,23 @@ void coordinate_pRnd(int &xReturn, int &yReturn, ProbabilityGrid pG, Hitmask hit
 };
 
 /**
- * @brief Find the position that maximises the information gain.
- * For every unknown cell in the hitmask, simulate each possible outcome
- * (miss, hit and sink (for each possible boat)).
+ * @brief for each unocupied cell, create the possible situations it could be
+ * in a hitmask, for calculating the infogain
  *
- * The information gain for that cell is equal to the sum
- * (num of boards matching option * probability of option) for each outcome
- *
- * @param xReturn coordinate for shot
- * @param yReturn cordinate for shot
- * @param pG probability grid to record infoGain data
- * @param hitM hitmask to ensure shot hasn't been taken yet
-*/
-double coordinate_infoGain(int &xReturn, int &yReturn, ProbabilityGrid &pG, Hitmask hitM){
-    std::vector<Board> emptyVector;
-    return coordinate_infoGain(xReturn, yReturn, pG, hitM, emptyVector);
-}
+ * @param hitM the boards shot reccord
+ * @return std::vector<InfogainTask> A list of "tasks" with data about hitmask,
+ * location (x,y) and an attached probability grid
+ */
+std::vector<InfogainTask> makeInfogainTasks(Hitmask hitM){
 
-/**
- * @brief Find the position that maximises the information gain.
- * For every unknown cell in the hitmask, simulate each possible outcome
- * (miss, hit and sink (for each possible boat)).
- *
- * The information gain for that cell is equal to the sum
- * (num of boards matching option * probability of option) for each outcome
- *
- * @param xReturn coordinate for shot
- * @param yReturn cordinate for shot
- * @param pG probability grid to record infoGain data
- * @param hitM hitmask to ensure shot hasn't been taken yet
- * @param rememberedBoards a potentially empty vector of boards to speed up checking//TODO spelling
-*/
-double coordinate_infoGain(int &xReturn, int &yReturn, ProbabilityGrid &pG, Hitmask hitM, std::vector<Board> rememberedBoards){
-    double max = 0;
-    int maxX = 0;
-    int maxY = 0;
-    double infoGainSum = 0; // the total information gained by shooting at this board (indicates if there are things still to learn about the game)
+    LOG_DEBUG(logLvl, "Making infogain tasks");
 
+    std::vector<InfogainTask> tasks; // all the threads and IG spots to simulate
     std::vector<cellStatus> options = {MISS, HIT, SUNK};
 
-    std::string logMessage = "Starting Infogain at "+ return_current_time_and_date() +
-        "! Rememembered " + std::to_string(rememberedBoards.size()) + " num of boards";
-    LOG_INFO(logLvl, logMessage);
-
+    // Make all tasks
     for (int y = 0; y < BOARD_SIZE; y++){
         for (int x = 0; x < BOARD_SIZE; x++){ // for each cell
-            pG.infoGain[x][y] = 0;
 
             if (!isHit(hitM, x,y)){ // if the cell hasn't been hit yet
                 for (auto opt : options){ // simulate each type of shot
@@ -204,50 +176,155 @@ double coordinate_infoGain(int &xReturn, int &yReturn, ProbabilityGrid &pG, Hitm
                         ((y+1 <= BOARD_SIZE) && (hitM.hitmask[x][y+1] == MISS || hitM.hitmask[x][y+1] == SUNK)))
                         { break; }
 
-                    // Copy the existing hitmask, then simulate the new shot
-                    // and make a new ProbabilityGrid for this simulation
-                    Hitmask infoHitmask = hitM;
-                    infoHitmask.hitmask[x][y] = opt;
-                    ProbabilityGrid infoPG;
-                    double infoGainPart = 0;
-
                     for (int i=0; i<FLEET_SIZE; i++){ // for each ship that could be sunk
+                        // Copy the existing hitmask, then simulate the new shot
+                        // and make a new ProbabilityGrid for this simulation
+                        Hitmask infoHitmask = hitM;
+                        infoHitmask.hitmask[x][y] = opt;
+                        ProbabilityGrid infoPG;
+
                         if (opt == SUNK){ // if testing sunk, set the next ship as sunk
                             std::memset(infoHitmask.shipSunk, 0, FLEET_SIZE);
                             infoHitmask.shipSunk[i]=1;
                         }
 
-
-			            // Check the probability grid here, using one of two methods
-                        if(rememberedBoards.size() > 0){
-                            checkThenUpdateVectorOfBoards(rememberedBoards, infoPG, infoHitmask);
-                        } else{
-                            iterateBoardsToGenerateProbabilityGrid(infoHitmask, infoPG, THREAD_COUNT);
-                        }
-
-                        double probOptionIsTrue = ((double) infoPG.totalGoodBoards)/((double) pG.totalGoodBoards);
-                        infoGainPart += (1 - probOptionIsTrue) * probOptionIsTrue;
+                        InfogainTask thisCellTask{infoHitmask, infoPG, x, y};
+                        tasks.push_back(thisCellTask);
 
                         if (opt != SUNK) break; // if not testing sunk don't repeat for another ship
                     }
-
-                    pG.infoGain[x][y] += infoGainPart;
                 }
+            } // end if not hit
+        }
+    }
 
-                infoGainSum += pG.infoGain[x][y]; // add the info gained from this cell to the total infomation gained
+    return tasks;
+}
 
-                if (pG.infoGain[x][y] >= max){ // if the IG here is greater than the current max, point at the new cell
-                    max = pG.infoGain[x][y];
-                    maxX = x;
-                    maxY = y;
-                }
+
+/**
+ * @brief Given a list of infogain tasks, sum the
+ * information into one probability grid
+ *
+ * @param tasks the list of tasks
+ * @param probGrid grid of information
+ * @param xReturn x position to hit, updated by reference here
+ * @param yReturn y position to hit, updated by reference here
+ * @param hitM hitmask, to avoid shooting in a spot already checked
+ * @return infoGainSum the total infogain inform
+ */
+double collateInfogainData(std::vector<InfogainTask>& tasks, ProbabilityGrid &probGrid,
+                            int &xReturn, int &yReturn, Hitmask hitM){
+    LOG_DEBUG(logLvl, "Collating IG Data");
+    long totalGoodBoards = probGrid.totalGoodBoards;
+    // clearProbabilityGrid(probGrid);
+
+    // Combine all data from done threads
+    for(auto& t : tasks){
+        double probOptionIsTrue = ((double) t.probGrid.totalGoodBoards)/((double) totalGoodBoards);
+        probGrid.infoGain[t.x][t.y] += (1 - probOptionIsTrue) * probOptionIsTrue;
+
+        std::ostringstream debugCollatedGrids;
+        // debugCollatedGrids << t.hitmask << "\nprobgrid is:\n" << t.probGrid;
+        debugCollatedGrids << "found prob of " << probOptionIsTrue << "=" << t.probGrid.totalGoodBoards << "/" << totalGoodBoards;
+        std::string debugCollatedGridsStr = debugCollatedGrids.str();
+        LOG_DEBUG(logLvl, debugCollatedGridsStr);
+    }
+
+    double max = 0;
+    int maxX = 0;
+    int maxY = 0;
+    double infoGainSum = 0; // the total information gained by shooting at this board (indicates if there are things still to learn about the game)
+
+    std::ostringstream probGridData;
+    probGridData << probGrid << std::endl;
+    std::string probGridDataStr = probGridData.str();
+    LOG_DEBUG(logLvl, probGridDataStr);
+
+    // go through the probgrid infogain to find the max, and find infogain sum
+    for (size_t y = 0; y < BOARD_SIZE; y++){
+        for (size_t x = 0; x < BOARD_SIZE; x++){
+             infoGainSum += probGrid.infoGain[x][y]; // add the info gained from this cell to the total infomation gained
+
+            if (probGrid.infoGain[x][y] >= max && !isHit(hitM, x, y)){ // if the IG here is greater than the current max, point at the new cell
+                max = probGrid.infoGain[x][y];
+                maxX = x;
+                maxY = y;
             }
         }
     }
 
     xReturn = maxX;
     yReturn = maxY;
+    LOG_DEBUG(logLvl, "DONE COLLATION " + std::to_string(xReturn) + ", " + std::to_string(yReturn));
 
+    return infoGainSum;
+}
+
+/**
+ * @brief Find the position that maximises the information gain.
+ * For every unknown cell in the hitmask, simulate each possible outcome
+ * (miss, hit and sink (for each possible boat)).
+ *
+ * The information gain for that cell is equal to the sum
+ * (num of boards matching option * probability of option) for each outcome
+ *
+ * @param xReturn coordinate for shot
+ * @param yReturn cordinate for shot
+ * @param pG probability grid to record infoGain data
+ * @param hitM hitmask to ensure shot hasn't been taken yet
+*/
+double coordinate_infoGain(int &xReturn, int &yReturn, ProbabilityGrid &pG, Hitmask hitM){
+    LOG_INFO(logLvl, "Starting Infogain at " + return_current_time_and_date() + "! Didn't remember any boards");
+    std::vector<InfogainTask> tasks = makeInfogainTasks(hitM);
+
+    for(auto& t: tasks){
+        iterateBoardsToGenerateProbabilityGrid(t.hitmask, t.probGrid, THREAD_COUNT);
+    }
+
+    double infoGainSum = collateInfogainData(tasks, pG, xReturn, yReturn, hitM);
+    return infoGainSum;
+}
+
+/**
+ * @brief Find the position that maximises the information gain.
+ * For every unknown cell in the hitmask, simulate each possible outcome
+ * (miss, hit and sink (for each possible boat)).
+ *
+ * The information gain for that cell is equal to the sum
+ * (num of boards matching option * probability of option) for each outcome
+ *
+ * @param xReturn coordinate for shot
+ * @param yReturn cordinate for shot
+ * @param pG probability grid to record infoGain data
+ * @param hitM hitmask to ensure shot hasn't been taken yet
+ * @param rememberedBoards a potentially empty vector of boards to speed up checking
+*/
+double coordinate_infoGain(int &xReturn, int &yReturn, ProbabilityGrid &pG, Hitmask hitM, std::vector<Board> rememberedBoards){
+
+    // if you don't remember anything, call the other function
+    if(rememberedBoards.size() == 0){
+        return coordinate_infoGain(xReturn, yReturn, pG, hitM);
+    }
+
+    LOG_INFO(logLvl, "Starting Infogain at " + return_current_time_and_date() +
+        "! Rememembered " + std::to_string(rememberedBoards.size()) + " num of boards");
+
+    // Make all tasks
+    std::vector<InfogainTask> tasks = makeInfogainTasks(hitM);
+
+    // Start all tasks as threads, then join the threads
+    std::vector<std::thread> threads;
+
+    for(auto& t : tasks){
+        std::thread threadedFunction(checkThenUpdateVectorOfBoards_IG, std::ref(rememberedBoards),
+                                    std::ref(t.probGrid), t.hitmask);
+        threads.push_back(std::move(threadedFunction));
+
+    }
+    for (auto& th : threads) th.join();
+
+    double infoGainSum = collateInfogainData(tasks, pG, xReturn, yReturn, hitM);
     return infoGainSum;
 };
 

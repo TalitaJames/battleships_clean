@@ -87,7 +87,7 @@ void takeTurn(CoordinateChooser playStyle, Board board, Hitmask &hitM,
                 coordinate_diagonal(x,y,probGrid,hitM);
                 break;
             case INFOGAIN_COMBINED:
-            LOG_DEBUG(logLvl, "INFOGAIN-COMBINED has IG previosly of " + std::to_string(totalIG));
+                LOG_DEBUG(logLvl, "INFOGAIN-COMBINED has IG previosly of " + std::to_string(totalIG));
                 if (totalIG < 0.01){ // if no information is gained, revert to pMax
                     coordinate_pMax(x,y,probGrid,hitM);
                 }
